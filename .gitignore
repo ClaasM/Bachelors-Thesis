@@ -1,0 +1,5 @@
+*.pyc
+
+/3_visualization/bower_components/
+/2_consumer/checkpoints/
+/.idea
