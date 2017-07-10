@@ -20,7 +20,6 @@ def initialize():
 class TwitterStreamListener(tweepy.StreamListener):
     def __init__(self):
         self.producer = KafkaProducer(bootstrap_servers='docker:9092')
-        self.tweets = []
 
     def on_data(self, data):
         data = json.loads(data)
@@ -30,7 +29,7 @@ class TwitterStreamListener(tweepy.StreamListener):
             text = json.dumps(data[u'text'])
             print(text)
             self.producer.send('iphone', json.dumps(text).encode('utf-8'))
-            self.producer.flush()
+            self.producer.flush()  # TODO probably not required to flush always
 
     def on_error(self, status_code):
         if status_code == 420:
