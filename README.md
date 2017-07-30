@@ -7,3 +7,10 @@ and each have to run in a separate process.
 4. Visualization - a web app that visualizes the outputs from the consumer-algorithm
 
 For instructions on how to run each component, see the component's README.
+
+
+
+dhcp-10-176-41-248:VirtualEnvs claasmeiners$ virtualenv botstop
+dhcp-10-176-41-248:VirtualEnvs claasmeiners$ source botstopper/bin/activate
+(botstopper) dhcp-10-176-41-248:VirtualEnvs claasmeiners$ cd ../PycharmProjects/Botstopper/
+(botstopper) dhcp-10-176-41-248:Botstopper claasmeiners$ pip3 install -U .
