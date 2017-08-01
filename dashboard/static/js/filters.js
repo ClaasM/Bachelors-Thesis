@@ -2,7 +2,7 @@
 
 /* Filters */
 
-angular.module('angularFlaskFilters', []).filter('uppercase', function() {
+angular.module('dashboardFilters', []).filter('uppercase', function() {
 	return function(input) {
 		return input.toUpperCase();
 	}
