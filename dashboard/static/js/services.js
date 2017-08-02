@@ -49,7 +49,7 @@ angular.module('dashboardServices', ['ngResource'])
       var currentUser = {};
 
       if ($cookies.get('token') && $location.path() !== '/logout') {
-        currentUser = User.get();
+        //currentUser = User.get();
       }
 
       var Auth = {

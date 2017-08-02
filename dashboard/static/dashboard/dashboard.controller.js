@@ -4,7 +4,18 @@
 'use strict';
 
 angular.module('Dashboard')
-    .controller('DashboardCtrl', function ($scope) {
+    .controller('DashboardCtrl', function ($scope, $http) {
+
+
+
+
+
+
+
+
+
+
+      //Dummy Data
       $scope.data = {
         topics: [
           {
