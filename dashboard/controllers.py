@@ -1,11 +1,11 @@
 import os
 
-from flask import g, session, request, url_for, flash
-from flask import make_response, abort
-from flask import redirect, render_template
+from flask import make_response
+from flask import render_template
 from flask import send_from_directory
-from flask_oauthlib.client import OAuth
 
+import dashboard.api as api
+import dashboard.auth as auth
 from dashboard import app
 
 """
@@ -35,9 +35,8 @@ def favicon():
 REST API & Auth
 """
 
-
-import dashboard.api
-import dashboard.auth
+auth.register_all(app)
+api.register_all(app)
 
 """
 Error Handling

@@ -1,11 +1,12 @@
-from flask import redirect, session, request, url_for
+from flask import redirect, session, request, url_for, Blueprint
+
 from flask_oauthlib.client import OAuth
 
 from dashboard import app
 
-oauth = OAuth(app)
+twitter_blueprint = Blueprint('twitter', __name__)
 
-twitter = oauth.remote_app(
+twitter_oauth = OAuth(app).remote_app(
     'twitter',
     consumer_key='xBeXxg9lyElUgwZT6AZ0A',
     consumer_secret='aawnSpNTOVuDCjx7HMh6uSXetjNN8zWLpZwCEU4LBrk',
@@ -16,21 +17,21 @@ twitter = oauth.remote_app(
 )
 
 
-@app.route('/login')
+@twitter_blueprint.route('/login')
 def login():
     callback_url = url_for('oauthorized', next=request.args.get('next'))
-    return twitter.authorize(callback=callback_url or request.referrer or None)
+    return twitter_oauth.authorize(callback=callback_url or request.referrer or None)
 
 
-@app.route('/logout')
+@twitter_blueprint.route('/logout')
 def logout():
     session.pop('twitter_oauth', None)
     return redirect(url_for('index'))
 
 
-@app.route('/oauthorized')
+@twitter_blueprint.route('/oauthorized')
 def oauthorized():
-    resp = twitter.authorized_response()
+    resp = twitter_oauth.authorized_response()
     if resp is None:
         print('You denied the request to sign in.')
     else:
@@ -39,7 +40,7 @@ def oauthorized():
 
 
 # TODO is this needed?
-@twitter.tokengetter
+@twitter_oauth.tokengetter
 def get_twitter_token():
     if 'twitter_oauth' in session:
         resp = session['twitter_oauth']
