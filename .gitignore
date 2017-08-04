@@ -5,3 +5,4 @@
 /.idea
 /dashboard/static/bower_components/
 **/.ipynb_checkpoints
+/checkpoints

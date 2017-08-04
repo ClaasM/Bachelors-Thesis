@@ -10,7 +10,12 @@ For instructions on how to run each component, see the component's README.
 
 
 
+To create the virtual env:
+TODO
 dhcp-10-176-41-248:VirtualEnvs claasmeiners$ virtualenv botstop
 dhcp-10-176-41-248:VirtualEnvs claasmeiners$ source botstopper/bin/activate
 (botstopper) dhcp-10-176-41-248:VirtualEnvs claasmeiners$ cd ../PycharmProjects/Botstopper/
 (botstopper) dhcp-10-176-41-248:Botstopper claasmeiners$ pip3 install -U .
+
+To start the thing up:
+TODO start from beginning
