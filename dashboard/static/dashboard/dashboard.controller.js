@@ -6,16 +6,31 @@
 angular.module('Dashboard')
     .controller('DashboardCtrl', function ($scope, $http) {
 
+      var number_of_tweets_shown = 4;
+
       var socket = io();
-      socket.on('connect', function () {
-        console.log("Connected");
-      });
-      socket.on('message', function (data) {
+      socket.on('dashboard.direct_message-create', function (data) {
         console.log(data);
       });
-      socket.on('dashboard.update', function (data) {
+      socket.on('dashboard.friends-create', function (data) {
         console.log(data);
       });
+      socket.on('dashboard.event-create', function (data) {
+        console.log(data);
+      });
+
+      socket.on('dashboard.status-create', function (data) {
+        _(number_of_tweets_shown).times(function (index) {
+          $scope.data.tweets[number_of_tweets_shown - index] = $scope.data.tweets[number_of_tweets_shown - index - 1];
+        });
+        $scope.data.tweets[0] = {
+          text: data.text,
+          name: data.user.name
+        };
+        //TODO use ngSocket
+        $scope.$digest()
+      });
+
 
       //Dummy Data
       $scope.data = {
@@ -40,12 +55,6 @@ angular.module('Dashboard')
             value: 0.5
           }
         ],
-        tweets: [
-          {
-            text: "Tweet 1"
-          }, {
-            text: "Tweet 2"
-          }
-        ]
+        tweets: []
       }
     });

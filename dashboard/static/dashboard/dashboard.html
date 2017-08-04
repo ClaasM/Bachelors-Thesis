@@ -3,10 +3,16 @@
     <div class="row">
       <h1>Dashboard</h1>
 
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#">User streams</a></li>
+        <li><a href="#">Site streams</a></li>
+        <li><a href="#">Public streams</a></li>
+      </ul>
+
       <div class="col-xs-12 col-md-4">
         <h2>Tweets</h2>
-        <p ng-repeat="tweet in data.tweets">
-          {{tweet.text}}
+        <p ng-repeat="tweet in data.tweets track by $index">
+          <b>{{tweet.name}}:</b>{{tweet.text}}
         </p>
       </div>
       <div class="col-xs-12 col-md-4">

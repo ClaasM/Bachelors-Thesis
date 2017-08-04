@@ -4,3 +4,4 @@
 /2_consumer/checkpoints/
 /.idea
 /dashboard/static/bower_components/
+**/.ipynb_checkpoints
