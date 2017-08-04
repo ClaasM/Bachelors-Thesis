@@ -15,7 +15,8 @@ Serve the App
 
 # routing for basic pages (pass routing onto the Angular app)
 @app.route('/')
-def basic_pages(**kwargs):
+@app.route('/<path:dummy>')
+def basic_pages(*args, **kwargs):
     return make_response(open('dashboard/templates/index.html').read())
 
 

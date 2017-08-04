@@ -1,7 +1,9 @@
 from flask import Flask
+from flask_socketio import SocketIO
 
 # Initialize the app
 app = Flask(__name__, static_url_path='/static')
+socketio = SocketIO(app)
 
 # Create the config
 app.config.from_object('dashboard.settings')

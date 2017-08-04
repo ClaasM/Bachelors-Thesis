@@ -6,14 +6,16 @@
 angular.module('Dashboard')
     .controller('DashboardCtrl', function ($scope, $http) {
 
-
-
-
-
-
-
-
-
+      var socket = io();
+      socket.on('connect', function () {
+        console.log("Connected");
+      });
+      socket.on('message', function (data) {
+        console.log(data);
+      });
+      socket.on('dashboard.update', function (data) {
+        console.log(data);
+      });
 
       //Dummy Data
       $scope.data = {

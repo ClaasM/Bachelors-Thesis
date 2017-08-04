@@ -5,7 +5,5 @@
 
 angular.module('Dashboard')
     .controller('MainCtrl', function ($scope) {
-      $scope.login = function () {
-        console.log("Login called")
-      }
+
     });

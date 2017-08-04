@@ -7,10 +7,10 @@ angular.module('Dashboard', ['dashboardServices',
         function ($routeProvider, $locationProvider, $httpProvider) {
           $routeProvider
               .when('/', {
-                templateUrl: '../main/main.html',
+                templateUrl: 'static/main/main.html',
                 controller: 'MainCtrl'
               })
-              .when('/', {
+              .when('/dashboard', {
                 templateUrl: 'static/dashboard/dashboard.html',
                 controller: 'DashboardCtrl'
               })
