@@ -12,15 +12,17 @@ def handle_connect():
         print("Not logged in!")
         redirect('/')  # TODO this doesn't work
     else:
-        print("Connected to Socket")
-        access_token = session['token'][0]
-        access_token_secret = session['token'][1]
+        # TODO maybe we can pass in the whole socket here
 
-        TwitterKafkaProducer(access_token=access_token,
-                             access_token_secret=access_token_secret,
-                             sid=request.sid).start()
-
-        TwitterKafkaConsumer(sid=request.sid).listen()
+        print("Someone connected to the socket")
+        # Start the consumer first
+        consumer = TwitterKafkaConsumer(sid=str(request.sid))
+        consumer.listen()
+        # Then start the producer
+        producer = TwitterKafkaProducer(access_token=session['token'][0],
+                                        access_token_secret=session['token'][1],
+                                        sid=str(request.sid))
+        producer.start()
 
 
 @socketio.on('disconnect')

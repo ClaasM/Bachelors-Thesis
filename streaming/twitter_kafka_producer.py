@@ -4,10 +4,6 @@ import tweepy
 from kafka import KafkaProducer
 from kafka.errors import NoBrokersAvailable
 
-
-# from dashboard import socketio  # from kafka import KafkaProducer
-
-
 # TODO test & figure out tweepy's twitter_stream.sitestream, .userstream, .retweet
 
 # TODO rename
@@ -42,7 +38,6 @@ class TwitterKafkaProducer(tweepy.StreamListener):
     # TODO write documentation
     def on_status(self, status):
         """Called when a new status arrives"""
-        # socketio.emit('dashboard.status-create', data=status._json, room=self.sid)  # TODO remove
         self.producer.send(str(self.sid), json.dumps(status._json).encode('utf-8'))
         self.producer.flush()  # TODO probably don't need to always do that
         return
