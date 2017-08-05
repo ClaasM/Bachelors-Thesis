@@ -4,7 +4,8 @@ import tweepy
 from kafka import KafkaProducer
 from kafka.errors import NoBrokersAvailable
 
-from dashboard import socketio  # from kafka import KafkaProducer
+
+# from dashboard import socketio  # from kafka import KafkaProducer
 
 
 # TODO test & figure out tweepy's twitter_stream.sitestream, .userstream, .retweet
@@ -29,16 +30,20 @@ class TwitterKafkaProducer(tweepy.StreamListener):
             self.producer = KafkaProducer(bootstrap_servers='docker:9092')
         except NoBrokersAvailable:
             print("Kafka Server not started!")  # TODO handle appropriately
+            raise
 
     def start(self):
         #  Start the stream
-        tweepy.Stream(auth=self.api.auth, listener=self)
+        twitter_stream = tweepy.Stream(auth=self.api.auth, listener=self)
+        twitter_stream.filter(track=['iphone'], async=True)
+        for i in range(10):
+            self.producer.send(str(self.sid), json.dumps(str(i)).encode('utf-8'))
 
     # TODO write documentation
     def on_status(self, status):
         """Called when a new status arrives"""
-        socketio.emit('dashboard.status-create', data=status._json, room=self.sid)  # TODO remove
-        self.producer.send(str(self.sid), status._json.encode('utf-8'))
+        # socketio.emit('dashboard.status-create', data=status._json, room=self.sid)  # TODO remove
+        self.producer.send(str(self.sid), json.dumps(status._json).encode('utf-8'))
         self.producer.flush()  # TODO probably don't need to always do that
         return
 
@@ -68,13 +73,13 @@ class TwitterKafkaProducer(tweepy.StreamListener):
     def on_event(self, status):
         """Called when a new event arrives"""
         print("on_event")
-        socketio.emit('dashboard.event-create', data=status._json, room=self.sid)
+        # socketio.emit('dashboard.event-create', data=status._json, room=self.sid)
         return
 
     def on_direct_message(self, status):
         """Called when a new direct message arrives"""
         print("on_direct_message")
-        socketio.emit('dashboard.direct_message-create', data=status._json, room=self.sid)
+        # socketio.emit('dashboard.direct_message-create', data=status._json, room=self.sid)
         return
 
     def on_friends(self, friends):
@@ -83,7 +88,7 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         friends is a list that contains user_id
         """
         print("on_friends")
-        socketio.emit('dashboard.friends-create', data=json.loads(friends), room=self.sid)
+        # socketio.emit('dashboard.friends-create', data=json.loads(friends), room=self.sid)
         return
 
     def on_limit(self, track):

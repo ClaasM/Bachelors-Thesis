@@ -1,8 +1,8 @@
-*.pyc
-
-/3_visualization/bower_components/
-/2_consumer/checkpoints/
 /.idea
-/dashboard/static/bower_components/
+
+**/bower_components/
 **/.ipynb_checkpoints
-/checkpoints
+**/checkpoints
+**/metastore_db
+
+*.log
