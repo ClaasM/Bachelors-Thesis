@@ -4,6 +4,7 @@ import tweepy
 from kafka import KafkaProducer
 from kafka.errors import NoBrokersAvailable
 
+
 # TODO test & figure out tweepy's twitter_stream.sitestream, .userstream, .retweet
 
 # TODO rename
@@ -27,9 +28,7 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         except NoBrokersAvailable:
             print("Kafka Server not started!")  # TODO handle appropriately
             raise
-
-    def start(self):
-        #  Start the stream
+        # Start the stream
         twitter_stream = tweepy.Stream(auth=self.api.auth, listener=self)
         twitter_stream.filter(track=['iphone'], async=True)
         for i in range(10):

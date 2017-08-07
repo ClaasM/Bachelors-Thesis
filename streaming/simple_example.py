@@ -7,7 +7,7 @@ from pyspark.streaming.kafka import KafkaUtils
 import json
 
 sc = SparkContext.getOrCreate()
-sc.setLogLevel("WARN")
+sc.setLogLevel("ERROR")
 ssc = StreamingContext(sc, 60)
 kafkaStream = KafkaUtils.createStream(ssc, 'docker:2181', 'spark-streaming', {'twitter':1})
 kafkaStream.pprint(num=10)

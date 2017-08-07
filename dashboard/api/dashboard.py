@@ -16,13 +16,12 @@ def handle_connect():
 
         print("Someone connected to the socket")
         # Start the consumer first
-        consumer = TwitterKafkaConsumer(sid=str(request.sid))
-        consumer.listen()
+        consumer = TwitterKafkaConsumer()
+        consumer.listen(sid=str(request.sid))
         # Then start the producer
         producer = TwitterKafkaProducer(access_token=session['token'][0],
                                         access_token_secret=session['token'][1],
                                         sid=str(request.sid))
-        producer.start()
 
 
 @socketio.on('disconnect')
