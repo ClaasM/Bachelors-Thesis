@@ -17,7 +17,7 @@ access_token_secret = config["access_token_secret"]
 
 # Start the consumer first
 consumer = TwitterKafkaConsumer(sid="test")
-consumer.listen()
+consumer.start()
 # Then start the producer
 producer = TwitterKafkaProducer(access_token=access_token,
                                 access_token_secret=access_token_secret,

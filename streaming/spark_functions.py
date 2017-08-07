@@ -20,7 +20,6 @@ Serializable functions to be executed on the spark execution nodes
 def preprocess():
     def _preprocess(data):
         tweet = data[1]  # TODO what is data[0]?
-        print(tweet)
         return tweet
 
     return _preprocess
@@ -28,7 +27,7 @@ def preprocess():
 
 def lda():
     def _lda(tweet):
-        print(tweet)
+        # print(tweet)
         return tweet
 
     return _lda

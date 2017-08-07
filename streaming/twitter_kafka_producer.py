@@ -29,8 +29,15 @@ class TwitterKafkaProducer(tweepy.StreamListener):
 
     def start(self):
         # Start the stream
-        twitter_stream = tweepy.Stream(auth=self.api.auth, listener=self)
-        twitter_stream.filter(track=['iphone'], async=True)
+        self.twitter_stream = tweepy.Stream(auth=self.api.auth, listener=self)
+        self.twitter_stream.filter(track=['iphone'], async=True)
+
+    def stop(self):
+        self.twitter_stream.disconnect()
+        print("Disconnected from Twitter stream")
+        self.producer.close(timeout=10)
+        print("Kafka producer closed")
+
 
     def on_status(self, status):
         """Called when a new status arrives"""

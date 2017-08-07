@@ -14,15 +14,20 @@ def handle_connect():
     else:
         # Start the consumer first
         consumer = TwitterKafkaConsumer()
-        consumer.listen(sid=str(request.sid))
+        consumer.start(sid=str(request.sid))
         # Then start the producer
         producer = TwitterKafkaProducer(access_token=session['token'][0],
                                         access_token_secret=session['token'][1],
                                         sid=str(request.sid))
         producer.start()
+        print("Adding consumer and producer to session")
+        session['consumer'] = consumer
+        session['producer'] = producer
 
 
 @socketio.on('disconnect')
-def handle_connect():
+def handle_disconnect():
     # TODO handle disconnect
     print("Disconnected")
+    session['consumer'].stop()
+    session['producer'].stop()

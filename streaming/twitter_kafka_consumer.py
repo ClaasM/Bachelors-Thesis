@@ -15,7 +15,7 @@ class TwitterKafkaConsumer(object):
         sc.setLogLevel("ERROR")
         self.ssc = StreamingContext(sc, 1)  # 1 second window
 
-    def listen(self, sid):
+    def start(self, sid):
         # ONLY USE GLOBAL FUNCTIONS!
 
         # Create the stream
@@ -29,6 +29,10 @@ class TwitterKafkaConsumer(object):
 
         # Start the streaming
         self.ssc.start()
+
+    def stop(self):
+        self.ssc.stop()
+        print("Streaming context stopped")
 
     def await_termination(self):
         """
