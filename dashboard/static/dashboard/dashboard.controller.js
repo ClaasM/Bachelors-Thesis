@@ -20,6 +20,7 @@ angular.module('Dashboard')
       });
 
       socket.on('dashboard.status-create', function (data) {
+        console.log(data);
         _(number_of_tweets_shown).times(function (index) {
           $scope.data.tweets[number_of_tweets_shown - index] = $scope.data.tweets[number_of_tweets_shown - index - 1];
         });

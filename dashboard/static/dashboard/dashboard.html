@@ -1,4 +1,4 @@
-<div class="main">
+<div class="main dashboard">
   <div class="container">
     <div class="row">
       <h1>Dashboard</h1>
@@ -11,21 +11,27 @@
 
       <div class="col-xs-12 col-md-4">
         <h2>Tweets</h2>
-        <p ng-repeat="tweet in data.tweets track by $index">
+        <p class="tweet" ng-repeat="tweet in data.tweets track by $index">
           <b>{{tweet.name}}:</b>{{tweet.text}}
         </p>
       </div>
       <div class="col-xs-12 col-md-4">
         <h2>Sentiment</h2>
+        TODO
+        <!--
         <p ng-repeat="sentiment in data.sentiment">
           <b>{{sentiment.text}}:</b>&nbsp;{{sentiment.value}}
         </p>
+        -->
       </div>
       <div class="col-xs-12 col-md-4">
         <h2>Topics</h2>
+        TODO
+        <!--
         <p ng-repeat="topic in data.topics">
           <b>{{topic.text}}:</b>&nbsp;{{topic.value}}
         </p>
+        -->
       </div>
     </div>
   </div>

@@ -7,7 +7,6 @@ from kafka.errors import NoBrokersAvailable
 
 # TODO test & figure out tweepy's twitter_stream.sitestream, .userstream, .retweet
 
-# TODO rename
 class TwitterKafkaProducer(tweepy.StreamListener):
     """
     Listens on the Twitter stream and sends all events to the Kafka queue.
@@ -21,7 +20,6 @@ class TwitterKafkaProducer(tweepy.StreamListener):
             config = json.load(config_data)
         auth = tweepy.OAuthHandler(config['consumer_key'], config['consumer_secret'])
         auth.set_access_token(access_token, access_token_secret)
-
         self.api = tweepy.API(auth)
         try:
             self.producer = KafkaProducer(bootstrap_servers='docker:9092')
@@ -34,7 +32,6 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         twitter_stream = tweepy.Stream(auth=self.api.auth, listener=self)
         twitter_stream.filter(track=['iphone'], async=True)
 
-    # TODO write documentation
     def on_status(self, status):
         """Called when a new status arrives"""
         self.producer.send(str(self.sid), json.dumps(status._json).encode('utf-8'))
