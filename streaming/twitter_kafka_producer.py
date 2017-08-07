@@ -28,11 +28,11 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         except NoBrokersAvailable:
             print("Kafka Server not started!")  # TODO handle appropriately
             raise
+
+    def start(self):
         # Start the stream
         twitter_stream = tweepy.Stream(auth=self.api.auth, listener=self)
         twitter_stream.filter(track=['iphone'], async=True)
-        for i in range(10):
-            self.producer.send(str(self.sid), json.dumps(str(i)).encode('utf-8'))
 
     # TODO write documentation
     def on_status(self, status):

@@ -12,9 +12,6 @@ def handle_connect():
         print("Not logged in!")
         redirect('/')  # TODO this doesn't work
     else:
-        # TODO maybe we can pass in the whole socket here
-
-        print("Someone connected to the socket")
         # Start the consumer first
         consumer = TwitterKafkaConsumer()
         consumer.listen(sid=str(request.sid))
@@ -22,6 +19,7 @@ def handle_connect():
         producer = TwitterKafkaProducer(access_token=session['token'][0],
                                         access_token_secret=session['token'][1],
                                         sid=str(request.sid))
+        producer.start()
 
 
 @socketio.on('disconnect')
