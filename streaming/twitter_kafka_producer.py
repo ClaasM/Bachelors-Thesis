@@ -24,12 +24,13 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         try:
             self.producer = KafkaProducer(bootstrap_servers='docker:9092')
         except NoBrokersAvailable:
-            print("Kafka Server not started!")  # TODO handle appropriately
+            print("Kafka Server not started!")
             raise
+            # TODO handle appropriately
+        self.twitter_stream = tweepy.Stream(auth=self.api.auth, listener=self)
 
     def start(self):
         # Start the stream
-        self.twitter_stream = tweepy.Stream(auth=self.api.auth, listener=self)
         self.twitter_stream.filter(track=['iphone'], async=True)
 
     def stop(self):
@@ -37,7 +38,6 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         print("Disconnected from Twitter stream")
         self.producer.close(timeout=10)
         print("Kafka producer closed")
-
 
     def on_status(self, status):
         """Called when a new status arrives"""

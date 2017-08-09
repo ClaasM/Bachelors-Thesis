@@ -20,14 +20,13 @@ def handle_connect():
                                         access_token_secret=session['token'][1],
                                         sid=str(request.sid))
         producer.start()
-        print("Adding consumer and producer to session")
+        # surprisingly, this works
         session['consumer'] = consumer
         session['producer'] = producer
 
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    # TODO handle disconnect
-    print("Disconnected")
     session['consumer'].stop()
     session['producer'].stop()
+    print("Disconnected")
