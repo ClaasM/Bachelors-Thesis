@@ -6,8 +6,21 @@ from streaming.twitter_kafka_consumer import TwitterKafkaConsumer
 dashboard_blueprint = Blueprint('dashboard', __name__)
 
 
+@socketio.on('update')
+def update(settings):
+    if 'token' not in session:
+        print("Not logged in!")
+        redirect('/')  # TODO this doesn't work
+    else:
+        print(settings)
+        print(request.sid)
+
+
 @socketio.on('connect')
 def handle_connect():
+    # TODO put this back in
+    return
+
     if 'token' not in session:
         print("Not logged in!")
         redirect('/')  # TODO this doesn't work

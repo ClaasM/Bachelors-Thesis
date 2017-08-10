@@ -1,13 +1,193 @@
 <div class="main dashboard">
   <div class="container">
+    <h1>Dashboard</h1>
     <div class="row">
-      <h1>Dashboard</h1>
+      <h2>Settings</h2>
+      <!-- TODO filter_level -->
+      <ul class="nav nav-pills">
+        <li ng-class="{'active':selectedStream == 'user'}">
+          <a href ng-click="selectedStream = 'user'">User stream</a>
+        </li>
+        <li ng-class="{'active':selectedStream == 'site'}">
+          <a href ng-click="selectedStream = 'site'">Site stream</a>
+        </li>
+        <li ng-class="{'active':selectedStream == 'public'}">
+          <a href ng-click="selectedStream = 'public'">Public (=filter) stream</a>
+        </li>
 
-      <ul class="nav nav-tabs">
-        <li class="active"><a href="#">User streams</a></li>
-        <li><a href="#">Site streams</a></li>
-        <li><a href="#">Public streams</a></li>
+        <li ng-class="{'active':selectedStream == 'sample'}">
+          <a href ng-click="selectedStream = 'sample'">Sample stream</a>
+        </li>
+        <li ng-class="{'active':selectedStream == 'retweet'}">
+          <a href ng-click="selectedStream = 'retweet'">Retweet stream</a>
+        </li>
+        <li ng-class="{'active':selectedStream == 'firehose'}">
+          <a href ng-click="selectedStream = 'firehose'">Retweet stream</a>
+        </li>
       </ul>
+
+      <div class="tab-content">
+        <div ng-if="selectedStream == 'user'">
+          <h3>User stream</h3>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#with">With</a></h4>
+          <div class="radio">
+            <label>
+              <input type="radio" name="with" ng-model="streamSettings['user'].with" value="user">
+              user (only stream messages from the user)
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="with" ng-model="streamSettings['user'].with" value="followings">
+              followings (adds those from accounts the user follows)
+            </label>
+          </div>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#replies">Replies</a></h4>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-change="setOrDelete('user.replies', 'all')">
+              all (include even if we don't follow both sender and receiver)
+              <!-- TODO do we receive replies from non-followed senders to followed recipients? -->
+            </label>
+          </div>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#track">Track</a></h4>
+          <div>
+            Here is a string list input
+            <!-- TODO String List input-->
+          </div>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#locations">Locations</a></h4>
+          Remember: a tweet is included if matched by Track <b>OR</b> by Location.
+          <div>
+            List of rows that each contain 4 float values
+            <!-- TODO Location List input-->
+          </div>
+
+        </div>
+        <div ng-if="selectedStream == 'site'">
+          <h3>Site stream</h3>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#follow">Follow</a></h4>
+          List of user_ids
+          <div>
+            Here is a string list input
+            <!-- TODO maybe some sort of search field would be nice-->
+          </div>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#with">With</a></h4>
+          <div class="radio">
+            <label>
+              <input type="radio" name="with" ng-model="streamSettings['site'].with" value="user">
+              user (only stream messages from the user)
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="with" ng-model="streamSettings['site'].with" value="followings">
+              followings (adds those from accounts the user follows)
+            </label>
+          </div>
+
+          <!-- TODO maybe change this to a directive -->
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#replies">Replies</a></h4>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-change="setOrDelete('site.replies', 'all')">
+              all (include even if we don't follow both sender and receiver)
+              <!-- TODO do we receive replies from non-followed senders to followed recipients? -->
+            </label>
+          </div>
+
+        </div>
+        <div ng-if="selectedStream == 'public'">
+          <h3>Public (Filter) stream</h3>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#follow">Follow</a></h4>
+          List of user_ids
+          <div>
+            Here is a string list input
+            <!-- TODO maybe some sort of search field would be nice-->
+          </div>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#track">Track</a></h4>
+          <div>
+            Here is a string list input
+            <!-- TODO String List input-->
+          </div>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#locations">Locations</a></h4>
+          Remember: a tweet is included if matched by Track <b>OR</b> by Location.
+          <div>
+            List of rows that each contain 4 float values
+            <!-- TODO Location List input-->
+          </div>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#languages">Languages</a></h4>
+          <div>
+            Languages bcp 47 multiselect
+            <!-- TODO figure out if this has any effect on other streams-->
+          </div>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#filter_level">Filter level</a></h4>
+          <div class="radio">
+            <label>
+              <input type="radio" name="filter_level" ng-model="streamSettings['public'].filter_level"
+                     value="none">
+              none
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="filter_level" ng-model="streamSettings['public'].filter_level"
+                     value="low">
+              low
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="filter_level" ng-model="streamSettings['public'].filter_level"
+                     value="medium">
+              medium
+            </label>
+          </div>
+        </div>
+
+
+        <div ng-if="selectedStream == 'sample'">
+          <h3>Public (Sample) stream</h3>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#languages">Languages</a></h4>
+          <div>
+            Languages bcp 47 multiselect
+            <!-- TODO figure out if this has any effect on other streams-->
+          </div>
+        </div>
+
+        <div ng-if="selectedStream == 'retweet'">
+          <h3>Retweet stream</h3>
+          The retweet stream has no further options.
+        </div>
+        <div ng-if="selectedStream == 'firehose'">
+          <h3>Firehose</h3>
+
+          <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#count">Count</a></h4>
+          Requires elevated access.
+          <div class="form-group">
+            <label for="count">Count:</label>
+            <input type="number" class="form-control" id="count" ng-model="streamSettings['firehose'].count">
+          </div>
+        </div>
+
+      </div>
+
+
+      <button class="btn btn-primary" ng-click="updateSettings()">Update Settings</button>
+    </div>
+    <div class="row">
+      <h2>Results</h2>
 
       <div class="col-xs-12 col-md-4">
         <h2>Tweets</h2>

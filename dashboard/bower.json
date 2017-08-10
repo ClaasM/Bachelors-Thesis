@@ -21,6 +21,7 @@
     "angular-notify": "^2.5.1",
     "jquery": "^3.2.1",
     "socket.io-client": "^2.0.3",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "angular": "^1.6.5"
   }
 }

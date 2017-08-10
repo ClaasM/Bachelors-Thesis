@@ -14,8 +14,9 @@ Serve the App
 
 
 # routing for basic pages (pass routing onto the Angular app)
+# TODO this is stupid.
 @app.route('/')
-@app.route('/<path:dummy>')
+@app.route('/dashboard')
 def basic_pages(*args, **kwargs):
     return make_response(open('dashboard/templates/index.html').read())
 

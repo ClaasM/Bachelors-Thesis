@@ -5,8 +5,38 @@
 
 angular.module('Dashboard')
     .controller('DashboardCtrl', function ($scope, $http) {
+      $scope.selectedStream = 'public';
+      $scope.streamSettings = {
+        'user': {
+          type: 'user'
+        },
+        'site': {
+          type: 'site'
+        },
+        /* TODO rename */
+        'public': {
+          type: 'public',
+          'filter_level':'none'
+        },
+        'sample': {
+          type: 'sample'
+        },
+        'retweet': {
+          type: 'retweet'
+        },
+        'firehose': {
+          type: 'firehose',
+          count:0
+        }
+      };
+      var socket = io();
+      $scope.updateSettings = function () {
+        //$http.post('/api/dashboard/update', $scope.streamSettings[$scope.selectedStream])
+        socket.emit('update', $scope.streamSettings[$scope.selectedStream])
+      };
 
       var number_of_tweets_shown = 4;
+
 
       var socket = io();
       socket.on('dashboard.direct_message-create', function (data) {
@@ -57,5 +87,19 @@ angular.module('Dashboard')
           }
         ],
         tweets: []
+      }
+
+      /**
+       * Sets or deletes a key on the streamSettings object.
+       * This is useful since some parameters for the twitter streaming API are supposed to be either a specific string or nonexistent.
+       * @param key the to set
+       * @param value the value to set if it's not set already (in which case it's deleted)
+       */
+      $scope.setOrDelete = function (key, value) {
+        if ($scope.streamSettings[key] == value) {
+          delete $scope.streamSettings[$scope.selectedStream][key]
+        } else {
+          $scope.streamSettings[key] = value
+        }
       }
     });
