@@ -1,7 +1,7 @@
 <div class="main dashboard">
   <div class="container">
     <h1>Dashboard</h1>
-    <div class="row">
+    <div class="settings row">
       <h2>Settings</h2>
       <!-- TODO filter_level -->
       <ul class="nav nav-pills">
@@ -22,7 +22,7 @@
           <a href ng-click="selectedStream = 'retweet'">Retweet stream</a>
         </li>
         <li ng-class="{'active':selectedStream == 'firehose'}">
-          <a href ng-click="selectedStream = 'firehose'">Retweet stream</a>
+          <a href ng-click="selectedStream = 'firehose'">Firehose</a>
         </li>
       </ul>
 
@@ -56,26 +56,19 @@
           </div>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#track">Track</a></h4>
-          <div>
-            <string-list array="streamSettings['user'].track"></string-list>
-          </div>
+          <string-list array="streamSettings['user'].track"></string-list>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#locations">Locations</a></h4>
           Remember: a tweet is included if matched by Track <b>OR</b> by Location.
-          <div>
-            <location-list array="streamSettings['user'].locations"></location-list>
-          </div>
+          <location-list array="streamSettings['user'].locations"></location-list>
 
         </div>
         <div ng-if="selectedStream == 'site'">
           <h3>Site stream</h3>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#follow">Follow</a></h4>
-          List of user_ids
-          <div>
-            Here is a string list input
-            <!-- TODO maybe some sort of search field would be nice-->
-          </div>
+          <!-- TODO maybe some sort of search field would be nice-->
+          <string-list array="streamSettings['site'].follow"></string-list>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#with">With</a></h4>
           <div class="radio">
@@ -91,7 +84,6 @@
             </label>
           </div>
 
-          <!-- TODO maybe change this to a directive -->
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#replies">Replies</a></h4>
           <div class="checkbox">
             <label>
@@ -108,30 +100,20 @@
           <h3>Public (Filter) stream</h3>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#follow">Follow</a></h4>
-          List of user_ids
-          <div>
-            Here is a string list input
-            <!-- TODO maybe some sort of search field would be nice-->
-          </div>
+          <!-- TODO maybe some sort of search field would be nice-->
+          <string-list array="streamSettings['public'].follow"></string-list>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#track">Track</a></h4>
-          <div>
-            Here is a string list input
-            <!-- TODO String List input-->
-          </div>
+          <string-list array="streamSettings['public'].track"></string-list>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#locations">Locations</a></h4>
           Remember: a tweet is included if matched by Track <b>OR</b> by Location.
-          <div>
-            List of rows that each contain 4 float values
-            <!-- TODO Location List input-->
-          </div>
+          <location-list array="streamSettings['public'].locations"></location-list>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#languages">Languages</a></h4>
-          <div>
-            Languages bcp 47 multiselect
-            <!-- TODO figure out if this has any effect on other streams-->
-          </div>
+          Stick to the BCP 47 standard
+          <string-list array="streamSettings['public'].languages"></string-list>
+          <!-- TODO figure out if this has any effect on other streams-->
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#filter_level">Filter level</a></h4>
           <div class="radio">
@@ -156,33 +138,28 @@
             </label>
           </div>
         </div>
-
-
         <div ng-if="selectedStream == 'sample'">
           <h3>Public (Sample) stream</h3>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#languages">Languages</a></h4>
-          <div>
-            Languages bcp 47 multiselect
-            <!-- TODO figure out if this has any effect on other streams-->
-          </div>
+          Stick to the BCP 47 standard
+          <string-list array="streamSettings['sample'].languages"></string-list>
+          <!-- TODO figure out if this has any effect on other streams-->
         </div>
-
         <div ng-if="selectedStream == 'retweet'">
           <h3>Retweet stream</h3>
           The retweet stream has no further options.
         </div>
-        <div ng-if="selectedStream == 'firehose'">
+        <div ng-if="selectedStream == 'firehose'" class="firehose">
           <h3>Firehose</h3>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#count">Count</a></h4>
           Requires elevated access.
-          <div class="form-group">
+          <div class="form-group count">
             <label for="count">Count:</label>
             <input type="number" class="form-control" id="count" ng-model="streamSettings['firehose'].count">
           </div>
         </div>
-
       </div>
 
 

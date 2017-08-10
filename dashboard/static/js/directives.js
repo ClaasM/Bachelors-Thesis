@@ -29,15 +29,18 @@ angular.module('Dashboard').directive('stringList', function () {
         }
         return input;
       };
-      scope.addLocation = function () {
-        console.log(scope.newLocation);
-        console.log(scope.array);
-
-
-
-        console.log(scope.newLocation);
-        console.log(scope.array);
-      }
+    }
+  }
+}).directive('languageSelect', function () {
+  return {
+    templateUrl: 'static/dashboard/locationList/locationList.html',
+    restrict: 'E',
+    scope: {
+      array: '=array'
+    },
+    link: function (scope, element, attrs) {
+      scope.languages = ["de", "en"];
+      //TODO there are to many bcp 47 languages
     }
   }
 });

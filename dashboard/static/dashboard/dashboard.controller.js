@@ -12,15 +12,22 @@ angular.module('Dashboard')
           _with: 'followings',
           replies: 'all',
           track: [],
-          locations:[]
+          locations: []
         },
         'site': {
-          type: 'site'
+          type: 'site',
+          _with: 'followings',
+          replies: 'all',
+          follow: []
         },
         /* TODO rename */
         'public': {
           type: 'public',
-          'filter_level': 'none'
+          'filter_level': 'none',
+          follow: [],
+          track: [],
+          locations: [],
+          languages: []
         },
         'sample': {
           type: 'sample'

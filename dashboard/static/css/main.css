@@ -66,3 +66,7 @@
 .location-list input {
   width: 50px;
 }
+
+.settings .firehose .count {
+  width: 100px;
+}
