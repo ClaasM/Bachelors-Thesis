@@ -11,7 +11,8 @@ angular.module('Dashboard')
           type: 'user',
           _with: 'followings',
           replies: 'all',
-          track: []
+          track: [],
+          locations:[]
         },
         'site': {
           type: 'site'

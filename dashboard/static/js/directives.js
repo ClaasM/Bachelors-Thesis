@@ -12,4 +12,32 @@ angular.module('Dashboard').directive('stringList', function () {
     link: function (scope, element, attrs) {
     }
   }
+}).directive('locationList', function () {
+  return {
+    templateUrl: 'static/dashboard/locationList/locationList.html',
+    restrict: 'E',
+    scope: {
+      array: '=array'
+    },
+    link: function (scope, element, attrs) {
+      scope.newLocation = [];
+
+      scope.stepRange = function (max, step) {
+        var input = [];
+        for (var i = 0; i < max; i += step) {
+          input.push(i);
+        }
+        return input;
+      };
+      scope.addLocation = function () {
+        console.log(scope.newLocation);
+        console.log(scope.array);
+
+
+
+        console.log(scope.newLocation);
+        console.log(scope.array);
+      }
+    }
+  }
 });

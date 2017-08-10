@@ -58,14 +58,12 @@
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#track">Track</a></h4>
           <div>
             <string-list array="streamSettings['user'].track"></string-list>
-            <!-- TODO String List input-->
           </div>
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#locations">Locations</a></h4>
           Remember: a tweet is included if matched by Track <b>OR</b> by Location.
           <div>
-            List of rows that each contain 4 float values
-            <!-- TODO Location List input-->
+            <location-list array="streamSettings['user'].locations"></location-list>
           </div>
 
         </div>

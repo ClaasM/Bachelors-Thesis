@@ -1,5 +1,5 @@
-<div>
-  <ul class="string-list">
+<div class="string-list">
+  <ul>
     <li ng-if="array.length == 0">No items added, yet</li>
     <li ng-if="array.length > 0" ng-repeat="string in array track by $index">
       {{string}} <p class="fa fa-trash-o pull-right" ng-click="array.splice($index, 1)"></p>
