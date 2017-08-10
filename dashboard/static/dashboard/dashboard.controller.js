@@ -8,7 +8,10 @@ angular.module('Dashboard')
       $scope.selectedStream = 'public';
       $scope.streamSettings = {
         'user': {
-          type: 'user'
+          type: 'user',
+          _with: 'followings',
+          replies: 'all',
+          track: []
         },
         'site': {
           type: 'site'
@@ -16,7 +19,7 @@ angular.module('Dashboard')
         /* TODO rename */
         'public': {
           type: 'public',
-          'filter_level':'none'
+          'filter_level': 'none'
         },
         'sample': {
           type: 'sample'
@@ -26,11 +29,12 @@ angular.module('Dashboard')
         },
         'firehose': {
           type: 'firehose',
-          count:0
+          count: 0
         }
       };
       var socket = io();
       $scope.updateSettings = function () {
+        console.log($scope.streamSettings[$scope.selectedStream]);
         //$http.post('/api/dashboard/update', $scope.streamSettings[$scope.selectedStream])
         socket.emit('update', $scope.streamSettings[$scope.selectedStream])
       };
@@ -38,7 +42,6 @@ angular.module('Dashboard')
       var number_of_tweets_shown = 4;
 
 
-      var socket = io();
       socket.on('dashboard.direct_message-create', function (data) {
         console.log(data);
       });

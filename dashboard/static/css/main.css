@@ -49,3 +49,11 @@
 	list-style-type: none;
 	margin-left: 0;
 }
+
+.string-list {
+	width: 300px;
+}
+
+.string-list li {
+	padding: 3px;
+}

@@ -33,13 +33,13 @@
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#with">With</a></h4>
           <div class="radio">
             <label>
-              <input type="radio" name="with" ng-model="streamSettings['user'].with" value="user">
+              <input type="radio" name="with" ng-model="streamSettings['user']._with" value="user">
               user (only stream messages from the user)
             </label>
           </div>
           <div class="radio">
             <label>
-              <input type="radio" name="with" ng-model="streamSettings['user'].with" value="followings">
+              <input type="radio" name="with" ng-model="streamSettings['user']._with" value="followings">
               followings (adds those from accounts the user follows)
             </label>
           </div>
@@ -47,7 +47,9 @@
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#replies">Replies</a></h4>
           <div class="checkbox">
             <label>
-              <input type="checkbox" ng-change="setOrDelete('user.replies', 'all')">
+              <input type="checkbox"
+                     ng-model="streamSettings['user'].replies"
+                     ng-true-value="'all'" ng-false-value="null">
               all (include even if we don't follow both sender and receiver)
               <!-- TODO do we receive replies from non-followed senders to followed recipients? -->
             </label>
@@ -55,7 +57,7 @@
 
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#track">Track</a></h4>
           <div>
-            Here is a string list input
+            <string-list array="streamSettings['user'].track"></string-list>
             <!-- TODO String List input-->
           </div>
 
@@ -80,13 +82,13 @@
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#with">With</a></h4>
           <div class="radio">
             <label>
-              <input type="radio" name="with" ng-model="streamSettings['site'].with" value="user">
+              <input type="radio" name="with" ng-model="streamSettings['site']._with" value="user">
               user (only stream messages from the user)
             </label>
           </div>
           <div class="radio">
             <label>
-              <input type="radio" name="with" ng-model="streamSettings['site'].with" value="followings">
+              <input type="radio" name="with" ng-model="streamSettings['site']._with" value="followings">
               followings (adds those from accounts the user follows)
             </label>
           </div>
@@ -95,7 +97,9 @@
           <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#replies">Replies</a></h4>
           <div class="checkbox">
             <label>
-              <input type="checkbox" ng-change="setOrDelete('site.replies', 'all')">
+              <input type="checkbox"
+                     ng-model="streamSettings['site'].replies"
+                     ng-true-value="'all'" ng-false-value="null">
               all (include even if we don't follow both sender and receiver)
               <!-- TODO do we receive replies from non-followed senders to followed recipients? -->
             </label>
