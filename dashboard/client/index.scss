@@ -1,0 +1,17 @@
+/**
+ * App-wide Styles
+ */
+
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+// Component styles are injected through grunt
+// injector
+@import 'css/main.scss';
+@import 'dashboard/dashboard.scss';
+@import 'test.scss';
+// endinjector

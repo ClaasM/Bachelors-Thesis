@@ -1,19 +1,14 @@
 'use strict';
 
 module.exports = function (grunt) {
-  var localConfig;
-  try {
-    localConfig = require('./server/config/local.env');
-  } catch (e) {
-    localConfig = {};
-  }
 
-  // Load grunt tasks automatically, when needed
+  // Load grunt tasks automatically, when needed TODO why
   require('jit-grunt')(grunt, {
     useminPrepare: 'grunt-usemin',
     ngtemplates: 'grunt-angular-templates',
     cdnify: 'grunt-google-cdn',
     buildcontrol: 'grunt-build-control',
+    shell: 'grunt-shell'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -22,30 +17,30 @@ module.exports = function (grunt) {
   // Define the configuration for all the tasks
   grunt.initConfig({
 
-    // Project settings
+    // Configure which site to open when the "open" task is run
     open: {
       server: {
         url: 'http://localhost:5000'
       }
     },
+
+    // Configure which files to watch and which tasks to run when they change
     watch: {
+      //When javascript changes, inject it into
       injectJS: {
         files: [
-          'client/!bower_components/**/*.js',
+          'client/**/*.js',
+          '!client/bower_components/**',
           '!client/index.js'
         ],
         tasks: ['injector:scripts']
       },
-      injectCss: {
-        files: ['client/!bower_components/**/*.css'],
-        tasks: ['injector:css']
-      },
       injectSass: {
-        files: ['client/!bower_components/**/*.{scss,sass}'],
+        files: ['client/**/*.{scss,sass}', '!client/bower_components/**'],
         tasks: ['injector:sass']
       },
       sass: {
-        files: ['client/!bower_components/**/*.{scss,sass}'],
+        files: ['client/**/*.{scss,sass}', '!client/bower_components/**'],
         tasks: ['sass', 'postcss']
       },
       gruntfile: {
@@ -53,9 +48,9 @@ module.exports = function (grunt) {
       },
       livereload: {
         files: [
-          //TODO maybe restructure and use {app, components} instead of !bower_components again
-          '{.tmp,dist}/!bower_components/**/*.{js,css,html}',
-          'client/**/*.{png,jpg,jpeg,gif,webp,svg}'
+          '{.tmp,dist}/**/*.{js,css,html}',
+          'client/**/*.{png,jpg,jpeg,gif,webp,svg}',
+          '!client/bower_components/**'
         ],
         options: {
           livereload: true
@@ -131,7 +126,7 @@ module.exports = function (grunt) {
     filerev: {
       dist: {
         src: [
-          'dist/client/!(bower_components){,*/}*.{js,css,png,jpg,jpeg,gif,webp,svg}' //TODO what does {,*/} mean?
+          'dist/client/!(bower_components){,*/}*.{js,css,png,jpg,jpeg,gif,webp,svg}' //TODO No idea if this works
         ]
       }
     },
@@ -203,16 +198,16 @@ module.exports = function (grunt) {
           removeScriptTypeAttributes: true,
           removeStyleLinkTypeAttributes: true
         },
-        usemin: 'app/index.js'
+        usemin: 'index.js'
       },
       main: {
         cwd: 'dist',
-        src: ['!bower_components/**/*.html'],
+        src: ['client/**/*.html', '!client/bower_components/**'],
         dest: '.tmp/templates.js'
       },
       tmp: {
         cwd: '.tmp',
-        src: ['!bower_components/**/*.html'],
+        src: ['client/**/*.html', '!client/bower_components/**'],
         dest: '.tmp/tmp-templates.js'
       }
     },
@@ -257,7 +252,7 @@ module.exports = function (grunt) {
         expand: true,
         cwd: 'dist',
         dest: '.tmp/',
-        src: ['!bower_components/**/*.css']
+        src: ['client/**/*.css', '!client/bower_components/**']
       }
     },
 
@@ -279,7 +274,7 @@ module.exports = function (grunt) {
           compass: false
         },
         files: {
-          '.tmp/app/app.css': 'client/app/app.scss'
+          '.tmp/client/index.css': 'client/index.scss'
         }
       }
     },
@@ -307,8 +302,9 @@ module.exports = function (grunt) {
         files: {
           'client/index.html': [
             [
-              '.tmp/!bower_components/**/*.js',
-              '!{.tmp,dist}/index.js'
+              'client/**/*.js',
+              '!client/bower_components/**',
+              '!client/index.js'
             ]
           ]
         }
@@ -326,8 +322,9 @@ module.exports = function (grunt) {
         },
         files: {
           'client/index.scss': [
-            'client/!bower_components/**/*.{scss,sass}',
-            '!client/app/app.{scss,sass}'
+            'client/**/*.{scss,sass}',
+            '!client/index.{scss,sass}',
+            '!client/bower_components/**',
           ]
         }
       },
@@ -345,11 +342,24 @@ module.exports = function (grunt) {
         },
         files: {
           'client/index.html': [
-            'client/!bower_components/**/*.css'
+            'client/**/*.css',
+            '!client/bower_components/**',
           ]
         }
       }
     },
+
+    shell: {
+      python: {
+        options: {
+          stdout: true
+        },
+        command: [
+          '~/.virtualenvs/thesis/bin/activate',
+          'python run.py',
+        ].join(' && ')
+      }
+    }
   });
 
   // Used for delaying livereload until after server has restarted
@@ -364,16 +374,6 @@ module.exports = function (grunt) {
     }, 1500);
   });
 
-  // New task for flask server
-  grunt.registerTask('flask', 'Run flask server.', function () {
-    var spawn = require('child_process').spawn;
-    grunt.log.writeln('Starting Flask development server.');
-    // stdio: 'inherit' let us see flask output in grunt
-    process.env.FLASK_YEOMAN_DEBUG = 1;
-    var PIPE = {stdio: 'inherit'};
-    spawn('python', ['run.py'], PIPE);
-  });
-
   grunt.registerTask('serve', function () {
     grunt.task.run([
       'clean:server',
@@ -382,7 +382,7 @@ module.exports = function (grunt) {
       'injector',
       'wiredep:client',
       'postcss',
-      'flask',
+      'shell:python',
       'wait',
       'open',
       'watch'
@@ -406,11 +406,5 @@ module.exports = function (grunt) {
     'uglify',
     'filerev',
     'usemin'
-  ]);
-
-  grunt.registerTask('default', [
-    'newer:jshint',
-    'test',
-    'build'
   ]);
 };

@@ -1,45 +1,4 @@
 <!doctype html>
-<html lang="en" ng-app="Dashboard">
-<head>
-  <meta charset="utf-8">
-  <base href="/">
-
-  <title>Dashboard</title>
-
-  <link rel="stylesheet" href="/client/css/bootstrap.scss">
-  <link rel="stylesheet" href="/client/css/main.scss">
-  <link rel="stylesheet" href="/client/dashboard/dashboard.scss">
-  <link rel="stylesheet" href="/client/bower_components/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="/client/bower_components/font-awesome/css/font-awesome.css">
-
-  <script src="/client/bower_components/angular/angular.js"></script>
-  <script src="/client/bower_components/angular-cookies/angular-cookies.js"></script>
-  <script src="/client/bower_components/angular-resource/angular-resource.js"></script>
-  <script src="/client/bower_components/angular-route/angular-route.js"></script>
-
-
-  <script src="/client/bower_components/jquery/dist/jquery.js"></script>
-  <script src="/client/bower_components/lodash/dist/lodash.js"></script>
-  <script src="/client/bower_components/socket.io-client/dist/socket.io.js"></script>
-  <script src="/client/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-
-
-  <script src="/client/index.js"></script>
-  <script src="/client/js/controllers.js"></script>
-  <script src="/client/js/services.js"></script>
-  <script src="/client/js/directives.js"></script>
-  <script src="/client/js/filters.js"></script>
-
-  <script src="/client/dashboard/dashboard.controller.js"></script>
-  <script src="/client/main/main.controller.js"></script>
-
-</head>
-<body>
-
-</body>
-</html>
-
-<!doctype html>
 <!--[if lt IE 7]>
 <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>
@@ -52,7 +11,7 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <base href="/">
-  <title>Ideation</title>
+  <title>Dashboard</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -61,8 +20,8 @@
   <link rel="stylesheet" href="bower_components/angular-notify/dist/angular-notify.css" />
   <!-- endbower -->
   <!-- endbuild -->
-  <!-- build:css({.tmp,client}) app/app.css -->
-  <link rel="stylesheet" href="app/app.css">
+  <!-- build:css({.tmp,client}) index.css -->
+  <link rel="stylesheet" href="index.css">
   <!-- injector:css -->
   <!-- endinjector -->
   <!-- endbuild -->
@@ -146,6 +105,12 @@
 <!-- build:js(.tmp) client/index.js -->
 <script src="client/index.js"></script>
 <!-- injector:js -->
+<script src="dashboard/dashboard.controller.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/directives.js"></script>
+<script src="js/filters.js"></script>
+<script src="js/services.js"></script>
+<script src="main/main.controller.js"></script>
 <!-- endinjector -->
 <!-- endbuild -->
 </body>

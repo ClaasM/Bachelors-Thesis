@@ -1,7 +1,8 @@
-from flask import redirect, session, request, url_for, flash, Blueprint
-from dashboard import socketio
-from streaming.twitter_kafka_producer import TwitterKafkaProducer
+from flask import redirect, session, request, Blueprint
+from server import socketio
 from streaming.twitter_kafka_consumer import TwitterKafkaConsumer
+
+from streaming.twitter_kafka_producer import TwitterKafkaProducer
 
 dashboard_blueprint = Blueprint('dashboard', __name__)
 

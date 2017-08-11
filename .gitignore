@@ -6,3 +6,4 @@
 **/metastore_db
 **/node_modules/
 *.log
+.tmp

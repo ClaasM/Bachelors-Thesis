@@ -1,6 +1,6 @@
 import json
 
-from dashboard import socketio
+from server import socketio
 
 """
 Non-serializable functions; Don't use on execution nodes, only use on server
