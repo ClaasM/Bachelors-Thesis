@@ -8,7 +8,8 @@ module.exports = function (grunt) {
     ngtemplates: 'grunt-angular-templates',
     cdnify: 'grunt-google-cdn',
     buildcontrol: 'grunt-build-control',
-    shell: 'grunt-shell'
+    shell: 'grunt-shell-spawn',
+    keepalive: 'grunt-keepalive'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -58,7 +59,7 @@ module.exports = function (grunt) {
       },
       flask: {
         files: ['server/**/*.py'],
-        tasks: ['flask', 'wait'],
+        tasks: ['shell:flask', 'wait'],
         options: {
           livereload: true,
           spawn: false //Without this option specified flask won't be reloaded
@@ -351,13 +352,11 @@ module.exports = function (grunt) {
 
     shell: {
       python: {
+        command: 'python run.py',
         options: {
-          stdout: true
-        },
-        command: [
-          //'~/.virtualenvs/thesis/bin/activate',
-          'python run.py',
-        ].join(' && ')
+          stdout: true,
+          async: true
+        }
       }
     }
   });
@@ -365,12 +364,10 @@ module.exports = function (grunt) {
   // Used for delaying livereload until after server has restarted
   grunt.registerTask('wait', function () {
     grunt.log.ok('Waiting for server reload...');
-
     var done = this.async();
-
     setTimeout(function () {
       grunt.log.writeln('Done waiting!');
-      done();
+      done()
     }, 1500);
   });
 
