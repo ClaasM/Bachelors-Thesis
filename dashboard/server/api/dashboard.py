@@ -41,6 +41,8 @@ def handle_connect():
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    session['consumer'].stop()
-    session['producer'].stop()
+    if 'consumer' in session:
+        session['consumer'].stop()
+    if 'producer' in session:
+        session['producer'].stop()
     print("Disconnected")

@@ -355,7 +355,7 @@ module.exports = function (grunt) {
           stdout: true
         },
         command: [
-          '~/.virtualenvs/thesis/bin/activate',
+          //'~/.virtualenvs/thesis/bin/activate',
           'python run.py',
         ].join(' && ')
       }

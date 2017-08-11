@@ -4,7 +4,7 @@
 
 angular.module('Dashboard').directive('stringList', function () {
   return {
-    templateUrl: '..//dashboard/stringList/stringList.html',
+    templateUrl: './dashboard/stringList/stringList.html',
     restrict: 'E',
     scope: {
       array: '=array'
@@ -14,7 +14,7 @@ angular.module('Dashboard').directive('stringList', function () {
   }
 }).directive('locationList', function () {
   return {
-    templateUrl: '..//dashboard/locationList/locationList.html',
+    templateUrl: './dashboard/locationList/locationList.html',
     restrict: 'E',
     scope: {
       array: '=array'
@@ -33,7 +33,7 @@ angular.module('Dashboard').directive('stringList', function () {
   }
 }).directive('languageSelect', function () {
   return {
-    templateUrl: '..//dashboard/locationList/locationList.html',
+    templateUrl: './dashboard/locationList/locationList.html',
     restrict: 'E',
     scope: {
       array: '=array'

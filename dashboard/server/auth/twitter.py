@@ -11,7 +11,6 @@ with open('config.json') as config_data:
 
 @twitter_blueprint.route('/login')
 def login():
-    print(url_for('twitter.callback'))
     auth = tweepy.OAuthHandler(config['consumer_key'], config['consumer_secret'],
                                url_for('twitter.callback', _external=True))
     url = auth.get_authorization_url()

@@ -1,13 +1,17 @@
+import mimetypes
+
 from flask import Flask, make_response, send_from_directory
 from flask_socketio import SocketIO
+from werkzeug.exceptions import NotFound
 import os
 
 # Initialize the app
-app = Flask(__name__, static_url_path='/client')
+app = Flask(__name__, static_folder="../client")
 socketio = SocketIO(app)
 
 
 def start():
+    app.config.from_object('server.settings')
     app.url_map.strict_slashes = False
 
     """
@@ -20,6 +24,14 @@ def start():
     @app.route('/dashboard')
     def basic_pages(*args, **kwargs):
         return make_response(open('./client/index.html').read())
+
+    @app.route('/<path:path>')
+    def send(path):
+        try:
+            return send_from_directory('../client', path)
+        except NotFound:
+            return send_from_directory('../.tmp/client', path)
+            # if mimetypes.guess_type(path)[0] is None:
 
     """
     Static Files
