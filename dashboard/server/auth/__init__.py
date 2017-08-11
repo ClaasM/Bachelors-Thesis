@@ -1,4 +1,4 @@
-from dashboard.auth.twitter import twitter_blueprint
+from dashboard.server.auth.twitter import twitter_blueprint
 
 url_prefix = '/auth'
 

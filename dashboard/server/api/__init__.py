@@ -1,4 +1,4 @@
-from dashboard.api.dashboard import dashboard_blueprint
+from dashboard.server.api.dashboard import dashboard_blueprint
 
 url_prefix = '/api'
 

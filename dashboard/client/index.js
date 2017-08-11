@@ -7,11 +7,11 @@ angular.module('Dashboard', ['dashboardServices',
         function ($routeProvider, $locationProvider, $httpProvider) {
           $routeProvider
               .when('/', {
-                templateUrl: 'static/main/main.html',
+                templateUrl: '..//main/main.html',
                 controller: 'MainCtrl'
               })
               .when('/dashboard', {
-                templateUrl: 'static/dashboard/dashboard.html',
+                templateUrl: '..//dashboard/dashboard.html',
                 controller: 'DashboardCtrl'
               })
               .otherwise({
