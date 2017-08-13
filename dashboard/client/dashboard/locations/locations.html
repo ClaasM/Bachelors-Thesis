@@ -1,0 +1,28 @@
+<div class="locations">
+  <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#locations">Locations</a></h4>
+  Remember: a tweet is included if matched by Track <b>OR</b> by Location.
+  <div class="location-list">
+    <table class="table">
+      <tr ng-if="settings.locations.length == 0">No items added, yet</tr>
+      <tr ng-if="settings.locations.length > 0" ng-repeat="num in stepRange(settings.locations.length, 4)">
+        <td ng-bind="settings.locations[num + 0]"></td>
+        <td ng-bind="settings.locations[num + 1]"></td>
+        <td ng-bind="settings.locations[num + 2]"></td>
+        <td ng-bind="settings.locations[num + 3]"></td>
+        <td><p class="fa fa-trash-o pull-right" ng-click="settings.locations.splice(num, 4)"></p></td>
+      </tr>
+      <tr>
+        <td><input type="number" ng-model="newLocation[0]"></td>
+        <td><input type="number" ng-model="newLocation[1]"></td>
+        <td><input type="number" ng-model="newLocation[2]"></td>
+        <td><input type="number" ng-model="newLocation[3]"></td>
+        <td>
+          <button class="btn btn-default"
+                  ng-click="settings.locations = settings.locations.concat(newLocation);newLocation = []">
+            Add
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

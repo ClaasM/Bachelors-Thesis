@@ -34,16 +34,6 @@ def start():
             # if mimetypes.guess_type(path)[0] is None:
 
     """
-    Static Files
-    """
-
-    # special file handlers, the rest is handled by providing the Flask constructor a static path
-    @app.route('/favicon.ico')
-    def favicon():
-        return send_from_directory(os.path.join(app.root_path, 'client'),
-                                   'img/favicon.ico')
-
-    """
     REST API & Auth
     """
 

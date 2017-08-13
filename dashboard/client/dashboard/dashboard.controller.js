@@ -5,6 +5,7 @@
 
 angular.module('Dashboard')
     .controller('DashboardCtrl', function ($scope, $http) {
+      $scope.isStreaming = false;
       $scope.selectedStream = 'public';
       $scope.streamSettings = {
         'user': {
@@ -49,7 +50,6 @@ angular.module('Dashboard')
 
       var number_of_tweets_shown = 4;
 
-
       socket.on('dashboard.direct_message-create', function (data) {
         console.log(data);
       });
@@ -61,6 +61,7 @@ angular.module('Dashboard')
       });
 
       socket.on('dashboard.status-create', function (data) {
+        $scope.isStreaming = true;
         console.log(data);
         _(number_of_tweets_shown).times(function (index) {
           $scope.data.tweets[number_of_tweets_shown - index] = $scope.data.tweets[number_of_tweets_shown - index - 1];
@@ -101,6 +102,7 @@ angular.module('Dashboard')
       }
 
       /**
+       * TODO this can be removed if the other thing works
        * Sets or deletes a key on the streamSettings object.
        * This is useful since some parameters for the twitter streaming API are supposed to be either a specific string or nonexistent.
        * @param key the to set
