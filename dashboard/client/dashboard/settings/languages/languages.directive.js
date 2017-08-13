@@ -3,7 +3,7 @@
  */
 angular.module('Dashboard').directive('languages', function () {
   return {
-    templateUrl: './dashboard/languages/languages.html',
+    templateUrl: './dashboard/settings/languages/languages.html',
     restrict: 'E',
     scope: {
       settings: '=settings'

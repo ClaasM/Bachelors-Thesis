@@ -3,7 +3,7 @@
  */
 angular.module('Dashboard').directive('count', function () {
   return {
-    templateUrl: './dashboard/count/count.html',
+    templateUrl: './dashboard/settings/count/count.html',
     restrict: 'E',
     scope: {
       settings: '=settings'

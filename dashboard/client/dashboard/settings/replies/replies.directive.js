@@ -3,7 +3,7 @@
  */
 angular.module('Dashboard').directive('replies', function () {
   return {
-    templateUrl: './dashboard/replies/replies.html',
+    templateUrl: './dashboard/settings/replies/replies.html',
     restrict: 'E',
     scope: {
       settings: '=settings'

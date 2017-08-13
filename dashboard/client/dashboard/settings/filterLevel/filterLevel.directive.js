@@ -3,7 +3,7 @@
  */
 angular.module('Dashboard').directive('filterLevel', function () {
   return {
-    templateUrl: './dashboard/filterLevel/filterLevel.html',
+    templateUrl: './dashboard/settings/filterLevel/filterLevel.html',
     restrict: 'E',
     scope: {
       settings: '=settings'

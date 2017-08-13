@@ -20,3 +20,5 @@ angular.module('Dashboard', [
           $locationProvider.html5Mode(true);
           //$httpProvider.interceptors.push('authInterceptor');
         });
+
+google.charts.load('current', {'packages': ['corechart']});

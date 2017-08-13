@@ -3,7 +3,7 @@
  */
 angular.module('Dashboard').directive('track', function () {
   return {
-    templateUrl: './dashboard/track/track.html',
+    templateUrl: './dashboard/settings/track/track.html',
     restrict: 'E',
     scope: {
       settings: '=settings'

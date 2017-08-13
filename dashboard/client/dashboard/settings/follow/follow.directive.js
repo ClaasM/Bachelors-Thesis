@@ -3,7 +3,7 @@
  */
 angular.module('Dashboard').directive('follow', function () {
   return {
-    templateUrl: './dashboard/follow/follow.html',
+    templateUrl: './dashboard/settings/follow/follow.html',
     restrict: 'E',
     scope: {
       settings: '=settings'

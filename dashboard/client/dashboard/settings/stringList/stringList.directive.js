@@ -4,7 +4,7 @@
 
 angular.module('Dashboard').directive('stringList', function () {
   return {
-    templateUrl: './dashboard/stringList/stringList.html',
+    templateUrl: './dashboard/settings/stringList/stringList.html',
     restrict: 'E',
     scope: {
       array: '=array'

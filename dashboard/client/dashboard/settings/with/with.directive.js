@@ -3,7 +3,7 @@
  */
 angular.module('Dashboard').directive('with', function () {
   return {
-    templateUrl: './dashboard/with/with.html',
+    templateUrl: './dashboard/settings/with/with.html',
     restrict: 'E',
     scope: {
       settings: '=settings'

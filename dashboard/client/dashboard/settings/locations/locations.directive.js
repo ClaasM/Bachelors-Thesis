@@ -3,7 +3,7 @@
  */
 angular.module('Dashboard').directive('locations', function () {
   return {
-    templateUrl: './dashboard/locations/locations.html',
+    templateUrl: './dashboard/settings/locations/locations.html',
     restrict: 'E',
     scope: {
       settings: '=settings'
