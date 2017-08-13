@@ -17,15 +17,15 @@ $fa-font-path: "./bower_components/font-awesome/fonts";
 
 // Component styles are injected through grunt
 // injector
-@import 'dashboard/count/count.scss';
 @import 'dashboard/dashboard.scss';
-@import 'dashboard/filterLevel/filterLevel.scss';
-@import 'dashboard/follow/follow.scss';
-@import 'dashboard/languages/languages.scss';
-@import 'dashboard/locations/locations.scss';
-@import 'dashboard/replies/replies.scss';
-@import 'dashboard/stringList/stringList.scss';
-@import 'dashboard/track/track.scss';
-@import 'dashboard/with/with.scss';
+@import 'dashboard/settings/count/count.scss';
+@import 'dashboard/settings/filterLevel/filterLevel.scss';
+@import 'dashboard/settings/follow/follow.scss';
+@import 'dashboard/settings/languages/languages.scss';
+@import 'dashboard/settings/locations/locations.scss';
+@import 'dashboard/settings/replies/replies.scss';
+@import 'dashboard/settings/stringList/stringList.scss';
+@import 'dashboard/settings/track/track.scss';
+@import 'dashboard/settings/with/with.scss';
 @import 'main/main.scss';
 // endinjector
