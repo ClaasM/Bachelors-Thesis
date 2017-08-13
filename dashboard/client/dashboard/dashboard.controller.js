@@ -6,6 +6,7 @@
 angular.module('Dashboard')
     .controller('DashboardCtrl', function ($scope, $http) {
       $scope.isStreaming = false;
+      $scope.isLoading = false;
       $scope.selectedStream = 'public';
       $scope.streamSettings = {
         'user': {
@@ -50,6 +51,8 @@ angular.module('Dashboard')
         console.log($scope.streamSettings[$scope.selectedStream]);
         //$http.post('/api/dashboard/update', $scope.streamSettings[$scope.selectedStream])
         socket.emit('update', $scope.streamSettings[$scope.selectedStream])
+        $scope.isLoading = true;
+        $scope.isStreaming = false;
       };
 
       var number_of_tweets_shown = 4;
@@ -66,6 +69,7 @@ angular.module('Dashboard')
 
       socket.on('dashboard.status-create', function (data) {
         $scope.isStreaming = true;
+        $scope.isLoading = false;
         console.log(data);
         _(number_of_tweets_shown).times(function (index) {
           $scope.data.tweets[number_of_tweets_shown - index] = $scope.data.tweets[number_of_tweets_shown - index - 1];

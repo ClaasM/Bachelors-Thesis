@@ -1,24 +1,18 @@
-<div class="filter-level">
+<div class="filter-level col-sm-6">
   <h4><a href="https://dev.twitter.com/streaming/overview/request-parameters#filter_level">Filter level</a></h4>
-  <div class="radio">
-    <label>
-      <input type="radio" name="filter_level" ng-model="settings.filter_level"
-             value="none">
-      none
-    </label>
-  </div>
-  <div class="radio">
-    <label>
-      <input type="radio" name="filter_level" ng-model="settings.filter_level"
-             value="low">
-      low
-    </label>
-  </div>
-  <div class="radio">
-    <label>
-      <input type="radio" name="filter_level" ng-model="settings.filter_level"
-             value="medium">
-      medium
-    </label>
-  </div>
+  <label class="radio-inline">
+    <input type="radio" name="filter_level"
+           ng-model="settings.filter_level" value="none">
+    none
+  </label>
+  <label class="radio-inline">
+    <input type="radio" name="filter_level" ng-model="settings.filter_level"
+           value="low">
+    low
+  </label>
+  <label class="radio-inline">
+    <input type="radio" name="filter_level" ng-model="settings.filter_level"
+           value="medium">
+    medium
+  </label>
 </div>

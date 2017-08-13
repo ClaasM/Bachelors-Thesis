@@ -16,11 +16,11 @@
           <a href ng-click="selectedStream = 'site'">Site stream</a>
         </li>
         <li ng-class="{'active':selectedStream == 'public'}">
-          <a href ng-click="selectedStream = 'public'">Public (=filter) stream</a>
+          <a href ng-click="selectedStream = 'public'">Public (filter) stream</a>
         </li>
 
         <li ng-class="{'active':selectedStream == 'sample'}">
-          <a href ng-click="selectedStream = 'sample'">Sample stream</a>
+          <a href ng-click="selectedStream = 'sample'">Public (sample) stream</a>
         </li>
         <li ng-class="{'active':selectedStream == 'retweet'}">
           <a href ng-click="selectedStream = 'retweet'">Retweet stream</a>
@@ -33,46 +33,66 @@
       <div class="tab-content">
         <div ng-if="selectedStream == 'user'">
           <h3>User stream</h3>
-          <x-with x-settings="streamSettings['user']"></x-with>
-          <x-replies x-settings="streamSettings['user']"></x-replies>
-          <x-track x-settings="streamSettings['user']"></x-track>
-          <x-locations x-settings="streamSettings['user']"></x-locations>
+          <div class="row">
+            <x-with x-settings="streamSettings['user']"></x-with>
+            <x-replies x-settings="streamSettings['user']"></x-replies>
+            <x-track x-settings="streamSettings['user']"></x-track>
+          </div>
+          <div class="row">
+            <x-locations x-settings="streamSettings['user']"></x-locations>
+          </div>
         </div>
         <div ng-if="selectedStream == 'site'">
           <h3>Site stream</h3>
-          <x-follow x-settings="streamSettings['site']"></x-follow>
-          <x-with x-settings="streamSettings['site']"></x-with>
-          <x-replies x-settings="streamSettings['site']"></x-replies>
+          <div class="row">
+            <x-follow x-settings="streamSettings['site']"></x-follow>
+            <x-with x-settings="streamSettings['site']"></x-with>
+            <x-replies x-settings="streamSettings['site']"></x-replies>
+          </div>
         </div>
         <div ng-if="selectedStream == 'public'">
           <h3>Public (Filter) stream</h3>
-          <x-follow x-settings="streamSettings['public']"></x-follow>
-          <x-track x-settings="streamSettings['public']"></x-track>
-          <x-locations x-settings="streamSettings['public']"></x-locations>
-          <x-languages x-settings="streamSettings['public']"></x-languages>
-          <x-filter-level x-settings="streamSettings['public']"></x-filter-level>
+          <div class="row">
+            <x-follow x-settings="streamSettings['public']"></x-follow>
+            <x-track x-settings="streamSettings['public']"></x-track>
+            <x-languages x-settings="streamSettings['public']"></x-languages>
+          </div>
+          <div class="row">
+            <x-locations x-settings="streamSettings['public']"></x-locations>
+            <x-filter-level x-settings="streamSettings['public']"></x-filter-level>
+          </div>
         </div>
         <div ng-if="selectedStream == 'sample'">
           <h3>Public (Sample) stream</h3>
-          <x-languages x-settings="streamSettings['sample']"></x-languages>
+          <div class="row">
+            <x-languages x-settings="streamSettings['sample']"></x-languages>
+          </div>
         </div>
         <div ng-if="selectedStream == 'retweet'">
           <h3>Retweet stream</h3>
-          The retweet stream has no further options.
+          <div class="row">
+            The retweet stream has no further options.
+          </div>
         </div>
         <div ng-if="selectedStream == 'firehose'" class="firehose">
           <h3>Firehose</h3>
-          <x-count x-settings="streamSettings['firehose']"></x-count>
+          <div class="row">
+            <x-count x-settings="streamSettings['firehose']"></x-count>
+          </div>
         </div>
       </div>
 
       <button class="btn btn-primary"
-              ng-click="updateSettings()"
-              ng-bind="isStreaming?'Update Settings':'Start Streaming'">
+              ng-click="updateSettings()">
+        <span ng-if="isLoading"><i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;Loading</span>
+        <span ng-if="isStreaming"><i class="fa fa-refresh"></i>&nbsp;Update Settings</span>
+        <span ng-if="!isLoading && !isStreaming"><i class="fa fa-play"></i>&nbsp;Start</span>
+
       </button>
+
     </div>
 
-    <div class="row">
+    <div class="results row">
       <h2>Results</h2>
       <div class="col-xs-12 col-md-4">
         <h2>Tweets</h2>

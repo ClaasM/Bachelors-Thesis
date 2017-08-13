@@ -1,5 +1,14 @@
-.dashboard .tweet {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.dashboard {
+  .settings {
+    .btn-primary {
+      width: 200px;
+    }
+  }
+  .results {
+    .tweet {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
