@@ -9,6 +9,7 @@ angular.module('Dashboard').directive('filterLevel', function () {
       settings: '=settings'
     },
     link: function (scope, element, attrs) {
+      console.log(scope.settings);
     }
   }
 });

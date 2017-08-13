@@ -26,6 +26,7 @@ class TwitterKafkaConsumer(object):
         # Perform LDA
         topic_model = preprocessed.map(spark_functions.lda())
         # Send results to client via the websocket
+        # TODO for each overall?
         topic_model.foreachRDD(lambda rdd: spark_functions.emit(rdd.collect(), sid))
 
         # Start the streaming

@@ -41,6 +41,10 @@ angular.module('Dashboard')
           count: 0
         }
       };
+      $scope.data = {
+        tweets: []
+      };
+
       var socket = io();
       $scope.updateSettings = function () {
         console.log($scope.streamSettings[$scope.selectedStream]);
@@ -73,33 +77,6 @@ angular.module('Dashboard')
         //TODO use ngSocket
         $scope.$digest()
       });
-
-
-      //Dummy Data
-      $scope.data = {
-        topics: [
-          {
-            text: "iPhone",
-            value: 0.8
-          }, {
-            text: "iPad",
-            value: 0.5
-          }, {
-            text: "iMac",
-            value: 0.2
-          }
-        ],
-        sentiment: [
-          {
-            text: "Anger",
-            value: 0.8
-          }, {
-            text: "Happiness",
-            value: 0.5
-          }
-        ],
-        tweets: []
-      }
 
       /**
        * TODO this can be removed if the other thing works

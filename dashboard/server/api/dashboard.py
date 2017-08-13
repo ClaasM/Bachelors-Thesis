@@ -7,25 +7,28 @@ from streaming.twitter_kafka_producer import TwitterKafkaProducer
 dashboard_blueprint = Blueprint('dashboard', __name__)
 
 
+def stop_pipeline():
+    if 'consumer' in session:
+        session['consumer'].stop()
+    if 'producer' in session:
+        session['producer'].stop()
+
+
 @socketio.on('update')
 def update(settings):
+    """
+    Starts or updates the pipeline
+    :param settings: settings for the twitter stream and which stream to use
+    :return: None
+    """
     if 'token' not in session:
         print("Not logged in!")
         redirect('/')  # TODO this doesn't work
     else:
+        # TODO update settings instead of recreating (as far as that's possible)
+        stop_pipeline()
         print(settings)
         print(request.sid)
-
-
-@socketio.on('connect')
-def handle_connect():
-    # TODO put this back in
-    return
-
-    if 'token' not in session:
-        print("Not logged in!")
-        redirect('/')  # TODO this doesn't work
-    else:
         # Start the consumer first
         consumer = TwitterKafkaConsumer()
         consumer.start(sid=str(request.sid))
@@ -39,10 +42,13 @@ def handle_connect():
         session['producer'] = producer
 
 
+@socketio.on('connect')
+def handle_connect():
+    # TODO remove
+    print("Connected!")
+
+
 @socketio.on('disconnect')
 def handle_disconnect():
-    if 'consumer' in session:
-        session['consumer'].stop()
-    if 'producer' in session:
-        session['producer'].stop()
+    stop_pipeline()
     print("Disconnected")
