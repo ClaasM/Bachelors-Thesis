@@ -50,24 +50,20 @@ angular.module('Dashboard')
       $scope.updateSettings = function () {
         console.log($scope.streamSettings[$scope.selectedStream]);
         //$http.post('/api/dashboard/update', $scope.streamSettings[$scope.selectedStream])
-        socket.emit('update', $scope.streamSettings[$scope.selectedStream])
+        socket.emit('update', $scope.streamSettings[$scope.selectedStream]);
         $scope.isLoading = true;
         $scope.isStreaming = false;
       };
 
+      socket.on('dashboard.wordcount-update', function (data) {
+        console.log(data);
+      });
+
+
+      //Number of tweets shown in the tweets-column of the dashboard
       var number_of_tweets_shown = 4;
-
-      socket.on('dashboard.direct_message-create', function (data) {
-        console.log(data);
-      });
-      socket.on('dashboard.friends-create', function (data) {
-        console.log(data);
-      });
-      socket.on('dashboard.event-create', function (data) {
-        console.log(data);
-      });
-
       socket.on('dashboard.status-create', function (data) {
+        //This is the main event, and since socket.io has no "onDefault", we set streaming to true here
         $scope.isStreaming = true;
         $scope.isLoading = false;
         console.log(data);
@@ -82,6 +78,16 @@ angular.module('Dashboard')
         $scope.$digest()
       });
 
+
+      socket.on('dashboard.direct_message-create', function (data) {
+        console.log(data);
+      });
+      socket.on('dashboard.friends-create', function (data) {
+        console.log(data);
+      });
+      socket.on('dashboard.event-create', function (data) {
+        console.log(data);
+      });
       /**
        * TODO this can be removed if the other thing works
        * Sets or deletes a key on the streamSettings object.

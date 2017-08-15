@@ -21,25 +21,28 @@ def update(settings):
     :param settings: settings for the twitter stream and which stream to use
     :return: None
     """
+    print("Test")
+    print(settings)
+    return
     if 'token' not in session:
         print("Not logged in!")
         redirect('/')  # TODO this doesn't work
     else:
-        # TODO update settings instead of recreating (as far as that's possible)
-        stop_pipeline()
-        print(settings)
-        print(request.sid)
-        # Start the consumer first
-        consumer = TwitterKafkaConsumer()
-        consumer.start(sid=str(request.sid))
-        # Then start the producer
-        producer = TwitterKafkaProducer(access_token=session['token'][0],
-                                        access_token_secret=session['token'][1],
-                                        sid=str(request.sid))
-        producer.start()
-        # surprisingly, this works
-        session['consumer'] = consumer
-        session['producer'] = producer
+        # Make sure consumer and producer are running
+        # (if the user is starting the stream for the first time in this session)
+        if 'consumer' not in session:
+            # Start the consumer first
+            consumer = TwitterKafkaConsumer()
+            consumer.start(sid=str(request.sid))
+            session['consumer'] = consumer
+        if 'producer' not in session:
+            # Then start the producer
+            producer = TwitterKafkaProducer(access_token=session['token'][0],
+                                            access_token_secret=session['token'][1],
+                                            sid=str(request.sid))
+            session['producer'] = producer
+
+        session['producer'].update(settings)
 
 
 @socketio.on('connect')

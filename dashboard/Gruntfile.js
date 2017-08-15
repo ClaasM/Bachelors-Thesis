@@ -379,10 +379,11 @@ module.exports = function (grunt) {
       'injector',
       'wiredep:client',
       'postcss',
-      'shell:python',
-      'wait',
-      'open',
-      'watch'
+      //TODO this doesn't work with flask stdout in routes - maybe it does if file=sys.stderr in the print function?
+      //'shell:python',
+      //'wait',
+      //'open',
+      //'watch'
     ]);
   });
 

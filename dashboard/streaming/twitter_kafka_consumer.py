@@ -15,19 +15,28 @@ class TwitterKafkaConsumer(object):
         sc = SparkContext.getOrCreate()
         sc.setLogLevel("ERROR")
         self.ssc = StreamingContext(sc, 1)  # 1 second window
+        self.ssc.checkpoint("./checkpoints")
 
     def start(self, sid):
         # ONLY USE GLOBAL FUNCTIONS!
-
         # Create the stream
         stream = KafkaUtils.createStream(self.ssc, 'docker:2181', "thesis-stream", {str(sid): 1})
         # Perform preprocessing on the incoming tweets
         preprocessed = stream.map(spark_functions.preprocess())
-        # Perform LDA
+        # TODO Perform LDA
         topic_model = preprocessed.map(spark_functions.lda())
-        # Send results to client via the websocket
-        # TODO for each overall?
-        topic_model.foreachRDD(lambda rdd: spark_functions.emit(rdd.collect(), sid))
+
+        """
+        running_counts = preprocessed.flatMap(lambda line: line.split(" ")) \
+            .map(lambda word: (word, 1)) \
+            .updateStateByKey(spark_functions.add).transform(lambda rdd: rdd.sortBy(lambda x: x[1], False))
+
+        # Emit the wordcount for the wordcount column
+        emit_wordcount = spark_functions.emitter('dashboard.wordcount-update', sid)
+        running_counts.foreachRDD(lambda rdd: emit_wordcount(rdd.collect()))
+        """
+        # Emit all tweets for the tweets column
+        preprocessed.foreachRDD(lambda rdd: spark_functions.emit('dashboard.status-create', sid, rdd.collect()))
 
         # Start the streaming
         self.ssc.start()

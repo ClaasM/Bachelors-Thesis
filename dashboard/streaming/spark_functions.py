@@ -7,13 +7,14 @@ Non-serializable functions; Don't use on execution nodes, only use on server
 """
 
 
-def emit(rdd, sid):
+def emit(event, sid, rdd):
     for status in rdd:
-        socketio.emit('dashboard.status-create', data=json.loads(status), room=sid)
+        socketio.emit(event, data=json.loads(status), room=sid)
 
 
 """
-Serializable functions to be executed on the spark execution nodes
+Serializable functions to be executed on the spark execution nodes.
+These are mostly factories
 """
 
 
@@ -27,8 +28,25 @@ def preprocess():
 
 
 def lda():
+    """
+    Factory for the LDA spark function
+    :return:
+    """
+
     def _lda(tweet):
         # print(tweet)
         return tweet
 
     return _lda
+
+
+def add():
+    """
+    Factory for the add spark function
+    :return:
+    """
+
+    def _add(new_values, last_sum):
+        return sum(new_values) + (last_sum or 0)
+
+    return _add

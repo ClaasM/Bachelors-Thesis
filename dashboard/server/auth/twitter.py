@@ -20,6 +20,8 @@ def login():
 
 @twitter_blueprint.route('/callback')
 def callback():
+    print(request.args)
+
     request_token = session['request_token']
     del session['request_token']
 

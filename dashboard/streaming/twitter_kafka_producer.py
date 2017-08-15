@@ -29,9 +29,24 @@ class TwitterKafkaProducer(tweepy.StreamListener):
             # TODO handle appropriately
         self.twitter_stream = tweepy.Stream(auth=self.api.auth, listener=self)
 
-    def start(self):
-        # Start the stream
-        self.twitter_stream.filter(track=['iphone'], async=True)
+    def update(self, settings):
+        # Stop the current stream if there is one
+        self.twitter_stream.disconnect()
+        # Start the new stream with new settings
+        if settings.type == 'site':
+            self.twitter_stream.sitestream(**settings, async=True)
+        elif settings.type == 'user':
+            self.twitter_stream.userstream(**settings, async=True)
+        elif settings.type == 'sample':
+            self.twitter_stream.sample(**settings, async=True)
+        elif settings.type == 'public':
+            self.twitter_stream.filter(**settings, async=True)
+        elif settings.type == 'retweet':
+            self.twitter_stream.retweet(async=True)
+        elif settings.type == 'firehose':
+            self.twitter_stream.firehose(**settings, async=True)
+        else:
+            raise "Unknown type: " + settings.type
 
     def stop(self):
         self.twitter_stream.disconnect()
