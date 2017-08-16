@@ -27,7 +27,7 @@ angular.module('Dashboard')
           type: 'public',
           'filter_level': 'none',
           follow: [],
-          track: [],
+          track: ['iphone'],
           locations: [],
           languages: []
         },
@@ -43,7 +43,8 @@ angular.module('Dashboard')
         }
       };
       var RESULTS_DEFAULT = {
-        tweets: []
+        tweets: [],
+        wordcount: []
       };
       $scope.results = RESULTS_DEFAULT;
 
@@ -69,7 +70,9 @@ angular.module('Dashboard')
       });
 
       socket.on('dashboard.wordcount-update', function (data) {
-        console.log(data);
+        $scope.results.wordcount = data;
+        //TODO use ngSocket
+        $scope.$digest()
       });
 
 
@@ -77,7 +80,7 @@ angular.module('Dashboard')
       var MAX_NUMBER_OF_TWEETS_SHOWN = 4;
       socket.on('dashboard.status-create', function (data) {
 
-        console.log(data);
+        //console.log(data);
         var number_of_tweets_shown = Math.min(MAX_NUMBER_OF_TWEETS_SHOWN, $scope.results.tweets.length + 1);
         _(number_of_tweets_shown).times(function (index) {
           $scope.results.tweets[number_of_tweets_shown - index] = $scope.results.tweets[number_of_tweets_shown - index - 1];

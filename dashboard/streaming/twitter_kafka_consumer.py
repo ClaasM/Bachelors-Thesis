@@ -26,17 +26,21 @@ class TwitterKafkaConsumer(object):
         # TODO Perform LDA
         topic_model = preprocessed.map(spark_functions.lda())
 
-        """
-        running_counts = preprocessed.flatMap(lambda line: line.split(" ")) \
+        # TODO comment each line
+        running_counts = preprocessed \
+            .map(lambda tweet: tweet['text']) \
+            .flatMap(lambda line: line.split(" ")) \
             .map(lambda word: (word, 1)) \
-            .updateStateByKey(spark_functions.add).transform(lambda rdd: rdd.sortBy(lambda x: x[1], False))
+            .updateStateByKey(spark_functions.add()) \
+            .transform(lambda rdd: rdd.sortBy(lambda x: x[1], False)) \
+            .map(lambda tupel: {'keyword': tupel[0], 'count': tupel[1]})
 
         # Emit the wordcount for the wordcount column
-        emit_wordcount = spark_functions.emitter('dashboard.wordcount-update', sid)
-        running_counts.foreachRDD(lambda rdd: emit_wordcount(rdd.collect()))
-        """
+        running_counts.foreachRDD(lambda rdd: spark_functions.emit('dashboard.wordcount-update', sid, rdd.take(5)))
+
         # Emit all tweets for the tweets column
-        preprocessed.foreachRDD(lambda rdd: spark_functions.emit('dashboard.status-create', sid, rdd.collect()))
+        # Limit to 5 tweets per window
+        preprocessed.foreachRDD(lambda rdd: spark_functions.emit_status('dashboard.status-create', sid, rdd.take(5)))
 
         # Start the streaming
         self.ssc.start()

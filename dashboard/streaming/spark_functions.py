@@ -7,10 +7,28 @@ Non-serializable functions; Don't use on execution nodes, only use on server
 """
 
 
-def emit(event, sid, rdd):
+def emit_status(event, sid, rdd):
+    """
+    Emits an array of statuses, each as its own event
+    :param event:
+    :param sid:
+    :param rdd:
+    :return:
+    """
     for status in rdd:
-        #print(event, sid, json.loads(status))
-        socketio.emit(event, data=json.loads(status), room=sid)
+        # print(event, sid, json.loads(status))
+        socketio.emit(event, data=status, room=sid)
+
+
+def emit(event, sid, data):
+    """
+    Generic emit function
+    :param event:
+    :param sid:
+    :param data:
+    :return:
+    """
+    socketio.emit(event, data=data, room=sid)
 
 
 """
@@ -21,7 +39,7 @@ These are mostly factories
 
 def preprocess():
     def _preprocess(data):
-        tweet = data[1]  # TODO what is data[0]?
+        tweet = json.loads(data[1])  # TODO what is data[0]?
 
         return tweet
 
