@@ -91,12 +91,14 @@
       </button>
 
     </div>
-
     <div class="results row">
       <h2>Results</h2>
       <div class="col-xs-12 col-md-4">
         <h2>Tweets</h2>
-        <p class="tweet" ng-repeat="tweet in data.tweets track by $index">
+        <p ng-if="results.tweets.length == 0">
+          <b>No tweets, yet</b>
+        </p>
+        <p class="tweet" ng-repeat="tweet in results.tweets track by $index">
           <b>{{tweet.name}}:</b>{{tweet.text}}
         </p>
       </div>
@@ -104,7 +106,7 @@
         <h2>Sentiment</h2>
         <x-sentiment x-data="TODO"></x-sentiment>
         <!--
-        <p ng-repeat="sentiment in data.sentiment">
+        <p ng-repeat="sentiment in result.sentiment">
           <b>{{sentiment.text}}:</b>&nbsp;{{sentiment.value}}
         </p>
         -->
@@ -113,7 +115,7 @@
         <h2>Topics</h2>
         <x-topics x-data="TODO"></x-topics>
         <!--
-        <p ng-repeat="topic in data.topics">
+        <p ng-repeat="topic in result.topics">
           <b>{{topic.text}}:</b>&nbsp;{{topic.value}}
         </p>
         -->

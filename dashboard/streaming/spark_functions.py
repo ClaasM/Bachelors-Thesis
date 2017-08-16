@@ -9,6 +9,7 @@ Non-serializable functions; Don't use on execution nodes, only use on server
 
 def emit(event, sid, rdd):
     for status in rdd:
+        #print(event, sid, json.loads(status))
         socketio.emit(event, data=json.loads(status), room=sid)
 
 

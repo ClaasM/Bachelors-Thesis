@@ -42,18 +42,31 @@ angular.module('Dashboard')
           count: 0
         }
       };
-      $scope.data = {
+      var RESULTS_DEFAULT = {
         tweets: []
       };
+      $scope.results = RESULTS_DEFAULT;
 
       var socket = io();
       $scope.updateSettings = function () {
         console.log($scope.streamSettings[$scope.selectedStream]);
-        //$http.post('/api/dashboard/update', $scope.streamSettings[$scope.selectedStream])
-        socket.emit('update', $scope.streamSettings[$scope.selectedStream]);
+        socket.emit('dashboard.update', $scope.streamSettings[$scope.selectedStream]);
         $scope.isLoading = true;
         $scope.isStreaming = false;
       };
+
+      socket.on('dashboard.update-success', function () {
+        //This is emitted by the server if the update was successful
+        $scope.isStreaming = true;
+        $scope.isLoading = false;
+        //Reset the dashboard
+        $scope.results = RESULTS_DEFAULT;
+      });
+
+      socket.on('dashboard.update-error', function () {
+        //TODO This is emitted by the server if the update was not successful
+
+      });
 
       socket.on('dashboard.wordcount-update', function (data) {
         console.log(data);
@@ -61,16 +74,15 @@ angular.module('Dashboard')
 
 
       //Number of tweets shown in the tweets-column of the dashboard
-      var number_of_tweets_shown = 4;
+      var MAX_NUMBER_OF_TWEETS_SHOWN = 4;
       socket.on('dashboard.status-create', function (data) {
-        //This is the main event, and since socket.io has no "onDefault", we set streaming to true here
-        $scope.isStreaming = true;
-        $scope.isLoading = false;
+
         console.log(data);
+        var number_of_tweets_shown = Math.min(MAX_NUMBER_OF_TWEETS_SHOWN, $scope.results.tweets.length + 1);
         _(number_of_tweets_shown).times(function (index) {
-          $scope.data.tweets[number_of_tweets_shown - index] = $scope.data.tweets[number_of_tweets_shown - index - 1];
+          $scope.results.tweets[number_of_tweets_shown - index] = $scope.results.tweets[number_of_tweets_shown - index - 1];
         });
-        $scope.data.tweets[0] = {
+        $scope.results.tweets[0] = {
           text: data.text,
           name: data.user.name
         };

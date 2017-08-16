@@ -1,4 +1,5 @@
 from flask import redirect, session, request, Blueprint
+from flask_socketio import send, emit
 from server import socketio
 from streaming.twitter_kafka_consumer import TwitterKafkaConsumer
 
@@ -14,35 +15,36 @@ def stop_pipeline():
         session['producer'].stop()
 
 
-@socketio.on('update')
+@socketio.on('dashboard.update')
 def update(settings):
     """
     Starts or updates the pipeline
     :param settings: settings for the twitter stream and which stream to use
     :return: None
     """
-    print("Test")
     print(settings)
-    return
-    if 'token' not in session:
-        print("Not logged in!")
-        redirect('/')  # TODO this doesn't work
-    else:
-        # Make sure consumer and producer are running
-        # (if the user is starting the stream for the first time in this session)
-        if 'consumer' not in session:
-            # Start the consumer first
-            consumer = TwitterKafkaConsumer()
-            consumer.start(sid=str(request.sid))
-            session['consumer'] = consumer
-        if 'producer' not in session:
-            # Then start the producer
-            producer = TwitterKafkaProducer(access_token=session['token'][0],
-                                            access_token_secret=session['token'][1],
-                                            sid=str(request.sid))
-            session['producer'] = producer
+    try:
+        if 'token' not in session:
+            raise 401
+        else:
+            # Make sure consumer and producer are running
+            # (if the user is starting the stream for the first time in this session)
+            if 'consumer' not in session:
+                # Start the consumer first
+                consumer = TwitterKafkaConsumer()
+                consumer.start(sid=str(request.sid))
+                session['consumer'] = consumer
+            if 'producer' not in session:
+                # Then start the producer
+                producer = TwitterKafkaProducer(access_token=session['token'][0],
+                                                access_token_secret=session['token'][1],
+                                                sid=str(request.sid))
+                session['producer'] = producer
 
-        session['producer'].update(settings)
+            session['producer'].update(settings)
+            emit('dashboard.update-success')
+    except 401:
+        emit('dashboard.update-error', "Unauthorized")
 
 
 @socketio.on('connect')

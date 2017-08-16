@@ -15,6 +15,7 @@ class TwitterKafkaProducer(tweepy.StreamListener):
 
     def __init__(self, access_token, access_token_secret, sid):
         # Create the twitter stream
+        super().__init__()
         self.sid = sid
         with open('config.json') as config_data:
             config = json.load(config_data)
@@ -32,21 +33,25 @@ class TwitterKafkaProducer(tweepy.StreamListener):
     def update(self, settings):
         # Stop the current stream if there is one
         self.twitter_stream.disconnect()
+
         # Start the new stream with new settings
-        if settings.type == 'site':
+        stream_type = settings['type']
+        del settings['type']
+        del settings['filter_level']  # TODO find a way to be able to use unicode --> Make a tweepy3 fork maybe?
+        if stream_type == 'site':
             self.twitter_stream.sitestream(**settings, async=True)
-        elif settings.type == 'user':
+        elif stream_type == 'user':
             self.twitter_stream.userstream(**settings, async=True)
-        elif settings.type == 'sample':
+        elif stream_type == 'sample':
             self.twitter_stream.sample(**settings, async=True)
-        elif settings.type == 'public':
+        elif stream_type == 'public':
             self.twitter_stream.filter(**settings, async=True)
-        elif settings.type == 'retweet':
+        elif stream_type == 'retweet':
             self.twitter_stream.retweet(async=True)
-        elif settings.type == 'firehose':
+        elif stream_type == 'firehose':
             self.twitter_stream.firehose(**settings, async=True)
         else:
-            raise "Unknown type: " + settings.type
+            raise "Unknown type: " + stream_type
 
     def stop(self):
         self.twitter_stream.disconnect()
