@@ -6,7 +6,7 @@ from kafka.errors import NoBrokersAvailable
 from pymongo import MongoClient as MCli
 
 
-class MongoKafkaProducer(tweepy.StreamListener):
+class MongoKafkaProducer(object):
     """
     Used for testing purposes
     """
