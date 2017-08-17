@@ -1,4 +1,3 @@
-
 DEBUG = True
 
 # TODO put twitter access info in env var and reference here

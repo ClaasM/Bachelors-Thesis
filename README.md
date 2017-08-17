@@ -44,3 +44,14 @@ result = kvs.map(lambda x: x[1]) \
 
 ssc.start()
 ssc.awaitTermination()
+
+
+To start the Notebook Server:
+
+Start pyspark in Notebook mode
+export SPARK_HOME="/Users/claasmeiners/Library/spark/"
+export PYSPARK_DRIVER_PYTHON=jupyter
+export PYSPARK_DRIVER_PYTHON_OPTS="notebook"
+
+ggf.
+export PYSPARK_SUBMIT_ARGS='--packages org.mongodb.spark:mongo-spark-connector_2.10:1.1.0'

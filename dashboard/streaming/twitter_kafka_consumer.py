@@ -14,6 +14,7 @@ class TwitterKafkaConsumer(object):
     def __init__(self):
         sc = SparkContext.getOrCreate()
         sc.setLogLevel("ERROR")
+        # TODO StreamingContext.getOrCreate()
         self.ssc = StreamingContext(sc, 1)  # 1 second window
         self.ssc.checkpoint("./checkpoints")
 
@@ -35,7 +36,7 @@ class TwitterKafkaConsumer(object):
             .transform(lambda rdd: rdd.sortBy(lambda x: x[1], False)) \
             .map(lambda tupel: {'keyword': tupel[0], 'count': tupel[1]})
 
-        # Emit the wordcount for the wordcount column
+        # Emit the wordcount of the top 5 keywords for the wordcount column
         running_counts.foreachRDD(lambda rdd: spark_functions.emit('dashboard.wordcount-update', sid, rdd.take(5)))
 
         # Emit all tweets for the tweets column
