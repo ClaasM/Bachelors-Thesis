@@ -2,8 +2,7 @@ import json
 from os import chdir
 
 import tweepy
-from streaming.twitter_kafka_consumer import TwitterKafkaConsumer
-
+from src.streaming.twitter_kafka_consumer import TwitterKafkaConsumer
 from streaming.twitter_kafka_producer import TwitterKafkaProducer
 
 chdir("../")
