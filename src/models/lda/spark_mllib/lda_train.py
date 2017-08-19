@@ -10,7 +10,8 @@ from pyspark.mllib.linalg import Vectors
 from pyspark.sql import SQLContext
 
 """
-This is the RDD-based API
+This is the RDD-based API.
+We can build the model, but scoring new documents is not supported, so we don't use it.
 """
 
 # Stopword corpus from nltk TODO augment with twitter-specific corpus
@@ -29,8 +30,6 @@ max_iterations = 35
 # Initialize
 sc = SparkContext('local', 'PySPARK LDA Example')
 sql_context = SQLContext(sc)
-
-# TODO reorder and simplify
 
 # Process the corpus:
 # 1. Load each file as an individual document
@@ -115,5 +114,5 @@ with open("../../models/lda/natural_language/%s.txt" % name, 'w') as f:
     f.write("{0} topics distributed over {1} documents and {2} unique words\n" \
             .format(num_topics, documents.count(), len(vocabulary)))
 
-
+# Save the model
 lda_model.save(sc, "../../models/lda/spark/%s" % name)

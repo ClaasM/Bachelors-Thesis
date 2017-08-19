@@ -6,9 +6,5 @@ from pyspark.sql import SQLContext
 sc = SparkContext('local', 'PySPARK LDA Example')
 sql_context = SQLContext(sc)
 
-name = "1503144859"
-
-# Cannot load a model that was saved using the RDD-based API
-sameModel = LocalLDAModel.load("../../../../models/lda/spark/%s" % name)
-
-# TODO
+# See https://stackoverflow.com/questions/32604516/spark-mllib-lda-how-to-infer-the-topics-distribution-of-a-new-unseen-document
+raise NotImplementedError

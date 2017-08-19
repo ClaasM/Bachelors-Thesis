@@ -6,6 +6,7 @@ from pyspark.sql import SQLContext
 sc = SparkContext('local', 'PySPARK LDA Example')
 sql_context = SQLContext(sc)
 
+# Load the model
 sameModel = LDAModel.load(sc, "target/org/apache/spark/PythonLatentDirichletAllocationExample/LDAModel")
 
-# TODO
+# It is not easily possible to score/classify new documents with this model.

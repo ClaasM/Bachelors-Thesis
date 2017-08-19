@@ -2,7 +2,11 @@ import time
 
 from pyspark.ml.clustering import LDA
 
-documents = [] # TODO
+"""
+This is using the DF-based API
+This fits an LDA model to a set of documents.
+"""
+documents = []  # TODO
 
 # Trains a LDA model.
 lda = LDA(k=10, maxIter=10)
@@ -25,4 +29,4 @@ transformed = model.transform(documents)
 transformed.show(truncate=False)
 
 name = "%d" % time.time()
-model.save(sc, "../../models/lda/spark/%s" % name)
+model.save("../../models/lda/spark/%s" % name)
