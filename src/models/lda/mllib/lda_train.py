@@ -1,12 +1,17 @@
-from collections import defaultdict
-from pyspark import SparkContext
-from pyspark.mllib.linalg import Vector, Vectors
-from pyspark.mllib.clustering import LDA, LDAModel
-from pyspark.sql import SQLContext
 import re
 import time
+from collections import defaultdict
+
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
+from pyspark import SparkContext
+from pyspark.mllib.clustering import LDA
+from pyspark.mllib.linalg import Vectors
+from pyspark.sql import SQLContext
+
+"""
+This is the RDD-based API
+"""
 
 # Stopword corpus from nltk TODO augment with twitter-specific corpus
 stop_words = set(stopwords.words('english'))
@@ -95,25 +100,20 @@ documents = tokens.zipWithIndex().map(document_vector).map(list)
 inv_voc = {value: key for (key, value) in vocabulary.items()}
 
 lda_model = LDA.train(documents, k=num_topics, maxIterations=max_iterations)
-
-name = "%d" % time.time()
-lda_model.save(sc, "../../models/lda/spark/%s" % name)
+topic_indices = lda_model.describeTopics(maxTermsPerTopic=num_words_per_topic)
 
 # Open an output file
+name = "%d" % time.time()
 with open("../../models/lda/natural_language/%s.txt" % name, 'w') as f:
-    topic_indices = lda_model.describeTopics(maxTermsPerTopic=num_words_per_topic)
-
     # Print topics, showing the top-weighted 10 terms for each topic
     for i in range(len(topic_indices)):
-        headline = "Topic #{0}".format(i + 1)
-        print(headline)
-        f.write(headline + "\n")
+        f.write("Topic #{0}\n".format(i + 1))
         for j in range(len(topic_indices[i][0])):
-            line = "{0}\t{1}".format(inv_voc[topic_indices[i][0][j]].encode('utf-8'), topic_indices[i][1][j])
-            print(line)
-            f.write(line + "\n")
+            f.write("{0}\t{1}\n".format(inv_voc[topic_indices[i][0][j]] \
+                                        .encode('utf-8'), topic_indices[i][1][j]))
 
-    footer = "{0} topics distributed over {1} documents and {2} unique words".format(num_topics, documents.count(),
-                                                                                     len(vocabulary))
-    print(footer)
-    f.write(footer + "\n")
+    f.write("{0} topics distributed over {1} documents and {2} unique words\n" \
+            .format(num_topics, documents.count(), len(vocabulary)))
+
+
+lda_model.save(sc, "../../models/lda/spark/%s" % name)
