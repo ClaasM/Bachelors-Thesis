@@ -4,15 +4,28 @@ from pyspark.mllib.linalg import Vector, Vectors
 from pyspark.mllib.clustering import LDA, LDAModel
 from pyspark.sql import SQLContext
 import re
+import time
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
 
-num_of_stop_words = 50      # Number of most common words to remove, trying to eliminate stop words
-num_topics = 3	            # Number of topics we are looking for
-num_words_per_topic = 10    # Number of words to display for each topic
-max_iterations = 35         # Max number of times to iterate before finishing
+# Stopword corpus from nltk TODO augment with twitter-specific corpus
+stop_words = set(stopwords.words('english'))
+# Porter Stemmer
+p_stemmer = PorterStemmer()
+# Number of most common words to remove, trying to eliminate stop words
+num_of_stop_words = 500
+# Number of topics we are looking for
+num_topics = 3
+# Number of words to display for each topic
+num_words_per_topic = 10
+# Max number of times to iterate before finishing
+max_iterations = 35
 
 # Initialize
 sc = SparkContext('local', 'PySPARK LDA Example')
 sql_context = SQLContext(sc)
+
+# TODO reorder and simplify
 
 # Process the corpus:
 # 1. Load each file as an individual document
@@ -21,6 +34,7 @@ sql_context = SQLContext(sc)
 # 4. Split each document into words, separated by whitespace, semi-colons, commas, and octothorpes
 # 5. Only keep the words that are all alphabetical characters
 # 6. Only keep words larger than 3 characters
+# 7. Use the Porter stemmer to make similar words equal
 
 data = sc.textFile("../../data/processed/tweets_text.txt")
 
@@ -28,7 +42,8 @@ tokens = data \
     .map(lambda document: document.strip().lower()) \
     .map(lambda document: re.split("[\s;,#]", document)) \
     .map(lambda word: [x for x in word if x.isalpha()]) \
-    .map(lambda word: [x for x in word if len(x) > 3])
+    .map(lambda word: [x for x in word if len(x) > 3]) \
+    .map(lambda word: [p_stemmer.stem(x) for x in word])
 
 # Get our vocabulary
 # 1. Flat map the tokens -> Put all the words in one giant list instead of a list per document
@@ -44,14 +59,15 @@ termCounts = tokens \
     .map(lambda tuple: (tuple[1], tuple[0])) \
     .sortByKey(False)
 
-
 # Identify a threshold to remove the top words, in an effort to remove stop words
 threshold_value = termCounts.take(num_of_stop_words)[num_of_stop_words - 1][0]
 
-# Only keep words with a count less than the threshold identified above,
+# Only keep words with a count less than the threshold identified above
+# and that aren't stopwords (although most of the times there are no stopwords left)
 # and then index each one and collect them into a map
 vocabulary = termCounts \
     .filter(lambda x: x[0] < threshold_value) \
+    .filter(lambda x: x not in stop_words) \
     .map(lambda x: x[1]) \
     .zipWithIndex() \
     .collectAsMap()
@@ -68,7 +84,7 @@ def document_vector(document):
     counts = sorted(counts.items())
     keys = [x[0] for x in counts]
     values = [x[1] for x in counts]
-    return (id, Vectors.sparse(len(vocabulary), keys, values))
+    return id, Vectors.sparse(len(vocabulary), keys, values)
 
 
 # Process all of the documents into word vectors using the
@@ -78,17 +94,26 @@ documents = tokens.zipWithIndex().map(document_vector).map(list)
 # Get an inverted vocabulary, so we can look up the word by it's index value
 inv_voc = {value: key for (key, value) in vocabulary.items()}
 
+lda_model = LDA.train(documents, k=num_topics, maxIterations=max_iterations)
+
+name = "%d" % time.time()
+lda_model.save(sc, "../../models/lda/spark/%s" % name)
+
 # Open an output file
-with open("output.txt", 'w') as f:
-    lda_model = LDA.train(documents, k=num_topics, maxIterations=max_iterations)
+with open("../../models/lda/natural_language/%s.txt" % name, 'w') as f:
     topic_indices = lda_model.describeTopics(maxTermsPerTopic=num_words_per_topic)
 
     # Print topics, showing the top-weighted 10 terms for each topic
     for i in range(len(topic_indices)):
-        f.write("Topic #{0}\n".format(i + 1))
+        headline = "Topic #{0}".format(i + 1)
+        print(headline)
+        f.write(headline + "\n")
         for j in range(len(topic_indices[i][0])):
-            f.write("{0}\t{1}\n".format(inv_voc[topic_indices[i][0][j]] \
-                                        .encode('utf-8'), topic_indices[i][1][j]))
+            line = "{0}\t{1}".format(inv_voc[topic_indices[i][0][j]].encode('utf-8'), topic_indices[i][1][j])
+            print(line)
+            f.write(line + "\n")
 
-    f.write("{0} topics distributed over {1} documents and {2} unique words\n" \
-            .format(num_topics, documents.count(), len(vocabulary)))
+    footer = "{0} topics distributed over {1} documents and {2} unique words".format(num_topics, documents.count(),
+                                                                                     len(vocabulary))
+    print(footer)
+    f.write(footer + "\n")
