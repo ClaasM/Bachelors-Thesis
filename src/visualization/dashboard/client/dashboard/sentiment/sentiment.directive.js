@@ -6,10 +6,9 @@ angular.module('Dashboard').directive('sentiment', function () {
     templateUrl: './dashboard/sentiment/sentiment.html',
     restrict: 'E',
     scope: {
-      data: '=data'
+      results: '=results'
     },
     link: function (scope, element, attrs) {
-      scope.data = {};
 
       google.charts.load('current', {'packages': ['corechart']});
       google.charts.setOnLoadCallback(drawChart);

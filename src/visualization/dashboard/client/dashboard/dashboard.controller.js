@@ -29,7 +29,7 @@ angular.module('Dashboard')
           follow: [],
           track: ['iphone'],
           locations: [],
-          languages: []
+          languages: ['en']
         },
         'sample': {
           type: 'sample'
@@ -44,7 +44,8 @@ angular.module('Dashboard')
       };
       var RESULTS_DEFAULT = {
         tweets: [],
-        wordcount: []
+        wordcount: [],
+        topics: []
       };
       $scope.results = RESULTS_DEFAULT;
 
@@ -75,6 +76,18 @@ angular.module('Dashboard')
         $scope.$digest()
       });
 
+      socket.on('dashboard.lda-update', function (data) {
+        _.forEach(data, function (value, key) {
+          if ($scope.results.topics[key]) {
+            $scope.results.topics[key].probability += value.probability
+          } else {
+            $scope.results.topics[key] = value
+          }
+        });
+        console.log($scope.results);
+        //TODO use ngSocket
+        $scope.$digest()
+      });
 
       //Number of tweets shown in the tweets-column of the dashboard
       var MAX_NUMBER_OF_TWEETS_SHOWN = 4;

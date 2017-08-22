@@ -9,14 +9,16 @@ They are retrieved in their tokenized version from a MongoDb database.
 See also the following blog posts
 * http://alexperrier.github.io/jekyll/update/2015/09/04/topic-modeling-of-twitter-followers.html
 * http://alexperrier.github.io/jekyll/update/2015/09/16/segmentation_twitter_timelines_lda_vs_lsa.html
+TODO attribuions (also in Thesis)
 """
 from gensim import corpora, models, similarities
 from pymongo import MongoClient
 import time
+import os
 import numpy as np
 
 # Initialize Parameters
-corpus_filename = '../../../../data/processed/tweets.mm'
+corpus_filename = '/../../../../data/processed/tweets.mm'
 dict_filename = '../../../../data/processed/tweets.dict'
 lda_filename = '../../../../models/lda/gensim/tweets.lda'
 
@@ -27,16 +29,13 @@ lda_params = {'num_topics': 5, 'passes': 20, 'alpha': 0.001}
 # https://radimrehurek.com/gensim/models/ldamodel.html
 
 # Load the corpus and Dictionary
-corpus = corpora.MmCorpus(corpus_filename)
-dictionary = corpora.Dictionary.load(dict_filename)
+dir_path = os.path.dirname(os.path.realpath(__file__))
+corpus = corpora.MmCorpus(dir_path + '/../../../../data/processed/tweets.mm')
+dictionary = corpora.Dictionary.load(dir_path + '/../../../../data/processed/tweets.dict')
 
-print("Running LDA with: %s  " % lda_params)
-t0 = time.time()
 lda = models.LdaModel(corpus, id2word=dictionary,
                       num_topics=lda_params['num_topics'],
                       passes=lda_params['passes'],
                       alpha=lda_params['alpha'])
-print(time.time() - t0)
 lda.print_topics()
-lda.save(lda_filename)
-print("lda saved in %s " % lda_filename)
+lda.save(dir_path + '/../../../../models/lda/gensim/tweets.lda')

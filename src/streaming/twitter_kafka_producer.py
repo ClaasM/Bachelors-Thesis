@@ -1,4 +1,5 @@
 import json
+import os
 
 import tweepy
 from kafka import KafkaProducer
@@ -17,7 +18,8 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         # Create the twitter stream
         super().__init__()
         self.sid = sid
-        with open('config.json') as config_data:
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        with open(dir_path + '/../../config.json') as config_data:
             config = json.load(config_data)
         auth = tweepy.OAuthHandler(config['consumer_key'], config['consumer_secret'])
         auth.set_access_token(access_token, access_token_secret)

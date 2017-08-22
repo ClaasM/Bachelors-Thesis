@@ -55,3 +55,8 @@ export PYSPARK_DRIVER_PYTHON_OPTS="notebook"
 
 ggf.
 export PYSPARK_SUBMIT_ARGS='--packages org.mongodb.spark:mongo-spark-connector_2.10:1.1.0'
+
+## To change the LDA model
+1. Run `tweets_mongo_to_gensim.py` with your filter settings
+2. Run `gensim/lda_train.py`to build the new model
+3. Restart the server

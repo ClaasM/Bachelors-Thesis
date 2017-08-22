@@ -5,7 +5,7 @@ from flask import redirect, session, request, url_for, Blueprint
 
 twitter_blueprint = Blueprint('twitter', __name__)
 
-with open('config.json') as config_data:
+with open('../../../config.json') as config_data:
     config = json.load(config_data)
 
 

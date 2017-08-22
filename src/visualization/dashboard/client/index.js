@@ -11,7 +11,7 @@ angular.module('Dashboard', [
                 controller: 'MainCtrl'
               })
               .when('/dashboard', {
-                templateUrl: '//dashboard.html',
+                templateUrl: '/dashboard/dashboard.html',
                 controller: 'DashboardCtrl'
               })
               .otherwise({
