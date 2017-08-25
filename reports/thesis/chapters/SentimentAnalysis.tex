@@ -4,9 +4,17 @@
 \label{chapter:DetailedDescriptions}\label{sentimentanalysis}
 %\inputminted{c++}{../../src/wos_native.cuh}
 
+The sanders dataset is used for all models to ensure consistency
 The sanders dataset was preprocessed by removing e.g. non-english tweets (e.g. nl)
-TODO do that
+TODO that still needs to be done
 also, how did that get in there?
+
+For the chapter on data acquisition/processing: A dictionary was created using the gensim-dictionary implementation, which was used in lda, wordcount and sentiment analysis.
+This was also the reason to put these into one sparkjob, to limit required bandwith to execution nodes (the dictionary doesn't need to be transmitted as often).
+Also of course the amount of events emitted via the sockets is reduced.
+It's okay since the jobs are still small enough for kafka to distribute them efficiently in a distributed setting.
+% TODO include figures: table with most used/least used words, word cloud
+
 
 
 TODO filter out non-english tweets for all these

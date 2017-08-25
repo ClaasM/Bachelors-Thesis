@@ -1,4 +1,5 @@
 import os
+import pickle
 
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
@@ -24,6 +25,11 @@ class TwitterKafkaConsumer(object):
         self.dictionary = Dictionary.load(dir_path + '/../../data/processed/tweets.dict')
         self.lda = LdaModel.load(dir_path + '/../../models/lda/gensim/tweets.lda')
 
+        # Load sentiment model
+        classifier_f = open("./../../models/naive_bayes/nltk_naive_bayes.pickle","rb")
+        self.classifier = pickle.load(classifier_f)
+        classifier_f.close()
+
     def start(self, sid):
         # ONLY USE GLOBAL FUNCTIONS!
         # Create the stream
@@ -34,6 +40,9 @@ class TwitterKafkaConsumer(object):
         topic_model = preprocessed \
             .map(spark_functions.tokenize()) \
             .map(spark_functions.lda(dictionary=self.dictionary, model=self.lda))
+
+        # TODO unite all these in one sparkjob
+        # sentiment_model =
 
         # TODO comment each line
         running_counts = preprocessed \

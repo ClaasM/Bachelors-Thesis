@@ -45,7 +45,11 @@ angular.module('Dashboard')
       var RESULTS_DEFAULT = {
         tweets: [],
         wordcount: [],
-        topics: []
+        topics: [],
+        emotion: {
+          positive: 0,
+          negative: 0
+        }
       };
       $scope.results = RESULTS_DEFAULT;
 
@@ -85,6 +89,15 @@ angular.module('Dashboard')
           }
         });
         console.log($scope.results);
+        //TODO use ngSocket
+        $scope.$digest()
+      });
+
+      socket.on('dashboard.sentiment-update', function (data) {
+        console.log(data);
+        $scope.results.emotion.positive += data.positive;
+        $scope.results.emotion.negative += data.negative;
+
         //TODO use ngSocket
         $scope.$digest()
       });

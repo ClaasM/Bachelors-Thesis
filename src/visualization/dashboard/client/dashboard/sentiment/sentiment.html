@@ -1,3 +1,21 @@
 <div class="sentiment">
-  <div id="sentiment_chart" style="width: 100%; height: 500px;"></div>
+  <!--<div id="sentiment_chart" style="width: 100%; height: 500px;"></div>-->
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Emotion</th>
+      <th>Percentage</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>Positive</td>
+      <td ng-bind="results.emotion.positive"></td>
+    </tr>
+    <tr>
+      <td>Negative</td>
+      <td ng-bind="results.emotion.negative"></td>
+    </tr>
+    </tbody>
+  </table>
 </div>
