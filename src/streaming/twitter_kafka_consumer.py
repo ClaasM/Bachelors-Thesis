@@ -35,8 +35,15 @@ class TwitterKafkaConsumer(object):
         # Create the stream
         stream = KafkaUtils.createStream(self.ssc, 'docker:2181', "thesis-stream", {str(sid): 1})
         # Perform preprocessing on the incoming tweets
-        preprocessed = stream.map(spark_functions.preprocess())
+        # 1. The actual tweet is the second element in a tupel
+        # 2. We just need the text
+        # 3. Use the same preprocessing function as everywhere else, for consitency
+        preprocessed = stream\
+            .map(lambda data: data[1]) \
+            .map(lambda data: data[1]) \
+            .map(spark_functions.preprocess())
 
+        # 1. Use the same tokenization function as everywhere else
         topic_model = preprocessed \
             .map(spark_functions.tokenize()) \
             .map(spark_functions.lda(dictionary=self.dictionary, model=self.lda))

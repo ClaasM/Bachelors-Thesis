@@ -1,12 +1,12 @@
-/.idea
-
-**/bower_components/
+# Folders to be ignored
+**/.idea
+**/bower_components
 **/.ipynb_checkpoints
 **/checkpoints
 **/metastore_db
-**/node_modules/
-*.log
-.tmp
+**/node_modules
+**/.tmp
 
-config.json
-google_access.json
+# File types to be ignored
+*.log
+*.access.json
