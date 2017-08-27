@@ -7,6 +7,7 @@ from pyspark.streaming.kafka import KafkaUtils
 from gensim.models import LdaModel
 from gensim.corpora import MmCorpus, Dictionary
 from src.streaming import spark_functions
+from src.visualization.dashboard.server.api.dashboard import emit_each, emit
 
 os.environ['PYSPARK_SUBMIT_ARGS'] \
     = '--packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.0.2 pyspark-shell'
@@ -40,7 +41,7 @@ class TwitterKafkaConsumer(object):
                                      sentiment_classifier=self.sentiment_classifier,
                                      lda_model=self.lda_model))
         # Emit each analysis result to the client to update the dashboard
-        analyzed.foreachRDD(lambda rdd: spark_functions.emit_each('dashboard.update', sid, rdd.collect))
+        analyzed.foreachRDD(lambda rdd: emit_each('dashboard.update', sid, rdd.collect()))
         # Start the streaming
         self.ssc.start()
 

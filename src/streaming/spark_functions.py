@@ -1,36 +1,7 @@
 import re
+import nltk
 
 from nltk.tokenize import RegexpTokenizer
-
-from server import socketio
-
-"""
-Non-serializable functions; Don't use on execution nodes, only use on server
-"""
-
-
-def emit_each(event, sid, data):
-    """
-    Emits an array of elements, each as its own event
-    :param event:
-    :param sid:
-    :param data:
-    :return:
-    """
-    for element in data:
-        socketio.emit(event, data=element, room=sid)
-
-
-def emit(event, sid, data):
-    """
-    Generic emit function
-    :param event:
-    :param sid:
-    :param data:
-    :return:
-    """
-    socketio.emit(event, data=data, room=sid)
-
 
 """
 Serializable functions to be executed on the spark execution nodes.
@@ -63,31 +34,21 @@ def tokenizer():
     Tokenization function for LDA. Used for training _and_ during streaming
     :return:
     """
-    # Match http, HTTPS and @mentions
-    url_pattern = re.compile(r"(?:\@|(http|https)?\://)\S+")
-    tokenizer = RegexpTokenizer(r'\w+')
-    import nltk
+    regex_tokenizer = RegexpTokenizer(r'\w+')
     stoplist = set(['amp', 'get', 'got', 'hey', 'hmm', 'hoo', 'hop', 'iep', 'let', 'ooo', 'par',
                     'pdt', 'pln', 'pst', 'wha', 'yep', 'yer', 'aest', 'didn', 'nzdt', 'via',
                     'one', 'com', 'new', 'like', 'great', 'make', 'top', 'awesome', 'best',
                     'good', 'wow', 'yes', 'say', 'yay', 'would', 'thanks', 'thank', 'going',
                     'new', 'use', 'should', 'could', 'best', 'really', 'see', 'want', 'nice',
                     'while', 'know'] + nltk.corpus.stopwords.words("english"))
-    from string import digits
 
-    def _tokenize(tweet):
-        # Extract tweets from text
-        text = tweet['text']
-        # Remove urls
-        text = url_pattern.sub("", text)
+    def _tokenize(text):
         # Tokenize
-        tokens = tokenizer.tokenize(text.lower())
+        tokens = regex_tokenizer.tokenize(text.lower())
         # Remove words with length < 3
         tokens = [token for token in tokens if len(token) > 2]
         # Remove stop words
         tokens = [token for token in tokens if token not in stoplist]
-        # rm numbers only words
-        tokens = [token for token in tokens if len(token.strip(digits)) == len(token)]
         # Sort words in tweet
         tokens.sort()
         return tokens

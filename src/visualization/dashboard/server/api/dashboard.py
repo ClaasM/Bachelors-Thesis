@@ -57,3 +57,26 @@ def handle_connect():
 def handle_disconnect():
     stop_pipeline()
     print("Disconnected")
+
+
+def emit_each(event, sid, data):
+    """
+    Emits an array of elements, each as its own event
+    :param event:
+    :param sid:
+    :param data:
+    :return:
+    """
+    for element in data:
+        socketio.emit(event, data=element, room=sid)
+
+
+def emit(event, sid, data):
+    """
+    Generic emit function
+    :param event:
+    :param sid:
+    :param data:
+    :return:
+    """
+    socketio.emit(event, data=data, room=sid)
