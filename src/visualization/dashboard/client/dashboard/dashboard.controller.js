@@ -1,13 +1,18 @@
 /**
  * Created by claasmeiners on 31/07/17.
+ * The Main Dashboard controller.
+ * Receives the updates from the backend and updates the results-object on the scope accordingly.
  */
 'use strict';
 
 angular.module('Dashboard')
     .controller('DashboardCtrl', function ($scope, $http) {
+      // Used to visualize what is currently happening
       $scope.isStreaming = false;
       $scope.isLoading = false;
+      //The default selected stream
       $scope.selectedStream = 'public';
+      //The default stream setting
       $scope.streamSettings = {
         'user': {
           type: 'user',
@@ -42,6 +47,8 @@ angular.module('Dashboard')
           count: 0
         }
       };
+      // Number of tweets shown in the recent tweets-part
+      var MAX_NUMBER_OF_TWEETS_SHOWN = 4;
       var RESULTS_DEFAULT = {
         tweets: [],
         wordcount: [],
@@ -51,6 +58,7 @@ angular.module('Dashboard')
           negative: 0
         }
       };
+
       $scope.results = RESULTS_DEFAULT;
 
       var socket = io();
@@ -69,66 +77,36 @@ angular.module('Dashboard')
         $scope.results = RESULTS_DEFAULT;
       });
 
-      socket.on('dashboard.update-error', function () {
-        //TODO This is emitted by the server if the update was not successful
+      //Called whenever a new tweet arrives via the stream, is analyzed and then sent to the client
+      socket.on('dashboard.update', function (data) {
+        console.log(data);
+        //Update the emotion scores
+        $scope.results.emotion.positive += data.emotion.positive;
+        $scope.results.emotion.negative += data.emotion.negative;
 
-      });
-
-      socket.on('dashboard.wordcount-update', function (data) {
-        $scope.results.wordcount = data;
-        //TODO use ngSocket
-        $scope.$digest()
-      });
-
-      socket.on('dashboard.lda-update', function (data) {
-        _.forEach(data, function (value, key) {
+        //Update the topics probabilities
+        _.forEach(data.topics, function (value, key) {
           if ($scope.results.topics[key]) {
             $scope.results.topics[key].probability += value.probability
           } else {
             $scope.results.topics[key] = value
           }
         });
-        console.log($scope.results);
-        //TODO use ngSocket
-        $scope.$digest()
-      });
 
-      socket.on('dashboard.sentiment-update', function (data) {
-        console.log(data);
-        $scope.results.emotion.positive += data.positive;
-        $scope.results.emotion.negative += data.negative;
-
-        //TODO use ngSocket
-        $scope.$digest()
-      });
-
-      //Number of tweets shown in the tweets-column of the dashboard
-      var MAX_NUMBER_OF_TWEETS_SHOWN = 4;
-      socket.on('dashboard.status-create', function (data) {
-
-        //console.log(data);
+        //Show the new tweet
         var number_of_tweets_shown = Math.min(MAX_NUMBER_OF_TWEETS_SHOWN, $scope.results.tweets.length + 1);
         _(number_of_tweets_shown).times(function (index) {
           $scope.results.tweets[number_of_tweets_shown - index] = $scope.results.tweets[number_of_tweets_shown - index - 1];
         });
         $scope.results.tweets[0] = {
-          text: data.text,
-          name: data.user.name
+          text: data.tweet.text,
+          name: data.tweet.user.name
         };
-        //TODO use ngSocket
+
+        //Perform a angular digest so that the changes are represented in the DOM
         $scope.$digest()
       });
 
-
-      socket.on('dashboard.direct_message-create', function (data) {
-        console.log(data);
-      });
-      socket.on('dashboard.friends-create', function (data) {
-        console.log(data);
-      });
-      socket.on('dashboard.event-create', function (data) {
-        console.log(data);
-      });
       /**
        * TODO this can be removed if the other thing works
        * Sets or deletes a key on the streamSettings object.

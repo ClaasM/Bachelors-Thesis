@@ -29,4 +29,4 @@ transformed = model.transform(documents)
 transformed.show(truncate=False)
 
 name = "%d" % time.time()
-model.save("../../models/lda/spark/%s" % name)
+model.save("../../models/lda_model/spark/%s" % name)

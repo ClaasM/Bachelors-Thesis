@@ -26,12 +26,12 @@ documents = [tweet for tweet in db.tweets.find()
              if 'lang' in tweet and tweet['lang'] == 'en']
 
 # Preprocess with the preprocessing function used during streaming
-preprocessor = spark_functions.preprocess()
+preprocessor = spark_functions.preprocessor()
 documents = [preprocessor(document) for document in documents]
 
 # Tokenize with the same tokenization function used during streaming
 # This ensures consistent results
-tokenizer = spark_functions.tokenize()
+tokenizer = spark_functions.tokenizer()
 documents = [tokenizer(document) for document in documents]
 
 # Remove words that only occur once

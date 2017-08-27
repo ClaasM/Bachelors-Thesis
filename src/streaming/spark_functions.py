@@ -1,4 +1,6 @@
-import json
+import re
+
+from nltk.tokenize import RegexpTokenizer
 
 from server import socketio
 
@@ -33,20 +35,19 @@ def emit(event, sid, data):
 """
 Serializable functions to be executed on the spark execution nodes.
 These are mostly factories.
-Contains some utility functions to preprocess and tokenize etc. tweets.
+Contains some utility functions to preprocessor and tokenizer etc. tweets.
 They are here instead of the data-directory since they are also used in streaming,
 because the features need to be consistent in training, testing and streaming.
 """
 
 
-def preprocess():
+def preprocessor():
     """
     Removes all #hashtags, @mentions and other commonly used special characters used directly in front of
     or behind valid words as well as URL's and then only keeps valid words.
     :param text: the text to be preprocessed
     :return: the preprocessed text
     """
-    import re
 
     def _preprocess(text):
         # Remove url's
@@ -57,15 +58,13 @@ def preprocess():
     return _preprocess
 
 
-def tokenize():
+def tokenizer():
     """
     Tokenization function for LDA. Used for training _and_ during streaming
     :return:
     """
-    import re
     # Match http, HTTPS and @mentions
     url_pattern = re.compile(r"(?:\@|(http|https)?\://)\S+")
-    from nltk.tokenize import RegexpTokenizer
     tokenizer = RegexpTokenizer(r'\w+')
     import nltk
     stoplist = set(['amp', 'get', 'got', 'hey', 'hmm', 'hoo', 'hop', 'iep', 'let', 'ooo', 'par',
@@ -125,13 +124,84 @@ def lda(dictionary, model):
     return _lda
 
 
-def add():
+def extract_features(document, word_features):
     """
-    Factory for the add spark function
+    Used to get a word vector required by the naive bayes classifier for training and during streaming
+    :param document: tokens
+    :param word_features: all words
     :return:
     """
+    document_words = set(document)
+    features = {}
+    for word in word_features:
+        features['contains(%s)' % word] = (word in document_words)
+    return features
 
-    def _add(new_values, last_sum):
-        return sum(new_values) + (last_sum or 0)
 
-    return _add
+def sentiment_analyzer(dictionary, classifier):
+    """
+    Factory for the sentiment analysis function
+    :param dictionary: gensim-dictionary that is also used for the topic model
+    :param classifier: sentiment classifier
+    :return: the sentiment analysis function
+    """
+
+    def _analyze_sentiment(tweet):
+        """
+        Classifies a preprocessed tweet using the sentiment classifier
+        :param tweet: preprocessed tweet
+        :return:
+        """
+        return classifier.classify(extract_features(document=tweet, word_features=dictionary.token2id))
+
+    return _analyze_sentiment
+
+
+def analyzer(dictionary, sentiment_classifier, lda_model):
+    """
+    Factory for the spark function that performs all the analysis and prerocessing of each tweet
+    :param dictionary: gensim-dictionary used in for both sentiment analysis and lda
+    :param sentiment_classifier: to classify the sentiment of each tweet
+    :param lda_model: to model the topic(s) of each tweet
+    :return: the spark function to do so
+    """
+
+    # Initialize all the stuff the execution node needs (the context is transmitted)
+    preprocess = preprocessor()
+    tokenize = tokenizer()
+    model_topics = lda(dictionary=dictionary, model=lda_model)
+    analyze_sentiment = sentiment_analyzer(dictionary=dictionary, classifier=sentiment_classifier)
+
+    def _analyze(element):
+        """
+        Performs all the analysis we want on the raw incoming tweet
+        :param element: the incoming tweet
+        :return: the update to be sent to the dashboard
+        """
+
+        # The actual tweet is the second element in a tupel
+        tweet = element[1]
+        # Just the text needed
+        raw_text = tweet['text']
+        # Using the same preprocessing function as everywhere else, for consistency
+        text = preprocess(raw_text)
+        # Use the same tokenization function as everywhere else, for consistency
+        tokens = tokenize(text)
+
+        # The update should contain...
+        update = dict()
+        # ...the sentiment score...
+        update['emotion'] = analyze_sentiment(text)
+        # ...the topics...
+        update['topics'] = model_topics(tokens)
+        # ...and the tweet itself (or at least what we need from it in the frontend).
+        update['tweet'] = {
+            'text': raw_text,
+            'user': {
+                'name': tweet['user']['name']
+            }
+        }
+
+        return update
+
+    return _analyze

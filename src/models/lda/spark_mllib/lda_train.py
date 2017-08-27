@@ -103,7 +103,7 @@ topic_indices = lda_model.describeTopics(maxTermsPerTopic=num_words_per_topic)
 
 # Open an output file
 name = "%d" % time.time()
-with open("../../models/lda/natural_language/%s.txt" % name, 'w') as f:
+with open("../../models/lda_model/natural_language/%s.txt" % name, 'w') as f:
     # Print topics, showing the top-weighted 10 terms for each topic
     for i in range(len(topic_indices)):
         f.write("Topic #{0}\n".format(i + 1))
@@ -115,4 +115,4 @@ with open("../../models/lda/natural_language/%s.txt" % name, 'w') as f:
             .format(num_topics, documents.count(), len(vocabulary)))
 
 # Save the model
-lda_model.save(sc, "../../models/lda/spark/%s" % name)
+lda_model.save(sc, "../../models/lda_model/spark/%s" % name)

@@ -9,7 +9,7 @@ The sanders dataset was preprocessed by removing e.g. non-english tweets (e.g. n
 TODO that still needs to be done
 also, how did that get in there?
 
-For the chapter on data acquisition/processing: A dictionary was created using the gensim-dictionary implementation, which was used in lda, wordcount and sentiment analysis.
+For the chapter on data acquisition/processing: A dictionary was created using the gensim-dictionary implementation, which was used in lda_model, wordcount and sentiment analysis.
 This was also the reason to put these into one sparkjob, to limit required bandwith to execution nodes (the dictionary doesn't need to be transmitted as often).
 Also of course the amount of events emitted via the sockets is reduced.
 It's okay since the jobs are still small enough for kafka to distribute them efficiently in a distributed setting.

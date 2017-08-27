@@ -7,7 +7,7 @@ def clean_split(text):
                                 and word != 'RT'
                             ]
 
-# Evaluate classifier performance on twitter test set
+# Evaluate sentiment_classifier performance on twitter test set
 import os
 print(sentim_analyzer.classify(["I","hate","twitter","so","much"])) # "obj" --> objective
 
@@ -20,4 +20,4 @@ with open('./../../data/external/umich_sentiment_labeled.txt') as twitter_test_s
     for key,value in sorted(sentim_analyzer.evaluate(evaluation_set).items()):
         print('{0}: {1}'.format(key, value))
 
-# The Problem: the classifier is trained on subjectivity and objectivity, not positive/negative!
+# The Problem: the sentiment_classifier is trained on subjectivity and objectivity, not positive/negative!

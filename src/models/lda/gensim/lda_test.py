@@ -3,13 +3,13 @@ from gensim.corpora import MmCorpus, Dictionary
 
 corpus_filename = '../../../../data/processed/tweets.mm'
 dict_filename = '../../../../data/processed/tweets.dict'
-lda_filename = '../../../../models/lda/gensim/tweets.lda'
+lda_filename = '../../../../models/lda_model/gensim/tweets.lda_model'
 
 corpus = MmCorpus(corpus_filename)
 dictionary = Dictionary.load(dict_filename)
 lda = LdaModel.load(lda_filename)
 
-# followers_data =  pyLDAvis.gensim.prepare(lda,corpus, dictionary)
+# followers_data =  pyLDAvis.gensim.prepare(lda_model,corpus, dictionary)
 # pyLDAvis.display(followers_data)
 
 # TODO use the same tokenization functions in training and testing

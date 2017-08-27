@@ -20,7 +20,7 @@ import numpy as np
 # Initialize Parameters
 corpus_filename = '/../../../../data/processed/tweets.mm'
 dict_filename = '../../../../data/processed/tweets.dict'
-lda_filename = '../../../../models/lda/gensim/tweets.lda'
+lda_filename = '../../../../models/lda_model/gensim/tweets.lda_model'
 
 # TODO try different parameters
 lda_params = {'num_topics': 5, 'passes': 20, 'alpha': 0.001}
@@ -38,4 +38,4 @@ lda = models.LdaModel(corpus, id2word=dictionary,
                       passes=lda_params['passes'],
                       alpha=lda_params['alpha'])
 lda.print_topics()
-lda.save(dir_path + '/../../../../models/lda/gensim/tweets.lda')
+lda.save(dir_path + '/../../../../models/lda_model/gensim/tweets.lda_model')
