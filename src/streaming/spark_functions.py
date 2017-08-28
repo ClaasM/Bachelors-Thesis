@@ -6,7 +6,7 @@ from nltk.tokenize import RegexpTokenizer
 """
 Serializable functions to be executed on the spark execution nodes.
 These are mostly factories.
-Contains some utility functions to preprocessor and tokenizer etc. tweets.
+Contains some utility functions to preprocess and tokenizer etc. tweets.
 They are here instead of the data-directory since they are also used in streaming,
 because the features need to be consistent in training, testing and streaming.
 """

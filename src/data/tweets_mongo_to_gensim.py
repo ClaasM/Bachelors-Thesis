@@ -22,12 +22,12 @@ from src.streaming import spark_functions
 db = MongoClient()['thesis-dev']
 
 # Load tweets from db, while filtering out non-english tweets
-documents = [tweet for tweet in db.tweets.find()
+documents = [tweet['text'] for tweet in db.tweets.find()
              if 'lang' in tweet and tweet['lang'] == 'en']
 
 # Preprocess with the preprocessing function used during streaming
-preprocessor = spark_functions.preprocessor()
-documents = [preprocessor(document) for document in documents]
+preprocess = spark_functions.preprocessor()
+documents = [preprocess(document) for document in documents]
 
 # Tokenize with the same tokenization function used during streaming
 # This ensures consistent results
@@ -51,12 +51,12 @@ dictionary = corpora.Dictionary(documents)
 dictionary.compactify()
 # and save the dictionary for future use
 # We use it for the topic model as well as the sentiment model.
-dictionary.save('../../data/processed/tweets.dict')
+dictionary.save('../../data/processed/tweets_stream.dict')
 
 # Build the corpus: vectors with occurence of each word for each document
 # convert tokenized documents to vectors
 corpus = [dictionary.doc2bow(doc) for doc in documents]
 
 # and save in Market Matrix format
-corpora.MmCorpus.serialize('../../data/processed/tweets.mm', corpus)
+corpora.MmCorpus.serialize('../../data/processed/tweets_stream.mm', corpus)
 # (This is only used for the LDA topic model)
