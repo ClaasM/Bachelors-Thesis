@@ -1,0 +1,42 @@
+% !TEX root = ../main.tex
+\chapter{Streaming Twitter}
+\label{ch:twitterStreaming}
+
+\section{Twitter}[Explaining Twitter]
+\label{sec:twitter}
+
+\begin{enumerate}
+    \item
+    explain how Twitter works and what entities it has (like the "status"-entity)
+    \item
+    explain technologies like JSON, REST and Streaming
+    \item
+    explain the Twitter API in particular, including the different kinds of streams, the normal REST API, rate limitations, and advantages of the stream for this and other usecases (i.e. its realtime)
+    \item
+    small streaming example, maybe a wordcloud, graph of number of incoming tweets over time for a keyword, some actual tweets showing sentiment regarding specific topics for a keyword, most used/least used words, etc.
+    Generally give the user a feeling for the data we are working with here
+    \item
+    explain why I only look at statuses even though the streaming API also emits other stuff (also listing the other stuff here and why its okay to only focus on tweets)
+    \item
+    Close with reiterating why I am using Twitter, in more detail, using the information provided in this chapter.
+\end{itemize}
+
+\section{The Sanders Dataset}
+\label{sec:theSandersDataset}
+
+The Sanders dataset is used for all models.
+Reasons: to ensure consistency, hand-labeled (important for sentiment analysis, and labeling by other means, e.g. emoticons, is flawed)
+
+\begin{itemize}
+    \item
+    Hydration of the dataset and why it was required (because of Twitter TOS)
+    \item
+    Preprocessing of the dataset removing e.g. non-english tweets
+\end{itemize}
+
+\section{Preprocessing and Tokenization}
+
+For consistency, the same preprocessing and tokenization functions are used for training, testing and streaming for all models and algorithms for consistency.
+Those are explained and shown here.
+Graphics for preprocessed Data.
+2 Gensim-Dictionaries were made, one from the actual Stream, one from the Sanders dataset, for sentiment analysis and lda topic modeling, in the same format to test them against each other later.

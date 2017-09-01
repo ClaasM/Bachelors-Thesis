@@ -31,12 +31,12 @@
 %   README.md                       contains information about this template.
 
 \documentclass[11pt,
-              a4paper,
-              index=totoc,
-              headsepline,
-              footsepline,
-              BCOR12mm,
-              DIV13]{scrbook}
+a4paper,
+index=totoc,
+headsepline,
+footsepline,
+BCOR12mm,
+DIV13]{scrbook}
 
 % KOMA scrbook options:
 %  index=totoc: include an entry for the index in the table of contents.
@@ -57,33 +57,31 @@
 
 \begin{document}
 
- \frontmatter
+    \frontmatter
 
- \input{components/cover}
+    \input{components/cover}
 
- \clearemptydoublepage
+    \clearemptydoublepage
 
- \input{components/titlepage}
+    \input{components/titlepage}
 
- \input{components/disclaimer}
+    \input{components/disclaimer}
 
- \input{components/acknowledgements}
+    \input{components/acknowledgements}
 
- \input{components/quote}
+    \input{components/abstract}
 
- \input{components/abstract}
+    \tableofcontents
 
- \tableofcontents
+    \mainmatter
 
- \mainmatter
+    \input{components/text}
 
- \input{components/text}
+    \clearemptydoublepage
 
- \clearemptydoublepage
+    \printglossaries
 
- \printglossaries
-
- \addcontentsline{toc}{chapter}{Bibliography}
- \bibliography{bibliography/literature}
+    \addcontentsline{toc}{chapter}{Bibliography}
+    \bibliography{bibliography/literature}
 
 \end{document}

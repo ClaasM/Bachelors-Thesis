@@ -1,0 +1,13 @@
+% !TEX root = ../main.tex
+\chapter{The Twitter Streaming API}
+
+This was also the reason to put these into one sparkjob, to limit required bandwith to execution nodes (the dictionary doesn't need to be transmitted as often).
+Also of course the amount of events emitted via the sockets is reduced.
+It's okay since the jobs are still small enough for kafka to distribute them efficiently in a distributed setting.
+And this makes it easier to combine the results of both analyses on a per-tweet/per-RDD basis.
+
+\label{chapter:Twitter Streaming}
+
+Twitter Streaming is cool
+\par
+This is below the par
