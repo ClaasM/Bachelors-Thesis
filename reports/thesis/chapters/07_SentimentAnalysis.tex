@@ -1,0 +1,50 @@
+% !TEX root = ../main.tex
+\chapter{Detailed Descriptions}
+%\section{Detailed Validation Results}
+\label{chapter:DetailedDescriptions}\label{sentimentanalysis}
+%\inputminted{c++}{../../src/wos_native.cuh}
+
+% TODO redo all of these analyses, filter out non-english tweets for all these
+
+Explain all the methods used and what classes they classify into, how they work "under the hood"
+
+The following 3 are all part of the NLTK.
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Na\"{i}ve Bayes}
+\label{subsec:naivebayes}
+
+\subsection{NLTK Sentiment Analyzer}
+\label{subsec:nltksentimentanalyzer}
+
+\subsection{VADER}
+\label{subsec:vader}
+
+Interestingly, Vader performs better on the dataset provided by the nltk (which is collected using...) than the sanders-dataset
+
+\subsection{TextBlob}
+\label{subsec:textblob}
+
+Failed to exceed 50\% accuracy on tweets, preprocessed or not, because...
+
+\subsection{GCloud}
+\label{subsec:gcloud}
+
+Languages were filtered out.
+Include some performance data from the API, like latency and stuff
+
+\section{Comparison}
+\label{sec:comparison}
+
+\subsection{Discrepancies in Performance}
+\label{subsec:discrepanciesinperformance}
+
+Discrepancies in performance between the two aforementioned dictionaries are indicative of the sentiment model not generalizing well over all of twitter.
+
+\subsection{Comparing to results without preprocessing}
+\label{subsec:comparingToResultsWithoutPreprocessing}
+Once again proving the point of preprocessing by showing that the results would have been worse without it (in a table or something)
+Or this maybe driving it past home?
+
+

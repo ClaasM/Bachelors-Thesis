@@ -1,0 +1,92 @@
+% !TEX root = ../main.tex
+\chapter{Streaming Twitter}
+\label{ch:twitterStreaming}
+
+\section{Twitter}[Twitter]
+\label{sec:twitter}
+
+\begin{enumerate}
+    \item
+    Explain how Twitter works and what entities it has (like the "status"-entity)
+\end{enumerate}
+
+\section{The API}
+\label{sec:theApi}
+
+\begin{enumerate}
+    \item
+    explain technologies like JSON, REST and Streaming
+    \item
+    explain data at rest and data in motion (i.e. retrieve historical data and then stream live data)
+    \item
+    explain the Twitter API in particular using the previous definitions:
+    \begin{itemize}
+        \item
+        Basic datatypes and objects: how the entities explained above look in the API
+        \item
+        Making the disambiguation between statuses and tweets and choosing one (sticking to the wording in the official docs, regardless of the wording in other papers)
+        \item
+        Explaining the different kinds of available streams plus parameters, filter<->public stream disambiguation and choosing one (sticking to the wording in the official docs, regardless of the wording in other papers)
+        \item
+        For the sake of completeness also explaining the normal REST API a bit
+        \item
+        Rate Limitations of both
+        \item
+        (Dis-)Advantages of Streaming- and REST-API for this and other usecases (i.e. that it is realtime)
+    \end{itemize}
+    \item
+    explain why I only look at statuses even though the streaming API also emits other stuff (also listing the other stuff here and why its okay to only focus on tweets)
+    \item
+    Close with reiterating why I am using Twitter, in more detail, using the information provided in this chapter.
+\end{itemize}
+
+\section{The Sanders Dataset}
+\label{sec:theSandersDataset}
+
+Explaining the dataset.
+The Sanders dataset is used for all models.
+Reasons: to ensure consistency, and because it is hand-labeled (important for sentiment analysis, and labeling by other means, e.g. emoticons, is flawed)
+
+\begin{itemize}
+    \item
+    Hydration of the dataset and why it was required (because of Twitter TOS)
+    \item
+    The original crawling script for the sanders data set was not working due to breaking changes in the api, a fixed version [source] would take 9 hours, a short yet efficient script was created to get the tweets
+    \item
+    Filtering of the dataset removing e.g. non-english tweets
+\end{itemize}
+
+Perform some preliminary data exploration: Wordcloud, some actual tweets showing sentiment regarding specific topics for a keyword, most used/least used words, etc.
+Generally giving the reader a feeling for the data we are working with here.
+Giving a convincing argument why it makes sense to use it.
+
+\section{Streaming Sample Dataset}
+\label{sec:streamingSampleDataset}
+
+Another dataset was collected by listening to the sample stream with filter the same filter settings as with were applied to the sanders dataset.
+In this case this meant only keeping english tweets.
+This is done until N tweets are collected.
+
+Do the same sort of exploration as with the Sanders Dataset, but additionally showing a graph of number of incoming tweets over time for a keyword or something like that
+
+\section{Preprocessing and Tokenization}
+\label{sec:preprocessingAndTokenization}
+
+There are now 2 datasets of "raw", but filtered tweets.
+Pointing out flaws in the dataset encoutered during exploration.
+
+\begin{itemize}
+    \item
+    For consistency, the same preprocessing and tokenization functions are used for training, testing and streaming for all models and algorithms
+    \item
+    Explaining how it was difficult to clean up the tweets (with examples)
+    \item
+    Show actual preprocessing code, since its a vital piece and not that long
+    \item
+    Graphics of preprocessed data for both datasets in the same visualizations as during exploration, with comparison, proving the effectiveness of the preprocessing
+    \item
+    2 Gensim-Dictionaries were made, one from the actual Stream Dataset, one from the Sanders dataset, for sentiment analysis and lda topic modeling, in the same format to test them against each other later.
+    \item
+    Explaining the saving of the preprocessed tweets and dictionaries
+\end{itemize}
+
