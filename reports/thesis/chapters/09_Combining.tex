@@ -2,10 +2,12 @@
 \chapter{Combining Sentiment Analysis and Topic Modeling}
 \label{ch:combiningSentimentAnalysisAndTopicModeling}
 
-This was also the reason to put these into one sparkjob, to limit required bandwith to execution nodes (the dictionary doesn't need to be transmitted as often).
+To combine topic modeling and sentiment analysis, they were all put into one sparkjob, to limit required bandwith to execution nodes (the dictionary doesn't need to be transmitted as often).
 Also of course the amount of events emitted via the sockets is reduced.
 It's okay since the jobs are still small enough for kafka to distribute them efficiently in a distributed setting.
-And this makes it easier to combine the results of both analyses on a per-tweet/per-RDD basis.
+And this makes it easier to combine the results of both analyses on a per-status (per-RDD) basis.
 
-Sentiment by Topic graphic
+Showing some figures that visualize the combination of sentiment by topic.
+Haven't thought this through yet, but it should also be around the 4 to 5 page mark.
 
+\pagebreak[5]

@@ -1,23 +1,31 @@
 % !TEX root = ../main.tex
 
 \chapter{Technologies used}
-
 \label{ch:technologiesUsed}
 
-I explain all the technologies used (excluding the dashboard) here, so that I can give code examples and talk about implementation
-while introducing the theory for sentiment analysis and topic modeling, for the reader to be able to make the connection easier.
+\paragraph
+I introduce all the technologies used here
+so that I can give code examples and talk about implementation
+while introducing the theory for sentiment analysis and topic modeling.
 
-\textbf{Since it has great influence in the general structur: Do you think this is a good idea?}
+\paragraph
+I limit myself to technologies used across the whole project and introduce specific libraries like Gensim for LDA when they are used.
 
-The Libraries used for each of the algorithms will be explained in their respective chapters;
-I only talk about technologes/design patterns etc that are used across all of them
+\paragraph
+I exclude the dashboard here, or should I include stuff like Angular, Flask or HTML as technologies here?
 
-NLTK is only really used in sentiment analysis, but since its such a prominent library, I'll do a general introduction here.
-Is that okay, even though I don't introduce gensim here (since gensim is purpose-build for Topic Modeling)
+\section{Languages}
+\label{sec:languages}
 
-Using the DS cookie cutter, except the streaming folder is one under source because it is used by data to collect training data and by visualization for the dashboard.
-Generally a modular approach that can be easily expanded with further analysis/monitoring beyond the LDA/Sentiment Analysis with Naive Bayes combination has been build.
+Only Python
 
+\section{Libraries}
+\label{sec:libraries}
+
+\subsection{Spark}
+\label{subsec:spark}
+
+Explaining Spark and how it was used
 \begin{itemize}
     \item
     Spark offers some good data analysis functions (maybe show wordcount code here)
@@ -31,15 +39,27 @@ Generally a modular approach that can be easily expanded with further analysis/m
     Why it makes sense and what is transmitted to the exec nodes in the end
     \item
     First using a queueStream, but it doesn’t work in the python API, switched to starting a Kafka stream (Kafka just has to be running somewhere, on connect the stream is connected to the Kafka broker and the sparkjob is immediately submitted with the session id as a parameter)
-
-
 \end{itemize}
+
+\subsection{NLTK}
+\label{subsec:nltk}
+
+Explaining the NLTK and how it was used, but not yet talking about the sentiment analysis algorithms it offers.
+Those are introduced and explained in detail in their chapters.
+
+\section{Project Structure}
+\label{sec:projectStructure}
+
+
+Using the DS cookie cutter, except the streaming folder is one under source because it is used by data to collect training data and by visualization for the dashboard.
+Generally a modular approach that can be easily expanded with further analysis/monitoring beyond the LDA/Sentiment Analysis with Naive Bayes combination has been build.
+
 
 \section{Architecture}
 \label{sec:architecture}
 
-Using the architecture from Book with a graphic cotaining ...
-
-About 2 pages introducing the technologies.
+Explaining the choice of architecture with some figures.
+% TODO architecture diagram from the book
+About 2 pages total introducing the technologies.
 
 \pagebreak[2]

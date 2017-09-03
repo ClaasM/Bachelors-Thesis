@@ -5,10 +5,8 @@
 \section{Twitter}[Twitter]
 \label{sec:twitter}
 
-\begin{enumerate}
-    \item
-    Explain how Twitter works and what entities it has (like the "status"-entity)
-\end{enumerate}
+Explain how Twitter works and what entities it has (like the "status"-entity).
+Including a entity-relation diagram
 
 \section{The API}
 \label{sec:theApi}
@@ -22,15 +20,15 @@
     explain the Twitter API in particular using the previous definitions:
     \begin{itemize}
         \item
-        Basic datatypes and objects: how the entities explained above look in the API
+        Explaining basic datatypes and objects: how the entities explained above look in the API
         \item
-        Making the disambiguation between statuses and tweets and choosing one (sticking to the wording in the official docs, regardless of the wording in other papers)
+        Status and Tweet is often used interchangeable, but I use status since that is used in the docs
         \item
-        Explaining the different kinds of available streams plus parameters, filter<->public stream disambiguation and choosing one (sticking to the wording in the official docs, regardless of the wording in other papers)
+        Explaining the different kinds of available streams plus parameters
         \item
         For the sake of completeness also explaining the normal REST API a bit
         \item
-        Rate Limitations of both
+        Explaining rate Limitations of both
         \item
         (Dis-)Advantages of Streaming- and REST-API for this and other usecases (i.e. that it is realtime)
     \end{itemize}
@@ -43,15 +41,16 @@
 \section{The Sanders Dataset}
 \label{sec:theSandersDataset}
 
+Evaluation showed the sanders-dataset to be most-suited to train twitter sentiment analysis models.
 Explaining the dataset.
 The Sanders dataset is used for all models.
-Reasons: to ensure consistency, and because it is hand-labeled (important for sentiment analysis, and labeling by other means, e.g. emoticons, is flawed)
+Reasons: to ensure consistency, and because it is hand-labeled (important for sentiment analysis, and also labeling by other means, e.g. emoticons, is flawed)
 
 \begin{itemize}
     \item
     Hydration of the dataset and why it was required (because of Twitter TOS)
     \item
-    The original crawling script for the sanders data set was not working due to breaking changes in the api, a fixed version [source] would take 9 hours, a short yet efficient script was created to get the tweets
+    The original crawling script for the sanders data set was not working due to breaking changes in the api, a fixed version would take 9 hours, a short yet efficient script was created to get the tweets
     \item
     Filtering of the dataset removing e.g. non-english tweets
 \end{itemize}
@@ -63,7 +62,7 @@ Giving a convincing argument why it makes sense to use it.
 \section{Streaming Sample Dataset}
 \label{sec:streamingSampleDataset}
 
-Another dataset was collected by listening to the sample stream with filter the same filter settings as with were applied to the sanders dataset.
+Another dataset was collected by listening to the sample stream with the same filter settings as used on the sanders dataset.
 In this case this meant only keeping english tweets.
 This is done until N tweets are collected.
 
@@ -86,7 +85,11 @@ Pointing out flaws in the dataset encoutered during exploration.
     Graphics of preprocessed data for both datasets in the same visualizations as during exploration, with comparison, proving the effectiveness of the preprocessing
     \item
     2 Gensim-Dictionaries were made, one from the actual Stream Dataset, one from the Sanders dataset, for sentiment analysis and lda topic modeling, in the same format to test them against each other later.
+    Is it okay to only briefly explain what a Gensim-Dictionary is here?
+    Because Gensim is primarily used for LDA, and is exaplained in detail there.
     \item
-    Explaining the saving of the preprocessed tweets and dictionaries
+    Explaining the saving of the preprocessed tweets and dictionaries (persistence layer)
 \end{itemize}
 
+3 pages planned for this chapter.
+\pagebreak[3]
