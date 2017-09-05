@@ -1,23 +1,23 @@
 % !TEX root = ../main.tex
-\chapter{Streaming Twitter}
-\label{ch:twitterStreaming}
+\chapter{Twitter}
+\label{ch:twitter}
 
-\section{Twitter}[Twitter]
+\section{Introduction to Twitter}
 \label{sec:twitter}
 
 Explain how Twitter works and what entities it has (like the "status"-entity).
 Including a entity-relation diagram
 
-\section{The API}
+\section{The Twitter API}
 \label{sec:theApi}
 
 \begin{enumerate}
     \item
-    explain technologies like JSON, REST and Streaming
+    Explaining technologies like JSON, REST and Streaming
     \item
-    explain data at rest and data in motion (i.e. retrieve historical data and then stream live data)
+    Explaining data at rest and data in motion (i.e. retrieve historical data and then stream live data)
     \item
-    explain the Twitter API in particular using the previous definitions:
+    Explaining the Twitter API in particular using the previous definitions:
     \begin{itemize}
         \item
         Explaining basic datatypes and objects: how the entities explained above look in the API
@@ -33,7 +33,7 @@ Including a entity-relation diagram
         (Dis-)Advantages of Streaming- and REST-API for this and other usecases (i.e. that it is realtime)
     \end{itemize}
     \item
-    explain why I only look at statuses even though the streaming API also emits other stuff (also listing the other stuff here and why its okay to only focus on tweets)
+    Explaining why I only look at statuses even though the streaming API also emits other stuff (also listing the other stuff here and why its okay to only focus on statuses)
     \item
     Close with reiterating why I am using Twitter, in more detail, using the information provided in this chapter.
 \end{enumerate}
@@ -41,7 +41,7 @@ Including a entity-relation diagram
 \section{The Sanders Dataset}
 \label{sec:theSandersDataset}
 
-Evaluation showed the sanders-dataset to be most-suited to train twitter sentiment analysis models.
+Evaluation using the comparison in \cite{Saif2013} showed the sanders-dataset \cite{sanders} to be most-suited to train twitter sentiment analysis models.
 Explaining the dataset.
 The Sanders dataset is used for all models.
 Reasons: to ensure consistency, and because it is hand-labeled (important for sentiment analysis, and also labeling by other means, e.g. emoticons, is flawed)
@@ -59,7 +59,7 @@ Perform some preliminary data exploration: Wordcloud, some actual tweets showing
 Generally giving the reader a feeling for the data we are working with here.
 Giving a convincing argument why it makes sense to use it.
 
-\section{Streaming Sample Dataset}
+\section{The Streaming Sample Dataset}
 \label{sec:streamingSampleDataset}
 
 Another dataset was collected by listening to the sample stream with the same filter settings as used on the sanders dataset.
