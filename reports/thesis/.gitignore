@@ -13,8 +13,9 @@ _minted*
 *.gls
 *.log
 *.out
-*.pdf
 *.tmp
 *.toc
 *.xdy
 *.xref
+
+main.pdf
