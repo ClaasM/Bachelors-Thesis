@@ -33,35 +33,35 @@ Furthermore, virtualenv was used to make the development environment easily repr
 \begin{table}
     \caption{The Python programming language~\cite{van2007python}}
     \label{table:python}
-    \resizebox{\textwidth}{!}{%
-    \begin{tabular}{lllll} %
+    \vspace{0.2cm}
+    \begin{tabular}{l | l} %
         Paradigms
-        & Multi-paradigm: object-oriented, imperative, functional, procedural, reflective
-        \\
+        & Multi-paradigm: object-oriented, imperative, functional,
+        \\ & procedural, reflective
+        \\ \midrule
         Appeared in
         & 1991
-        \\
+        \\ \midrule
         Designed by
         & Guido van Rossum
         % TODO properly link to his name
-        \\
+        \\ \midrule
         Developer
         & Python Software Foundation
         % TODO properly link to the Python software foundation
-        \\
+        \\ \midrule
         Stable releases
         & 3.6.2 and 2.7.13 (8. September 2017)
-        \\
+        \\ \midrule
         Typing discipline
         & duck, dynamic, strong
-        \\
+        \\ \midrule
         OS
         & cross-platform
-        \\
+        \\ \midrule
         Usual filename extensions
         & .py, .pyw, .pyc, .pyo, .pyd
-        \bottomrule
-    \end{tabular}}
+    \end{tabular}
 \end{table}
 
 % TODO maybe also talk about other languages considered, with comparison table
@@ -70,8 +70,31 @@ Furthermore, virtualenv was used to make the development environment easily repr
 \section{Libraries}
 \label{sec:libraries}
 
+\subsection{Kafka}
+\label{subsec:kafka}
+
+Kafka is a distributed messaging system implementing the publish/subscribe paradigm.
+In the publish/subscribe paradigm, subscribers register their interest in a certain type of event,
+and are asynchronously notified by the system when an event is published that matches the criteria~\cite{Eugster2003}.
+In Kafka, the publishing entities are called producers, and the subscribing entities are called consumers.
+A stream of events (called messages in Kafka) of a particular type that a consumer can subscribe to is defined by a topic~\cite{Kreps2015}.
+
+% include diagram
+\begin{figure}
+    \centering
+    \caption{Simplified diagram of a typical Kafka setup.}
+    \label{fig:kafka}
+    % TODO smaller maybe it somehow fits next to the python table.
+    \includegraphics[width=\textwidth]{../figures/kafka.pdf}
+\end{figure}
+
+The system, as seen in~\ref{fig:kafka}, scales vertically, enabling high throughput and redundance.
+
+% Figure and Code example
 \subsection{Spark}
 \label{subsec:spark}
+
+Important: Spark plugs into Kafka very nicely as a consumer
 
 Explaining Spark and how it was used
 \begin{itemize}
@@ -95,11 +118,6 @@ Explaining Spark and how it was used
 Explaining the NLTK and how it was used, but not yet talking about the sentiment analysis algorithms it offers.
 Those are introduced and explained in detail in their chapters.
 
-\subsection{Kafka}
-\label{subsec:kafka}
-
-Explaining Kafka and all the other major technologies used
-
 \section{Project Structure}
 \label{sec:projectStructure}
 
@@ -115,4 +133,6 @@ Explaining the choice of architecture with some figures.
 % TODO architecture diagram from the book
 About 2 pages total introducing the technologies.
 
+
+In our case, we only have one execution node, but Kafka and Spark are designed such that there should not be a problem
 \pagebreak[2]
