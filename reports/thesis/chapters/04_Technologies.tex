@@ -88,7 +88,10 @@ A stream of events (called messages in Kafka) of a particular type that a consum
     \includegraphics[width=\textwidth]{../figures/kafka.pdf}
 \end{figure}
 
-The system, as seen in~\ref{fig:kafka}, scales vertically, enabling high throughput and redundance.
+\ref{fig:kafka} shows a simplified, typical configuration of a messaging system powered by Kafka.
+The Kafka cluster is a set of message brokers, being replicated and running on different machines, that can each contain messages for every topic,
+which are then distributed to the subscribing execution nodes (consumers)~\cite{Kreps2015}.
+The system scales vertically, enabling high throughput and redundance.
 
 % Figure and Code example
 \subsection{Spark}
