@@ -136,9 +136,8 @@ through which the parallelization, distribution and persistence of data is abstr
 \begin{figure}
     \caption{A simple example showing how spark distributes data and collects the result back to the driver node (~\cite{sparkDocs}, modified)}
     \label{code:simpleParallelization}
-    \begin{tabular}{c}
-        \begin{lstlisting}[language=Python]
-            % @formatter:off
+    \begin{minted}{python}
+        % @formatter:off
 data = [1, 2, 3, 4, 5]
 # Wrap the data into a RDD, which is distributed across execution nodes by Spark, ready for parallel processing
 # sc is the so-called streaming context, which provides an interface with the cluster
@@ -150,8 +149,7 @@ incrementedData = distributedData.map(lambda a: a + 1)
 incrementedData.reduce(lambda a, b: a + b)
 # returns 20
             % @formatter:on
-        \end{lstlisting}
-    \end{tabular}
+    \end{minted}
 \end{figure}
 
 Furthermore, Spark is developed by the Apache Software Foundation, as is Kafka,
@@ -163,8 +161,7 @@ as can be seen in the wordcount-example in~\ref{code:wordcount}.
 \begin{figure}
     \caption{Consuming data from a stream and processing them in batches}
     \label{code:wordcount}
-    \begin{tabular}{c}
-        \begin{lstlisting}[language=Python]
+        \begin{minted}{python}
             % @formatter:off
 # Stream the data in 1-second windows
 streaming_context = StreamingContext(sc, 1)  # 1 second window
@@ -175,8 +172,7 @@ counts = stream.flatMap(lambda line: line.split(" ")) \
     .map(lambda word: (word, 1)) \
     .reduceByKey(lambda a, b: a + b)
             % @formatter:on
-        \end{lstlisting}
-    \end{tabular}
+        \end{minted}
 \end{figure}
 
 Spark also allows for more complex functions to be applied to the data.
@@ -193,8 +189,7 @@ A simple example of this can be seen in~\ref{code:factory}.
 \begin{figure}
     \caption{Demonstration of using packages and outside-variables on execution nodes}
     \label{code:factory}
-    \begin{tabular}{c}
-        \begin{lstlisting}[language=Python]
+        \begin{minted}{python}
             % @formatter:off
 # Factory to create a match-function that matches a text against a compiled regular expression
 def matcher(pattern):
@@ -212,18 +207,125 @@ def matcher(pattern):
 # Usage:
 someRDD.map(matcher("ab*"))
             % @formatter:on
-        \end{lstlisting}
-    \end{tabular}
+            %TODO can man den code safe einrücken ohne dass es die Darstellung kaputt macht? Ausprobieren
+        \end{minted}
 \end{figure}
 
 \subsection{NLTK}
 \label{subsec:nltk}
 
-Explaining the NLTK and how it was used, but not yet talking about the sentiment analysis algorithms it offers.
-Those are introduced and explained in detail in their chapters.
+The NLTK (\textbf{N}atural \textbf{L}anguage \textbf{T}ool\textbf{K}it) is a Python-toolkit consisting of several libraries used for
+natural language processing.
+It interfaces with many lexical resources and corpora, and offers functions for tokenizing, stemming and parsing text-based artifacts,
+and many more~\cite{nltkDocs}.
+The NLTK is mainly used by students, teachers and researchers, as a self-study tool or for teaching,
+and to prototype and build research systems such as this thesis.
+The community appreciates the shallow learning curve and that it is unopinionated~\cite{Bird2006}.
+It was used across the project of this thesis for utilitarian and miscellaneous tasks.
+A simple exemplary use-case can be seen in~\ref{code:nltk}.
+
+\begin{figure}
+    \caption{Example usage of the NLTK in a Python shell}
+    \label{code:nltk}
+        \begin{minted}{python}
+            % @formatter:off
+import nltk
+text = "the quick brown fox jumps over the lazy dog"
+# The NLTK offers, for example, word tokenization
+tokens = nltk.tokenize.word_tokenize(text)
+tokens
+Out[3]: ['the', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog']
+# It also offers a wrapper-class for text that enables, for example, searching it and displaying the results.
+wrapped = nltk.Text(tokens)
+wrapped.concordance("fox")
+Displaying 1 of 1 matches:
+                      the quick brown fox jumps over the lazy dog
+            % @formatter:on
+            %TODO can man den code safe einrücken ohne dass es die Darstellung kaputt macht? Ausprobieren
+        \end{minted}
+\end{figure}
+
+Some of the more complex functionality and methods for classification that border on machine learning territory were also used,
+although they are explained in more detail in their respective chapters~\ref{ch:sentimentAnalysis}.
 
 \section{Project Structure}
 \label{sec:projectStructure}
+
+As with any programming project, high-quality, well documented and structured code is important this thesis.
+Since the programming language used in this thesis is Python, and it is in large parts data-science,
+the "Cookiecutter Data Science" %TODO quote properly
+project structure is used~\cite{dsCookieCutter}.
+This project structure follows a type-based separation, an explanation or the individual folders can be seen in~\ref{forest:dscookiecutter}.
+
+% TODO use the folder icon in all forest https://tex.stackexchange.com/questions/5073/making-a-simple-directory-tree
+\begin{figure}
+    \caption{The folder structure of the "Cookiecutter Data Science"~\cite{dsCookieCutter}} %TODO quote properly
+    \label{forest:dscookiecutter}
+    \begin{forest}
+        % @formatter:off
+% TODO can this be safely indented? same as code
+  for tree={
+    font=\ttfamily,
+    grow'=0,
+    child anchor=west,
+    parent anchor=south,
+    anchor=west,
+    calign=first,
+    edge path={
+      \noexpand\path [draw, \forestoption{edge}]
+      (!u.south west) +(7.5pt,0) |- node[fill,inner sep=1.25pt] {} (.child anchor)\forestoption{edge label};
+    },
+    before typesetting nodes={
+      if n=1
+        {insert before={[,phantom]}}
+        {}
+    },
+    fit=band,
+    before computing xy={l=15pt},
+  }
+[Thesis
+  [data \textit{all data}
+    [external \textit{data from external sources}
+    ]
+    [interim \textit{data that has started\, but not finished processing}
+    ]
+    [processed \textit{data that is ready to be used}
+    ]
+    [raw \textit{collected\, yet unprocessed data}
+    ]
+  ]
+  [docs \textit{documentation of the project}
+  ]
+  [models \textit{trained model binaries}
+  ]
+  [notebooks \textit{Jupyter notebooks used for exploration}
+  ]
+  [references \textit{references and attributions for the code}
+  ]
+  [reports \textit{written reports such as this thesis}
+  ]
+  [src \textit{all code}
+    [data \textit{code related to acquisition and processing of data}
+    ]
+    [models \textit{code related to training the models}
+    ]
+    [streaming \textit{code used for streaming data}
+    ]
+    [visualization \textit{code used to visualize results}
+    ]
+  ]
+]
+        % @formatter:on
+    \end{forest}
+\end{figure}
+
+Additionally, a \texttt{/streaming} directory was created under \texttt{/src}, which accommodates all streaming-related modules.
+Beyond the structure given by the cookie cutter, further down in the directory tree, feature-based separation is employed,
+to make the code easily expandable with further analysis and modeling beyond what is implemented in this thesis.
+A part of the folder structure showcasing this project structure can be seen in the \texttt{notebooks} directive, shown in~\ref{forest:featurebased}.
+
+
+% another forest
 
 
 Using the DS cookie cutter, except the streaming folder is one under source because it is used by data to collect training data and by visualization for the dashboard.
