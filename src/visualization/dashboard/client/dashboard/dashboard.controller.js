@@ -47,6 +47,7 @@ angular.module('Dashboard')
           count: 0
         }
       };
+      //TODO remove site, retweet and firehose, and all then unused code parts
       // Number of tweets shown in the recent tweets-part
       var MAX_NUMBER_OF_TWEETS_SHOWN = 4;
       var RESULTS_DEFAULT = {

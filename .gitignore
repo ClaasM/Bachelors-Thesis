@@ -10,3 +10,4 @@
 # File types to be ignored
 *.log
 *.access.json
+*.pyg

@@ -42,6 +42,7 @@ and analyze its influence on the overall userbase.
 For the purpose of this thesis we will only focus on the text of a status and do not assign any special meaning to links,
 mentions, hashtags or whether a status is a retweet.\\
 
+% TODO add that retweets mean nothing has to be weighed by likes or something to get sentiment
 
 \section{The Twitter API}
 \label{sec:theApi}
@@ -50,6 +51,7 @@ Twitter is offering an API (\textbf{A}pplication \textbf{P}rogramming \textbf{I}
 through which developers and researchers can access machine-readable data,
 including the entities shown in~\ref{fig:twitter}, from the platform.
 This API transmits data encoded in JSON, and follows the REST-paradigm.
+A Python-library called Tweepy, which contains utility functions for interaction with the Twitter API, was used where adequate~\cite{tweepyDocs}.
 
 \subsection{JSON}
 \label{subsec:json}
@@ -79,7 +81,7 @@ A small example for an object in this format can be seen in~\ref{code:json}.
     \caption{A shortened JSON representation of a fictional Twitter status}
     \label{code:json}
     \begin{minted}{json}
-        % @formatter:off
+    % @formatter:off
     {
         "created_at" : "Fri Jan 20 20:04:05 +0000 2017",
         "id" : "123",
@@ -172,75 +174,225 @@ Some examples can be seen in ~\ref{tab:twitter_endpoints}.
     \end{tabular}}
 \end{table}
 
-\subsection{Data at Rest - Data in Motion}
+\subsection{Processing Data at Rest and Data in Motion}
 \label{subsec:dataAtRest-DataInMotion}
+
+The previous subsection discussed the data at rest offered by the Twitter API.
+Processing data at rest (not to be confused with REST) is processing data from a persistent data storage, like a database, in batches~\cite{Nandi2015}.
+Since this thesis aims to provide analysis in real time, one option would be to request the latest entities in fixed intervals from
+Twitters API.
+\par
+However, that would be inefficient, and introduces latency to the analysis,
+since events like the posting of statuses can only be analyzed after the next request is answered, not immediately when they occur.
+This is amplified by the fact that the number of requests than can be made to the API is limited by the rate-limit.
+\par
+To analyze events right when they occur, the data has to be processed in motion, meaning ingesting data in real time via a stream~\cite{Nandi2015}.
+This thesis aims to process data in motion.
+Thankfully, Twitter offers a Streaming API, which is explained in the next subsection. % TODO is it okay to reference chapters and stuff like this?
 
 
 \subsection{Streaming}
 \label{subsec:streaming}
 
-But we want to do real time - that doesn't work properly with the REST API
-- thankfully you can also stream twitter
+Although the Twitter documentation distinguishes between the REST API for processing data at rest and the the Streaming API for processing data in motion,
+the streaming API is also REST-based.
+The user sends a HTTP-request to a streaming-endpoint, but the the API doesn't respond and close the requests,
+but instead keeps the connection open and sends successive responses until the connection closes.
+These responses have the same format as in the REST-API, and represent Twitter entities like statuses or direct messages~\cite{twitterDocs}.
+A diagram from the Twitter documentation visualizing this behaviour can be seen in~\ref{fig:twitter_streaming}.
 
-(Dis-)Advantages of Streaming- and REST-API for this and other usecases (i.e. that it is realtime)
+% include diagram
+\begin{figure}
+    \centering
+    \caption{Diagram from the Twitter documentation showing how the Twitter streaming-API works}
+    \label{fig:twitter_streaming}
+    \includegraphics[width=10cm]{../images/twitter_streaming_diagram.png}
+\end{figure}
 
-Explaining the different kinds of available streams plus parameters
-Referencing ~\ref{subsec:kafka}: Compared to the general use case presented in~\ref{fig:kafka},
-there is only one topic per producer, with the topic being the stream a user started and the produer being twitter.
-(Show adjusted figure with one producer feeding into)
+
+Twitter itself offers 6 different endpoints for 6 different streams, all of which are explained in~\ref{tab:twitter_streams}.
+
+\begin{table}
+    \caption{All streams offered by Twitter~\cite{twitterDocs}}
+    \label{tab:twitter_streams}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{lllll} %
+        \toprule
+        & & \multicolumn{2}{c}{Authentication} & \\
+        \cmidrule{3-4}
+        Name
+        & Method
+        & URI
+        & User
+        & Application
+        & Description
+        \\
+        \midrule
+        Filter stream
+        & \texttt{POST}
+        & \texttt{statuses/filter}
+        & \cmark
+        & \cmark
+        & Streams a random sample of statuses matching the filter setting
+        \\
+        \midrule
+        Sample stream
+        & \texttt{GET}
+        & \texttt{statuses/sample}
+        & \cmark
+        & \cmark
+        & Streams a random sample of statuses
+        \\
+        \midrule
+        User stream
+        & \texttt{GET}
+        & \texttt{user}
+        & \cmark
+        & \xmark
+        & Streams all activity regarding the authenticated user
+        \\
+        \midrule
+        Site stream
+        & \texttt{GET}
+        & \texttt{site}
+        & & &
+        \\
+        \cmidrule{2-3}
+        Retweet stream
+        & \multicolumn{2}{c}{Unknown}
+        & \multicolumn{2}{c}{Not publicly available, disregarded in this thesis} &
+        \\
+        \cmidrule{2-3}
+        Firehose
+        & \multicolumn{2}{c}{Unknown}
+        & & &
+        \\
+        \bottomrule
+    \end{tabular}}
+\end{table}
+
+This thesis will work with the sample, user and filter stream, since only these are publicly available.
+The main focus will be the sample stream, since it gives a representative sample of all activity on twitter.
+\par
+Compared to the general use-case for Kafka shown in~\ref{fig:kafka}, in this thesis,
+every producer will produce events for exactly one topic, with the producer being a specific Twitter stream and the topic beint a unique identifier for it.
+%TODO maybe show adjusted diagram here if its not clear
+The advantage of using the Twitter streaming-API compared to repeatedly polling the REST-API for the use-case of this thesis
+is that it is more efficient and has less latency.
 
 \section{The Sanders Dataset}
 \label{sec:theSandersDataset}
 
-Evaluation using the comparison in \cite{Saif2013} showed the sanders-dataset \cite{sanders} to be most-suited to train twitter sentiment analysis models.
-Explaining the dataset.
-The Sanders dataset is used for all models.
-Reasons: to ensure consistency, and because it is hand-labeled (important for sentiment analysis, and also labeling by other means, e.g. emoticons, is flawed)
+To train the sentiment analysis models, a set of statuses labeled with sentiment was needed.
+Evaluation using the comparison in\cite{Saif2013} showed the Sanders-dataset \cite{sanders} to be most-suited to train twitter sentiment analysis models.
+It is large enough to train an accurate model and is hand-labeled instead of relying on emoticons for labeling, which might be inaccurate.
+Also, Twitter's terms of service forbid the distribution of statuses outside of their API, which ruled out all datasets that did.
+The Sanders-dataset only contains the statuses unique identifier (id), along with the sentiment label ("positive", "negative", "neutral" or "irrelevant").
+The existing scripts to hydrate the dataset (replace the id with the actual status by requesting them from the API) were either slow or deprecated and dysfunctional,
+which is why a new script was written.
+Unfortunately no real statuses can be shown, but~\ref{tab:sanders_sample} shows some fictional examples.
 
-\begin{itemize}
-    \item
-    Hydration of the dataset and why it was required (because of Twitter TOS)
-    \item
-    The original crawling script for the sanders data set was not working due to breaking changes in the api, a fixed version would take 9 hours, a short yet efficient script was created to get the tweets
-    \item
-    Filtering of the dataset removing e.g. non-english tweets
-\end{itemize}
+\begin{table}
+    \caption{Some fictional statuses with labels}
+    \label{tab:sanders_sample}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{lllll} %
+        \toprule
+        Text
+        & Sentiment Label
+        \\
+        \midrule
+        Lmao I had a funny argument with Siri @Apple
+        & \texttt{positive}
+        \\
+        My #iPad crashes constantly since the update.
+        & \texttt{negative}
+        \\
+        Can anyone recommend me an app for my iPhone?
+        & \texttt{neutral}
+        \\
+        Apple stellt neues iPhone vor \textit{(non-english)}
+        & \texttt{irrelevant}
+        \bottomrule
+    \end{tabular}}
+\end{table}
 
-Perform some preliminary data exploration: Wordcloud, some actual tweets showing sentiment regarding specific topics for a keyword, most used/least used words, etc.
-Generally giving the reader a feeling for the data we are working with here.
-Giving a convincing argument why it makes sense to use it.
+The resulting dataset was then filtered to only contain english statuses.
+The distribution of labels on the dataset can be seen in~\ref{fig:sanders_sentiment}.
+
+% include diagram
+\begin{figure}
+    \centering
+    \caption{The distribution of labels in the Sanders dataset.}
+    \label{fig:sanders_sentiment}
+    \includegraphics[width=10cm]{../images/sanders_sentiment.png}
+\end{figure}
 
 \section{The Streaming Sample Dataset}
 \label{sec:streamingSampleDataset}
 
-Another dataset was collected by listening to the sample stream with the same filter settings as used on the sanders dataset.
-In this case this meant only keeping english tweets.
-This is done until N tweets are collected.
+Another dataset was collected by streaming the sample stream described in\ref{subsec:streaming},
+again only keeping english tweets.
+The statuses received via the stream were written to a database until 10000 statuses were collected.
+This dataset will be used for (unsupervised) topic modeling, since it is representative of all activity on Twitter.
+A wordcloud of the statuses collected from the sample stream can be seen in~\ref{fig:wordloud_pre}~
 
-Do the same sort of exploration as with the Sanders Dataset, but additionally showing a graph of number of incoming tweets over time for a keyword or something like that
+% include diagram
+\begin{figure}
+    \centering
+    \caption{Wordcloud of the statuses collected from the sample stream.}
+    \label{fig:wordloud_pre}
+    \includegraphics[width=10cm]{../images/wordloud_pre.png}
+\end{figure}
+
+Some of the biggest "words" in the wordcloud are "RT", "it" and "be",
+or even some digits, which have no informativeness with regards to sentiment or topic,
+which demonstrates the necessity of preprocessing, shown in the next chapter.
+
 
 \section{Preprocessing and Tokenization}
 \label{sec:preprocessingAndTokenization}
 
-There are now 2 datasets of "raw", but filtered tweets.
-Pointing out flaws in the dataset encoutered during exploration.
+There are now 2 datasets of statuses that are filtered by language but still raw.
+These statuses now need to be preprocessed,
+which in this case means removing all elements of text that have no influence on topic and sentiment and make
+modeling and analysis unnecessarily difficult.\\
+Furthermore, since all the algorithms that will be used later on are bag-of-words algorithms,
+which means they disregard the order of words in text, a tokenization function needs to be created
+to split sentences in the right places and only keep tokens (words) relevant for modeling and analysis.\\
+However, to achieve consistent results,
+the same preprocessing and tokenization functions need to be used for all models, analyses and datasets.
+The following steps were taken.
 
-\begin{itemize}
-    \item
-    For consistency, the same preprocessing and tokenization functions are used for training, testing and streaming for all models and algorithms
-    \item
-    Explaining how it was difficult to clean up the tweets (with examples)
-    \item
-    Show actual preprocessing code, since its a vital piece and not that long
-    \item
-    Graphics of preprocessed data for both datasets in the same visualizations as during exploration, with comparison, proving the effectiveness of the preprocessing
-    \item
-    2 Gensim-Dictionaries were made, one from the actual Stream Dataset, one from the Sanders dataset, for sentiment analysis and lda topic modeling, in the same format to test them against each other later.
-    Is it okay to only briefly explain what a Gensim-Dictionary is here?
-    Because Gensim is primarily used for LDA, and is exaplained in detail there.
-    \item
-    Explaining the saving of the preprocessed tweets and dictionaries (persistence layer)
-\end{itemize}
+\begin{enumerate}
+    \item Precrocessing
+    \begin{enumerate}
+        \item All URL's were removed by using a regular expression matching everything from "http" up to the next whitespace
+        \item All punctuation as well as the Twitter-specific characters \texttt{@} and \texttt{#} were removed
+        \item The text was split at whitespace using the \texttt{\\s} regular expression
+        \item All elements that contained anything but latin letters were discarded
+    \end{enumerate}
+    \item Tokenization
+    \begin{enumerate}
+        \item The text is split into tokens using the whitespace regular expression again
+        \item Tokens of length 1 are removed
+        \item Tokens that can be found in NLTK's stopwords list for the english language
+        (containing a fixed selection of words with low-informativeness for bag-of-words algorithms) were removed
+        \item Tokens that can be found in an additional self-devised stopwords list were removed % TODO put this stopword list plus the code in the appendix and reference it here
+    \end{enumerate}
+\end{enumerate}
 
-3 pages planned for this chapter.
-\pagebreak[3]
+The change to the wordcloud of the statuses collected from the sample stream after preprocessing and tokenization can be seen in~\ref{fig:wordloud_post}.
+
+\begin{figure}
+    \centering
+    \caption{Wordcloud of the statuses collected from the sample stream after preprocessing and tokenization.}
+    \label{fig:wordloud_post}
+    \includegraphics[width=10cm]{../images/wordloud_post.png}
+\end{figure}
+
+%TODO be more specific what is used where here
+The preprocessed datasets were saved to be used later.
+Also, two dictionaries of the preprocessed datasets were made using the Gensim-library,
+which will be explained in more detail in\ref{ch:topicModeling}~ where the library is primarily used.
+The dictionaries will be used for sentiment analysis and topic modeling.
