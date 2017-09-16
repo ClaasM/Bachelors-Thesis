@@ -284,7 +284,7 @@ is that it is more efficient and has less latency.
 \label{sec:theSandersDataset}
 
 To train the sentiment analysis models, a set of statuses labeled with sentiment was needed.
-Evaluation using the comparison in\cite{Saif2013} showed the Sanders-dataset \cite{sanders} to be most-suited to train twitter sentiment analysis models.
+Evaluation using the comparison in~\cite{Saif2013} showed the Sanders-dataset~\cite{sanders} to be most-suited to train twitter sentiment analysis models.
 It is large enough to train an accurate model and is hand-labeled instead of relying on emoticons for labeling, which might be inaccurate.
 Also, Twitter's terms of service forbid the distribution of statuses outside of their API, which ruled out all datasets that did.
 The Sanders-dataset only contains the statuses unique identifier (id), along with the sentiment label ("positive", "negative", "neutral" or "irrelevant").
@@ -327,6 +327,11 @@ The distribution of labels on the dataset can be seen in~\ref{fig:sanders_sentim
     \label{fig:sanders_sentiment}
     \includegraphics[width=10cm]{../images/sanders_sentiment.png}
 \end{figure}
+
+The statuses were collected using the search terms "@apple", "#google", "#microsoft" and "#twitter",
+which not only renders them unusable to create a topic model since that makes them highly topical,
+but might also negatively impact the ability of sentiment analysis models trained on them to generalize on a representative sample.
+This will be explored further in~\ref{ch:sentimentAnalysis}.
 
 \section{The Streaming Sample Dataset}
 \label{sec:streamingSampleDataset}
@@ -394,5 +399,5 @@ The change to the wordcloud of the statuses collected from the sample stream aft
 %TODO be more specific what is used where here
 The preprocessed datasets were saved to be used later.
 Also, two dictionaries of the preprocessed datasets were made using the Gensim-library,
-which will be explained in more detail in\ref{ch:topicModeling}~ where the library is primarily used.
+which will be explained in more detail in~\ref{ch:topicModeling} where the library is primarily used.
 The dictionaries will be used for sentiment analysis and topic modeling.

@@ -3,16 +3,66 @@
 \label{ch:sentimentAnalysis}
 
 % TODO redo all of these analyses, filter out non-english tweets for all these
-
-Explaining all the methods used and what classes they classify into, how they work "under the hood"
+Semantic orientation describes the strength and polarity of words and phrases used in text.
+Extraction of subjectivity and polarity of the text from the semantic orientation of its words and phrases is called sentiment analysis.
+The huge volume of text-based interactions on social media make it difficult
+to read and organize them and analyze their sentiment by humans.
+Focusing on single instances of interaction also makes it difficult to extract the overall sentiment,
+necessitating a solution that performs and summarizes the analysis automatically, fast, and gives human-comprehensible results~\cite{Sarlan2014}.
 
 \section{Methods}
 \label{sec:methods}
 
+The informal language used in statuses on Twitter, and the limited length, poses an additional difficulty
+to analyzing their sentiment.
+Previous research showed supervised approaches, as opposed to lexicon-based approaches, to be superior~\cite{Sarlan2014}.
+Since labeled data is available from the Sanders dataset~\ref{sec:theSandersDataset},
+this thesis will focus on supervised approaches.
+
 \subsection{Na\"{i}ve Bayes}
 \label{subsec:naivebayes}
 
-Using the implementation from the NLTK
+The Naive Bayes algorithm works by first expressing the probability of a label given the features,
+in this case the sentiment given the bag of words that is the status, with Bayes rule:
+
+\begin{math}
+    P(label|features) = \frac{P(label)*P(features|label)}{P(features)}
+\end{math}
+
+The algorithm then naively assumes that all features are independent, giving:
+
+\begin{math}
+    P(label|features) = \frac{P(label)*P(feature 1|label)*...*P(feature n|label)}{P(features)}
+\end{math}
+
+
+The denominator $P(features)$ is not explicitly calculated.
+Instead, all numerators are calculated and the denominator is chosen such that all $P(label|features)$ sum to 1~\cite{nltkDocs}.
+
+The features of each status are encoded as a vector containing every word in the Sanders-dictionary created in~\ref{sec:preprocessingAndTokenization},
+together with $True$ if the word can be found in the status, or $False$ if not.
+The Python-code achieving this encoding can be seen in~\ref{code:extract_features}.
+
+\begin{figure}
+    \caption{Encoding a status as a vector.}
+    \label{code:extract_features}
+    % @formatter:off
+    \begin{minted}{python}
+features = {} # Contains every word in the dictionary and whether the status contains it.
+# Using the previously created gensim-dictionary
+for word in dictionary.token2id:
+    features['contains(\%s)' \% word] = (word in document_words)
+    \end{minted}
+    % @formatter:on
+\end{figure}
+
+NLTK's implementation of this algorithm is used~\cite{nltkDocs}.
+The data from the hydrated Sanders dataset created in~\ref{sec:theSandersDataset} was shuffled and split into $10\%$ test data and $90\%$ training data.
+This classifier achieved an accuracy of $74\%$.
+However, when the dictionary created from the sample stream was used to extract the features as shown in~\ref{code:extract_features},
+the accuracy dropped to $62\%$, confirming that the Sanders dataset, and the dictionary created from it, is highly topical.
+
+% TODO Accuracy by label chart would be fun maybe
 
 \subsection{Multinomial Na\"{i}ve Bayes}
 \label{subsec:multinomialnaivebayes}
