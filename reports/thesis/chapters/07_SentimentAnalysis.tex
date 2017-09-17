@@ -18,11 +18,12 @@ to analyzing their sentiment.
 Previous research showed supervised approaches, as opposed to lexicon-based approaches, to be superior~\cite{Sarlan2014}.
 Since labeled data is available from the Sanders dataset~\ref{sec:theSandersDataset},
 this thesis will focus on supervised approaches.
+The dataset was preprocessed using the preprocessing and tokenization functions introduced in~\ref{sec:preprocessingAndTokenization} (without stopwords removal).
 
 \subsection{Na\"{i}ve Bayes}
 \label{subsec:naivebayes}
 
-The Naive Bayes algorithm works by first expressing the probability of a label given the features,
+The naive Bayes algorithm works by first expressing the probability of a label given the features,
 in this case the sentiment given the bag of words that is the status, with Bayes rule:
 
 \begin{math}
@@ -38,8 +39,8 @@ The algorithm then naively assumes that all features are independent, giving:
 
 The denominator $P(features)$ is not explicitly calculated.
 Instead, all numerators are calculated and the denominator is chosen such that all $P(label|features)$ sum to 1~\cite{nltkDocs}.
-
-The features of each status are encoded as a vector containing every word in the Sanders-dictionary created in~\ref{sec:preprocessingAndTokenization},
+\\
+The features of each status are extracted as a vector of every distinct word in the dataset,
 together with $True$ if the word can be found in the status, or $False$ if not.
 The Python-code achieving this encoding can be seen in~\ref{code:extract_features}.
 
@@ -49,66 +50,199 @@ The Python-code achieving this encoding can be seen in~\ref{code:extract_feature
     % @formatter:off
     \begin{minted}{python}
 features = {} # Contains every word in the dictionary and whether the status contains it.
-# Using the previously created gensim-dictionary
-for word in dictionary.token2id:
+# Using the previously created dictionary
+for word in dictionary:
     features['contains(\%s)' \% word] = (word in document_words)
     \end{minted}
     % @formatter:on
 \end{figure}
 
 NLTK's implementation of this algorithm is used~\cite{nltkDocs}.
+This implementation assumes the distribution of each feature $P(feature i|label)$ to be multinomial,
+making it a multinomial naive Bayes, which has shown the best performance in previous work~\cite{Go2009}.
 The data from the hydrated Sanders dataset created in~\ref{sec:theSandersDataset} was shuffled and split into $10\%$ test data and $90\%$ training data.
 This classifier achieved an accuracy of $74\%$.
+Class distribution and absolute counts for each class can be seen in~\ref{tab:naive_bayes_results}.
 However, when the dictionary created from the sample stream was used to extract the features as shown in~\ref{code:extract_features},
 the accuracy dropped to $62\%$, confirming that the Sanders dataset, and the dictionary created from it, is highly topical.
 
-% TODO Accuracy by label chart would be fun maybe
+\begin{table}
+    \caption{Sentiment classification using multinomial naive Bayes}
+    \label{tab:naive_bayes_results}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{lllll} %
+        \toprule
+        & \multicolumn{2}{c}{Test Data} & \multicolumn{2}{c}{Classification Result}\\
+        \cmidrule{3-4}
+        Sentiment
+        & Count
+        & Percentage
+        & Count
+        & Percentage
+        \\\midrule
+        neutral & 206 & 47\%  & 266 & 61\%
+        \\\midrule
+        irrelevant & 146 & 33\%  & 124 & 28\%
+        \\\midrule
+        negative & 42 & 9\%   & 30 & 6\%
+        \\\midrule
+        positive & 41 & 9\%   & 15 & 3\%
+        \\\bottomrule
+    \end{tabular}}
+\end{table}
 
-\subsection{Multinomial Na\"{i}ve Bayes}
-\label{subsec:multinomialnaivebayes}
-
-Multinomial naive bayes showed the best results here \cite{Go2009}
-Using the implementation from SciKit
-weirdly, about the same accuracy as NLTK's naive bayes.
 
 \subsection{NLTK Sentiment Analyzer}
 \label{subsec:nltksentimentanalyzer}
+
+The NLTK sentiment analyzer package provides a framework for building classification-pipelines with easily interchangeable components
+(like choosing which methods to use for training, or which feature extractors to use).
+It also builds its own dictionary, which means the dictionary created in~\ref{sec:preprocessingAndTokenization} doesn't need to be used.
+\par
+First, the previous approach was reconstructed in this framework, and successfully validated to give the same accuracy.
+Detailed results in addition to accuracy, which can be seen in~\ref{tab:mnb_results}.
+
+\begin{table}
+    \caption{Sentiment classification using multinomial naive Bayes}
+    \label{tab:mnb_results}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{llll} %
+        \toprule
+        Sentiment
+        & F-measure
+        & Precision
+        & Recall
+        \\\midrule
+        neutral & 0.769 & 0.747 & 0.792
+        \\\midrule
+        irrelevant & 0.896 & 0.902 & 0.890
+        \\\midrule
+        negative & 0.504 & 0.464 & 0.553
+        \\\midrule
+        positive & 0.318 & 0.440 & 0.250
+        \\\bottomrule
+    \end{tabular}}
+\end{table}
+
+Then, it was expanded by marking all negated words as negated using the \texttt{mark_negation} utility function of the NLTK.
+They were then added to the dictionary in their negated form.
+\\
+This yielded no performance increase.
+\\
+Inspection revealed that only 22 words were added to the dictionary in negated form.
+Since the tokenization function described in~\ref{sec:preprocessingAndTokenization} filters tokens of length shorter then 3,
+thereby also filtering, for example, the word "no", another test was conducted with a modified tokenization function that doesn't filter out short words.
+\\
+This also yielded no performance increase.
+\\
+Only two more distinct words were found in their negated form and added to the dictionary,
+increasing the dictionary size of the modified tokenization function by 24, from 4132 to 4156.
+\\
+While recognizing contextual polarity has shown improvements in accuracy in a more general case~\cite{Hoffmann2005},
+these results indicate that marking negated words does not have the same positive effect on the special case presented by Twitter statuses.
 
 \subsection{VADER}
 \label{subsec:vader}
 
 % TODO Interestingly, Vader performs better on the dataset provided by the nltk (which is collected using...) than the sanders-dataset
-Also using the implementation from the NLTK.
-\cite{Hutto2014}
+VADER (\textbf{V}alence \textbf{A}ware \textbf{D}ictionary for s\textbf{E}ntiment \textbf{R}easoning))
+is a gold standard of lexical features together with five general rules embodying grammatical and syntactical conventions
+that were devised in a human-centered approach.
+It is specifically designed for microblog-like environments such as Twitter~\cite{Hutto2014}.
+\par
+NLTK's implementation of VADER returns scores between 0 and 1 for positivity, negativity and neutrality,
+as well as a compound score between -1 and 1, where the direction represents polarity and the magnitude represents subjectivity.
+A test was conducted involving only the statuses labeled "positive", "negative" or "neutral",
+to avoid the ambiguity of the "irrelevant"-label.
+The optimal threshold for which a status will be classified as neutral was chosen
+at an absolute value for the compound score of 0.8, giving an accuracy of 68\%.
+% TODO insert {-bracketed mathematical respresentation of that here
+Still, this accuracy remained below that of the naive Bayes approach at 75\% when using the same, filtered statuses.
+Detailed results can be seem in~\ref{tab:vader_results}.
+
+\begin{table}
+    \caption{Sentiment classification using VADER}
+    \label{tab:vader_results}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{llll} %
+        \toprule
+        Sentiment
+        & F-measure
+        & Precision
+        & Recall
+        \\\midrule
+        neutral & 0.806 & 0.689 & 0.971
+        \\\midrule
+        negative & 0.098 & 0.742 & 0.052
+        \\\midrule
+        positive & 0.171 & 0.448 & 0.105
+        \\\bottomrule
+    \end{tabular}}
+\end{table}
 
 \subsection{TextBlob}
 \label{subsec:textblob}
 
-Failed to exceed 50\% accuracy on tweets, preprocessed or not, because of reasons
+TextBlob is a simple text-processing library written in Python.
+It provides similar functionality than the NLTK described in~\ref{subsec:nltk},
+but is simpler and less extensive.
+Among other, it offers sentiment analysis~\cite{textblobDocs}.
+TextBlob returns a polarity score between -1 and 1 as well as a subjectivity score between 0 and 1.
+As in the previous subsection, the Sanders dataset is used for evaluation, disregarding statuses labeled as irrelevant.
+A scatter plot of the polarity and subjectivity score on the axes and label represented as the color can be seen in~\ref{fig:textblob}.
 
-\subsection{Google Cloud NLP}
-\label{subsec:googleCloudNlp} % TODO korrekte Bezeichnung
 
-Languages were filtered out.
-Include some performance data from the API, like latency.
+\begin{figure}
+    \centering
+    \caption{Scatter plot of the polarity and subjectivity score computed by TextBlob on the axes and label represented as the color.}
+    \label{fig:textblob}
+    \includegraphics[width=10cm]{../figures/textblob.pdf}
+\end{figure}
 
-\section{Comparison}
+The plot clearly shows the algorithms incapability of distinguishing subjective from neutral statuses,
+which is why a quantitative accuracy test was conducted using only tweets labeled as negative or positive.
+% TODO insert {-bracketed mathematical respresentation of that here
+The TextBlob's sentiment analysis algorithm achieved an accuracy of 64\% on this filtered dataset,
+whereas the current frontrunner, the multinomial naive bayes, achieved an accuracy of 72\% on the same filtered dataset.
+
+\subsection{Google Cloud}
+\label{subsec:googlecloud} % TODO korrekte Bezeichnung
+
+The natural language API by Google Cloud offers sentiment analysis as a service.
+For any documented, provided in a supported language, the API returns a magnitude starting from 0 with an undocumented upper bound
+(although the highest observed was 4.1) and a score between -1 and 1.
+Magnitude and subjectivity as well as score and polarity are similarly described in the their relative documentation~\cite{gcloudDocs}\cite{textblobDocs}.
+\par
+The API is billed on a per-request basis, so all statuses from the Sanders dataset were classified once and persisted in a CSV-file.
+Again, statuses labeled as irrelevant were filtered out to avoid ambiguity.
+A scatter plot of the score and magnitude on the axes and label represented as the color can be seen in~\ref{fig:gcloud}.
+
+\begin{figure}
+    \centering
+    \caption{Scatter plot of the score and magnitude computed by the Google Cloud natural language API on the axes and label represented as the color.}
+    \label{fig:gcloud}
+    \includegraphics[width=10cm]{../figures/gcloud.pdf}
+\end{figure}
+
+As for the VADER-classifier in~\ref{subsec:vader}, these values are mapped to the labels from the dataset by
+choosing an optimal threshold for which a status will be classified as neutral.
+The optimal magnitude-threshold was found at a magnitude of 0.9, giving an accuracy of 49\%,
+which is just marginally better than guessing neutral, with 47\% of statuses being labeled neutral.
+Without neutral-labeled statuses, an accuracy of 73\% was achieved.
+
+\section{Comparison and Conclusion}
 \label{sec:comparison}
 
-Quantitative and qualitative comparison of different kinds with supporting figures
-
-\subsection{Discrepancies in Performance}
-\label{subsec:discrepanciesinperformance}
-
-%TODO Discrepancies in performance between dictionaries are indicative of the sentiment model not generalizing well over all of twitter.
-%TODO Also, Twitter statuses pose a challenge because they are short.
-Explaining discrepancies in performance I encountered during evaluation of the different methods.
-
-\subsection{Comparing to results without preprocessing}
-\label{subsec:comparingToResultsWithoutPreprocessing}
-
-Once again proving the point of preprocessing by showing that the results would have been worse without it (in a table or something)
-Or this maybe driving it past home?
-
-4 pages planned for this chapter.
-\pagebreak[4]
+When comparing the results of the different methods presented, it is suprising to see the simplest,
+a multinomial naive Bayes, turned out to be most accurate.\\
+This indicates that short text statuses on micro-blogs like Twitter present a special challenge to sentiment analysis
+that cannot be solved with current approaches.
+Additions to existing algorithms, like marking negated words, that showed improved results with regular texts,
+showed no improvement to the multinomial naive Bayes classifier when working with Twitter statuses.
+Furthermore, even methods specifically designed for this special challenge, like VADER,
+were outperformed by a multinomial naive Bayes classifier.
+\par
+However, the results of these tests need to be handled carefully,
+since the training dataset is highly topical as shown by the performance discrepancies between different dictionaries in~\ref{subsec:naivebayes}.
+\par
+The multinomial naive Bayes classifer created in~\ref{subsec:naivebayes} was saved and will be used in the coming chapters.

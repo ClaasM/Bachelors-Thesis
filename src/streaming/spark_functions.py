@@ -29,7 +29,7 @@ def preprocessor():
     return _preprocess
 
 
-def tokenizer():
+def tokenizer(remove_stopwords=True):
     """
     Tokenization function for LDA. Used for training _and_ during streaming
     :return:
@@ -40,17 +40,16 @@ def tokenizer():
                     'one', 'com', 'new', 'like', 'great', 'make', 'top', 'awesome', 'best',
                     'good', 'wow', 'yes', 'say', 'yay', 'would', 'thanks', 'thank', 'going',
                     'new', 'use', 'should', 'could', 'best', 'really', 'see', 'want', 'nice',
-                    'while', 'know'] + nltk.corpus.stopwords.words("english"))
+                    'while', 'know', 'microsoft', 'apple', 'google', 'twitter'] + nltk.corpus.stopwords.words("english"))
 
     def _tokenize(text):
         # Tokenize
         tokens = regex_tokenizer.tokenize(text.lower())
         # Remove words with length < 3
         tokens = [token for token in tokens if len(token) > 2]
-        # Remove stop words
-        tokens = [token for token in tokens if token not in stoplist]
-        # Sort words in tweet
-        tokens.sort()
+        if remove_stopwords:
+            # Remove stop words
+            tokens = [token for token in tokens if token not in stoplist]
         return tokens
 
     return _tokenize

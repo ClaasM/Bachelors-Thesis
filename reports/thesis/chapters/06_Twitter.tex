@@ -285,8 +285,9 @@ is that it is more efficient and has less latency.
 
 To train the sentiment analysis models, a set of statuses labeled with sentiment was needed.
 Evaluation using the comparison in~\cite{Saif2013} showed the Sanders-dataset~\cite{sanders} to be most-suited to train twitter sentiment analysis models.
-It is large enough to train an accurate model and is hand-labeled instead of relying on emoticons for labeling, which might be inaccurate.
+At 4347 available statuses, it is large enough to train an accurate model and is hand-labeled instead of relying on emoticons for labeling, which might be inaccurate.
 Also, Twitter's terms of service forbid the distribution of statuses outside of their API, which ruled out all datasets that did.
+% TODO maybe write about why we don't use the dataset supplied with the NLTK (no idea how they were selected, they don't seem random since they're very opinionated, no information on how they were labeled)
 The Sanders-dataset only contains the statuses unique identifier (id), along with the sentiment label ("positive", "negative", "neutral" or "irrelevant").
 The existing scripts to hydrate the dataset (replace the id with the actual status by requesting them from the API) were either slow or deprecated and dysfunctional,
 which is why a new script was written.
@@ -325,7 +326,7 @@ The distribution of labels on the dataset can be seen in~\ref{fig:sanders_sentim
     \centering
     \caption{The distribution of labels in the Sanders dataset.}
     \label{fig:sanders_sentiment}
-    \includegraphics[width=10cm]{../images/sanders_sentiment.png}
+    \includegraphics[width=10cm]{../images/sanders_sentiment.png} % TODO turn into pdf
 \end{figure}
 
 The statuses were collected using the search terms "@apple", "#google", "#microsoft" and "#twitter",
@@ -347,7 +348,7 @@ A wordcloud of the statuses collected from the sample stream can be seen in~\ref
     \centering
     \caption{Wordcloud of the statuses collected from the sample stream.}
     \label{fig:wordloud_pre}
-    \includegraphics[width=10cm]{../images/wordloud_pre.png}
+    \includegraphics[width=10cm]{../images/wordloud_pre.png} % TODO turn into pdf
 \end{figure}
 
 Some of the biggest "words" in the wordcloud are "RT", "it" and "be",
@@ -381,23 +382,19 @@ The following steps were taken.
     \begin{enumerate}
         \item The text is split into tokens using the whitespace regular expression again
         \item Tokens of length 1 are removed
-        \item Tokens that can be found in NLTK's stopwords list for the english language
-        (containing a fixed selection of words with low-informativeness for bag-of-words algorithms) were removed
-        \item Tokens that can be found in an additional self-devised stopwords list were removed % TODO put this stopword list plus the code in the appendix and reference it here
+        \item Tokens that can be found in NLTK's stopwords list for the english language,
+        (containing a fixed selection of words with low-informativeness for bag-of-words algorithms),
+        or an additional self-devised stopwords list,
+        were removed. \textit{This only applies to topic modeling}
+        % TODO put this stopword list plus the code in the appendix and reference it here
     \end{enumerate}
 \end{enumerate}
 
-The change to the wordcloud of the statuses collected from the sample stream after preprocessing and tokenization can be seen in~\ref{fig:wordloud_post}.
+The change to the wordcloud of the statuses collected from the sample stream after preprocessing and tokenization (including stopword removal) can be seen in~\ref{fig:wordloud_post}.
 
 \begin{figure}
     \centering
     \caption{Wordcloud of the statuses collected from the sample stream after preprocessing and tokenization.}
     \label{fig:wordloud_post}
-    \includegraphics[width=10cm]{../images/wordloud_post.png}
+    \includegraphics[width=10cm]{../images/wordloud_post.png} % TODO turn into pdf
 \end{figure}
-
-%TODO be more specific what is used where here
-The preprocessed datasets were saved to be used later.
-Also, two dictionaries of the preprocessed datasets were made using the Gensim-library,
-which will be explained in more detail in~\ref{ch:topicModeling} where the library is primarily used.
-The dictionaries will be used for sentiment analysis and topic modeling.
