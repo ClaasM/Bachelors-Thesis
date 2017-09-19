@@ -62,9 +62,54 @@ This implementation assumes the distribution of each feature $P(feature i|label)
 making it a multinomial naive Bayes, which has shown the best performance in previous work~\cite{Go2009}.
 The data from the hydrated Sanders dataset created in~\ref{sec:theSandersDataset} was shuffled and split into $10\%$ test data and $90\%$ training data.
 This classifier achieved an accuracy of $74\%$.
+In addition to accuracy, the performance measures precision, recall and F-measure,
+the definition of which can be seen in~\ref{math:precision_recall_fmeasure}, were computed.
+
+\begin{figure}
+    \caption{Definition of precision, recall and F-measure~\cite{Hong2010}.}
+    \label{math:precision_recall_fmeasure}
+    \begin{math}
+        p_t = number of true positives
+        p_f = number of false positives
+        n_t = number of true negatives
+        n_f = number of false negatives
+
+        Precision = \frac{p_t}{p_t + p_f}
+        Recall = \frac{p_t}{p_t + n_f}
+
+        F-Measure = \frac{2 \* Precision \* Recall}{Precision + Recall}
+    \end{math}
+\end{figure}
+
+Intuitively, precision and recall can be understood the percentage of positives that are real positives,
+and the percentage of real positives that were labeled as positives, respectively.
+The F-measure is their harmonic mean.
+The measures, for each sentiment-class, can be seen in~\ref{tab:mnb_results}.
+
+\begin{table}
+    \caption{Sentiment classification results using multinomial naive Bayes}
+    \label{tab:mnb_results}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{llll} %
+        \toprule
+        Sentiment
+        & F-measure
+        & Precision
+        & Recall
+        \\\midrule
+        neutral & 0.769 & 0.747 & 0.792
+        \\\midrule
+        irrelevant & 0.896 & 0.902 & 0.890
+        \\\midrule
+        negative & 0.504 & 0.464 & 0.553
+        \\\midrule
+        positive & 0.318 & 0.440 & 0.250
+        \\\bottomrule
+    \end{tabular}}
+\end{table}
+
+% TODO maybe a bit of interpretation
 Class distribution and absolute counts for each class can be seen in~\ref{tab:naive_bayes_results}.
-However, when the dictionary created from the sample stream was used to extract the features as shown in~\ref{code:extract_features},
-the accuracy dropped to $62\%$, confirming that the Sanders dataset, and the dictionary created from it, is highly topical.
 
 \begin{table}
     \caption{Sentiment classification using multinomial naive Bayes}
@@ -91,6 +136,8 @@ the accuracy dropped to $62\%$, confirming that the Sanders dataset, and the dic
     \end{tabular}}
 \end{table}
 
+When the dictionary created from the sample stream was used to extract the features as shown in~\ref{code:extract_features},
+the accuracy dropped to $62\%$, confirming that the Sanders dataset, and the dictionary created from it, is highly topical.
 
 \subsection{NLTK Sentiment Analyzer}
 \label{subsec:nltksentimentanalyzer}
@@ -100,30 +147,6 @@ The NLTK sentiment analyzer package provides a framework for building classifica
 It also builds its own dictionary, which means the dictionary created in~\ref{sec:preprocessingAndTokenization} doesn't need to be used.
 \par
 First, the previous approach was reconstructed in this framework, and successfully validated to give the same accuracy.
-Detailed results in addition to accuracy, which can be seen in~\ref{tab:mnb_results}.
-
-\begin{table}
-    \caption{Sentiment classification using multinomial naive Bayes}
-    \label{tab:mnb_results}
-    \resizebox{\textwidth}{!}{%
-    \begin{tabular}{llll} %
-        \toprule
-        Sentiment
-        & F-measure
-        & Precision
-        & Recall
-        \\\midrule
-        neutral & 0.769 & 0.747 & 0.792
-        \\\midrule
-        irrelevant & 0.896 & 0.902 & 0.890
-        \\\midrule
-        negative & 0.504 & 0.464 & 0.553
-        \\\midrule
-        positive & 0.318 & 0.440 & 0.250
-        \\\bottomrule
-    \end{tabular}}
-\end{table}
-
 Then, it was expanded by marking all negated words as negated using the \texttt{mark_negation} utility function of the NLTK.
 They were then added to the dictionary in their negated form.
 \\

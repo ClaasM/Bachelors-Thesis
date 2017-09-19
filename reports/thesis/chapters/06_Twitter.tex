@@ -283,6 +283,7 @@ is that it is more efficient and has less latency.
 \section{The Sanders Dataset}
 \label{sec:theSandersDataset}
 
+% TODO go deeper into the whole topic-thing, since we use it for topic modeling later
 To train the sentiment analysis models, a set of statuses labeled with sentiment was needed.
 Evaluation using the comparison in~\cite{Saif2013} showed the Sanders-dataset~\cite{sanders} to be most-suited to train twitter sentiment analysis models.
 At 4347 available statuses, it is large enough to train an accurate model and is hand-labeled instead of relying on emoticons for labeling, which might be inaccurate.
@@ -326,7 +327,7 @@ The distribution of labels on the dataset can be seen in~\ref{fig:sanders_sentim
     \centering
     \caption{The distribution of labels in the Sanders dataset.}
     \label{fig:sanders_sentiment}
-    \includegraphics[width=10cm]{../images/sanders_sentiment.png} % TODO turn into pdf
+    \includegraphics[width=10cm]{../figures/sanders_sentiment.pdf}
 \end{figure}
 
 The statuses were collected using the search terms "@apple", "#google", "#microsoft" and "#twitter",
@@ -348,7 +349,8 @@ A wordcloud of the statuses collected from the sample stream can be seen in~\ref
     \centering
     \caption{Wordcloud of the statuses collected from the sample stream.}
     \label{fig:wordloud_pre}
-    \includegraphics[width=10cm]{../images/wordloud_pre.png} % TODO turn into pdf
+    \includegraphics[width=10cm]{../images/wordloud_pre.png}
+    % TODO turn into pdf
 \end{figure}
 
 Some of the biggest "words" in the wordcloud are "RT", "it" and "be",
@@ -360,14 +362,16 @@ which demonstrates the necessity of preprocessing, shown in the next chapter.
 \label{sec:preprocessingAndTokenization}
 
 There are now 2 datasets of statuses that are filtered by language but still raw.
-These statuses now need to be preprocessed,
+Since the quality of the output of any model inevitably depends on the quality of the input,
+these datasets now need to be preprocessed,
 which in this case means removing all elements of text that have no influence on topic and sentiment and make
 modeling and analysis unnecessarily difficult.\\
 Furthermore, since all the algorithms that will be used later on are bag-of-words algorithms,
 which means they disregard the order of words in text, a tokenization function needs to be created
-to split sentences in the right places and only keep tokens (words) relevant for modeling and analysis.\\
-However, to achieve consistent results,
-the same preprocessing and tokenization functions need to be used for all models, analyses and datasets.
+to split sentences in the right places and only keep tokens (terms, words) relevant for modeling and analysis.\\
+To achieve consistent results, the same preprocessing and tokenization functions need to be used for all models, analyses and datasets.
+At this point it is important to mention that while the tokenization does not, strictly speaking, tokenize the documents,
+but rather splits them into terms, this thesis will stick to the NLTK's~\cite{nltkDocs} nomenclature.
 The following steps were taken.
 
 \begin{enumerate}
@@ -381,20 +385,24 @@ The following steps were taken.
     \item Tokenization
     \begin{enumerate}
         \item The text is split into tokens using the whitespace regular expression again
-        \item Tokens of length 1 are removed
-        \item Tokens that can be found in NLTK's stopwords list for the english language,
-        (containing a fixed selection of words with low-informativeness for bag-of-words algorithms),
-        or an additional self-devised stopwords list,
+        \item Terms of length 1 are removed
+        \item Terms that can be found in NLTK's stopwords list for the english language
+        (containing a fixed selection of terms with low informativeness for bag-of-words algorithms),
         were removed. \textit{This only applies to topic modeling}
+        \item Terms that can be found in an additional self-devised stopwords list specific to this case were removed
         % TODO put this stopword list plus the code in the appendix and reference it here
     \end{enumerate}
 \end{enumerate}
 
+While some approaches to removing terms with low informativeness rely on removing terms that occur in too many or too few documents,
+in this thesis, a stopword list is used,
+since only english statuses for which extensive stopword lists exist will be considered~\cite{Porter2001}.
 The change to the wordcloud of the statuses collected from the sample stream after preprocessing and tokenization (including stopword removal) can be seen in~\ref{fig:wordloud_post}.
 
 \begin{figure}
     \centering
     \caption{Wordcloud of the statuses collected from the sample stream after preprocessing and tokenization.}
     \label{fig:wordloud_post}
-    \includegraphics[width=10cm]{../images/wordloud_post.png} % TODO turn into pdf
+    \includegraphics[width=10cm]{../images/wordloud_post.png}
+    % TODO turn into pdf
 \end{figure}

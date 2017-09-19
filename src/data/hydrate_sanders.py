@@ -16,7 +16,7 @@ with open('../../twitter.access.json') as access_info_file:
     api = tweepy.API(auth)
     with open('../../data/external/sanders.csv') as in_file:
         csv_reader = csv.reader(in_file, delimiter=',')
-        with open('../../data/interim/sanders_hydrated.csv', 'w') as out_file:
+        with open('../../data/interim/sanders_hydrated_en.csv', 'w') as out_file:
             # Quote everything, just like the in_file
             csv_writer = csv.writer(out_file, delimiter=',', quoting=csv.QUOTE_ALL)
             # Go through the tweets in chunks of 100, since the lookup api can return 100 tweets at once.
@@ -31,7 +31,8 @@ with open('../../twitter.access.json') as access_info_file:
                         # write the original row plus the text
                         # add more details from the tweet as needed
                         # The csv file contains line breaks, but the python csv reader handles them correctly
-                        csv_writer.writerow(chunk[index] + [tweet.text])
+                        if tweet.lang == "en":
+                            csv_writer.writerow(chunk[index] + [tweet.text])
                 else:
                     # We're done, all chunks downloaded
                     break

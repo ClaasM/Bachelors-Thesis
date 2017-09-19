@@ -40,7 +40,7 @@ def tokenizer(remove_stopwords=True):
                     'one', 'com', 'new', 'like', 'great', 'make', 'top', 'awesome', 'best',
                     'good', 'wow', 'yes', 'say', 'yay', 'would', 'thanks', 'thank', 'going',
                     'new', 'use', 'should', 'could', 'best', 'really', 'see', 'want', 'nice',
-                    'while', 'know', 'microsoft', 'apple', 'google', 'twitter'] + nltk.corpus.stopwords.words("english"))
+                    'while', 'know', 'que', 'sur', 'con'] + nltk.corpus.stopwords.words("english"))
 
     def _tokenize(text):
         # Tokenize
