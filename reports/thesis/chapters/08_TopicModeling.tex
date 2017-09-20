@@ -109,6 +109,7 @@ When classifying a document, this matrix is used to allocate a distribution of t
 For LDA topic modeling, the gensim library was used~\cite{gensimDocs}.
 The dataset used was the streaming sample dataset described in~\ref{sec:streamingSampleDataset},
 since the Sanders dataset is topically not representative of Twitter, as described in~\ref{sec:theSandersDataset}.
+% TODO LDAvis was used for exploration + cite LDAvis docs + screenshot
 The number of topics was set to 10.
 \eta was set to 0.01, which showed good results in previous Twitter topic modeling research~\cite{Hong2010}.
 \alpha is set to "auto", which means gensim learns it from the data provided.
@@ -119,12 +120,12 @@ In the graph, each light-blue node represents a topic.
 For each topic, the 5 terms with the highest probabilities are connected with edges whose weight represents the probability.
 It can be seen that some topics share terms - however, these shared terms are not very distinct terms.
 The model even successfully modeled trending topics that evening.
-The network graph can be seen in~\ref{}
+The network graph can be seen in~\ref{fig:lda_network_graph}
 
 \begin{figure}
     \centering
-    \caption{Scatter plot of the polarity and subjectivity score computed by TextBlob on the axes and label represented as the color.}
-    \label{fig:textblob}
+    \caption{Network graph of the LDA topic model created from the stream sample dataset}
+    \label{fig:lda_network_graph}
     \includegraphics[width=\textwidth]{../figures/lda_network_graph.pdf}
 \end{figure}
 
@@ -132,13 +133,32 @@ The network graph can be seen in~\ref{}
 \subsection{NMF}
 \label{subsec:nmf}
 
-~\cite{Choo2013}
+NMF (\textbf{N}onnegative \textbf{M}atrix \textbf{F}actorization) is another active area of research in topic modeling.
+It overcomes some of the shortcomings of LDA in terms of consistency across runs and empirical convergence,
+since it is deterministic~\cite{Choo2013}.
+It is also easier to adjust the model and incorporate feedback on the classification results in a semi-supervised approach,
+making it a potentially more suitable solution for recommendation systems as described at the beginning of this chapter.
+The output of the model is the same as the output of an LDA model: a term-wise representation of topics, even though the columns
+do not necessarily sum up to 1.
+
+% TODO maybe show the optimization function here
+
+The implementation of NMF in the scikit-learn library was used~\cite{scikitDocs}.
+The number of components (the number of topics in this case) was set to 10 to ensure comparability with the LDA results.
+Although several parameters were explored, the best results were accomplished with the default parameters.
+The resulting network graph can be seen in~\ref{fig:nmf_network_graph}.
+
+\begin{figure}
+    \centering
+    \caption{Network graph of the NMF topic model created from the stream sample dataset}
+    \label{fig:nmf_network_graph}
+    \includegraphics[width=\textwidth]{../figures/nmf_network_graph.pdf}
+\end{figure}
 
 \section{Results}
 \label{sec:results}
 
-% TODO Can't call it "Comparison" in parallel to sentiment analysis since topic models are not really objectively comparable.
-% TODO Can't call it "Results" since there is already a chapter that is named that.
-
-4 pages planned for this chapter.
-\pagebreak[4]
+Overall, the results that could be achieved with both methods were similar in terms of subjective descriptiveness of the top terms and amount of overlap.
+There were even some equal topics, like topic number 6 in the LDA model and topic number 1 in the NMF model.
+The advantages of NMF also do not apply to this usecase, therefore a decision was made in favor or LDA,
+since it is the more mature method with more available research and implementations. % TODO like LDAvis
