@@ -73,10 +73,10 @@ the definition of which can be seen in~\ref{math:precision_recall_fmeasure}, wer
         p_f = number of false positives
         n_t = number of true negatives
         n_f = number of false negatives
-
+        \\
         Precision = \frac{p_t}{p_t + p_f}
         Recall = \frac{p_t}{p_t + n_f}
-
+        \\
         F-Measure = \frac{2 \* Precision \* Recall}{Precision + Recall}
     \end{math}
 \end{figure}
@@ -147,7 +147,7 @@ The NLTK sentiment analyzer package provides a framework for building classifica
 It also builds its own dictionary, which means the dictionary created in~\ref{sec:preprocessingAndTokenization} doesn't need to be used.
 \par
 First, the previous approach was reconstructed in this framework, and successfully validated to give the same accuracy.
-Then, it was expanded by marking all negated words as negated using the \texttt{mark_negation} utility function of the NLTK.
+Then, it was expanded by marking all negated words as negated using the \texttt{mark\_negation} utility function of the NLTK.
 They were then added to the dictionary in their negated form.
 \\
 This yielded no performance increase.

@@ -88,14 +88,14 @@ This thesis will provide an outside view of this method, while explaining import
 LDA is a bag-of-words model, which means there are no syntax rules.
 \\
 An LDA model takes the TF-IDF matrix created in~\ref{subsec:tfidf} as an input to determine the dirichlet distributions,
-and two major hyperparameters, \alpha and \eta,
+and two major hyperparameters, $\alpha$ and $\eta$,
 both of which are parameters of the internal dirichlet-distributions.
 \\
-\Alpha controls the per-document topic dirichlet distribution,
+$\alpha$ controls the per-document topic dirichlet distribution,
 where a higher value indicates that documents tend to be a mixture of many topics,
 and lower values lead to few topics with higher probability.
 \\
-\eta (also sometimes denoted \beta) controls the per-topic word dirichlet distribution, where, as with \alpha,
+$\eta$ (also sometimes denoted $\beta$) controls the per-topic word dirichlet distribution, where, as with $\alpha$,
 higher values lead to few words with high probabilities determining the topics,
 and vice-versa.
 \\
@@ -111,8 +111,8 @@ The dataset used was the streaming sample dataset described in~\ref{sec:streamin
 since the Sanders dataset is topically not representative of Twitter, as described in~\ref{sec:theSandersDataset}.
 % TODO LDAvis was used for exploration + cite LDAvis docs + screenshot
 The number of topics was set to 10.
-\eta was set to 0.01, which showed good results in previous Twitter topic modeling research~\cite{Hong2010}.
-\alpha is set to "auto", which means gensim learns it from the data provided.
+$\eta$ was set to 0.01, which showed good results in previous Twitter topic modeling research~\cite{Hong2010}.
+$\alpha$ is set to "auto", which means gensim learns it from the data provided.
 % TODO Hoffman, Blei, Bach: Online Learning for Latent Dirichlet Allocation, for decay and offset (Kappa and Tau_0)
 \par
 A visualization as a network graph was devised to make a subjective assessment of the model.

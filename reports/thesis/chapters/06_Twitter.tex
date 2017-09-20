@@ -31,8 +31,8 @@ The relationship between different kinds of entities present on Twitter can be s
 % TODO statuses/tweets persistence
 This thesis will focus on analyzing statuses in real time.
 Statuses on Twitter can not only contain text, but also rich media like images, gifs, or videos, as well as surveys.
-The text itself can also contain links, mention other users by containing \texttt{@<user_name>},
-and contain any number of the infamous hashtag (\texttt{#hastag}), used to label a status, all while being limited to 140 characters.
+The text itself can also contain links, mention other users by containing \texttt{@<user\_name>},
+and contain any number of the infamous hashtag (\texttt{\#hastag}), used to label a status, all while being limited to 140 characters.
 A status can also be a so-called retweet of another status, adding to its content and exposing the other status to the retweeting users' followers.
 Research shows that statuses are mostly retweeted shortly after they are published, and often lead to chains of retweets,
 which not only spreads information fast, but also diffuses it~\ref{Kwak2010}.\\
@@ -138,7 +138,7 @@ Some examples can be seen in ~\ref{tab:twitter_endpoints}.
 \begin{table}
     \caption{A selection of resources offered by the Twitter REST API~\cite{twitterDocs}}
     \label{tab:twitter_endpoints}
-    \resizebox{\textwidth}{!}{%
+    %\resizebox{\textwidth}{!}{%
     \begin{tabular}{lllll} %
         \toprule
         & & \multicolumn{2}{c}{Authentication} & \\
@@ -158,7 +158,7 @@ Some examples can be seen in ~\ref{tab:twitter_endpoints}.
         \\
         \midrule
         \texttt{GET}
-        & \texttt{direct_messages}
+        & \texttt{direct\_messages}
         & \cmark
         & \xmark
         & Returns direct messages of the authenticated user
@@ -171,7 +171,8 @@ Some examples can be seen in ~\ref{tab:twitter_endpoints}.
         & Posts a status for the authenticated user
         \\
         \bottomrule
-    \end{tabular}}
+    \end{tabular}
+%}
 \end{table}
 
 \subsection{Processing Data at Rest and Data in Motion}
@@ -215,8 +216,8 @@ Twitter itself offers 6 different endpoints for 6 different streams, all of whic
 \begin{table}
     \caption{All streams offered by Twitter~\cite{twitterDocs}}
     \label{tab:twitter_streams}
-    \resizebox{\textwidth}{!}{%
-    \begin{tabular}{lllll} %
+    %\resizebox{\textwidth}{!}{%
+    \begin{tabular}{llllll} %
         \toprule
         & & \multicolumn{2}{c}{Authentication} & \\
         \cmidrule{3-4}
@@ -268,7 +269,8 @@ Twitter itself offers 6 different endpoints for 6 different streams, all of whic
         & & &
         \\
         \bottomrule
-    \end{tabular}}
+    \end{tabular}
+%}
 \end{table}
 
 This thesis will work with the sample, user and filter stream, since only these are publicly available.
@@ -307,7 +309,7 @@ Unfortunately no real statuses can be shown, but~\ref{tab:sanders_sample} shows 
         Lmao I had a funny argument with Siri @Apple
         & \texttt{positive}
         \\
-        My #iPad crashes constantly since the update.
+        My \#iPad crashes constantly since the update.
         & \texttt{negative}
         \\
         Can anyone recommend me an app for my iPhone?
@@ -315,6 +317,7 @@ Unfortunately no real statuses can be shown, but~\ref{tab:sanders_sample} shows 
         \\
         Apple stellt neues iPhone vor \textit{(non-english)}
         & \texttt{irrelevant}
+        \\
         \bottomrule
     \end{tabular}}
 \end{table}
@@ -330,7 +333,7 @@ The distribution of labels on the dataset can be seen in~\ref{fig:sanders_sentim
     \includegraphics[width=10cm]{../figures/sanders_sentiment.pdf}
 \end{figure}
 
-The statuses were collected using the search terms "@apple", "#google", "#microsoft" and "#twitter",
+The statuses were collected using the search terms "@apple", "\#google", "\#microsoft" and "\#twitter",
 which not only renders them unusable to create a topic model since that makes them highly topical,
 but might also negatively impact the ability of sentiment analysis models trained on them to generalize on a representative sample.
 This will be explored further in~\ref{ch:sentimentAnalysis}.
@@ -349,7 +352,7 @@ A wordcloud of the statuses collected from the sample stream can be seen in~\ref
     \centering
     \caption{Wordcloud of the statuses collected from the sample stream.}
     \label{fig:wordloud_pre}
-    \includegraphics[width=10cm]{../images/wordloud_pre.png}
+    \includegraphics[width=10cm]{../images/wordcloud_pre.png}
     % TODO turn into pdf
 \end{figure}
 
@@ -378,7 +381,7 @@ The following steps were taken.
     \item Precrocessing
     \begin{enumerate}
         \item All URL's were removed by using a regular expression matching everything from "http" up to the next whitespace
-        \item All punctuation as well as the Twitter-specific characters \texttt{@} and \texttt{#} were removed
+        \item All punctuation as well as the Twitter-specific characters \texttt{@} and \texttt{\#} were removed
         \item The text was split at whitespace using the \texttt{\\s} regular expression
         \item All elements that contained anything but latin letters were discarded
     \end{enumerate}
@@ -403,6 +406,6 @@ The change to the wordcloud of the statuses collected from the sample stream aft
     \centering
     \caption{Wordcloud of the statuses collected from the sample stream after preprocessing and tokenization.}
     \label{fig:wordloud_post}
-    \includegraphics[width=10cm]{../images/wordloud_post.png}
+    \includegraphics[width=10cm]{../images/wordcloud_post.png}
     % TODO turn into pdf
 \end{figure}
