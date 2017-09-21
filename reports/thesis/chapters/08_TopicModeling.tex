@@ -117,7 +117,8 @@ $\alpha$ is set to "auto", which means gensim learns it from the data provided.
 \par
 A visualization as a network graph was devised to make a subjective assessment of the model.
 In the graph, each light-blue node represents a topic.
-For each topic, the 5 terms with the highest probabilities are connected with edges whose weight represents the probability.
+For each topic, the 5 terms with the highest probabilities are connected with edges whose weight (thickness) represent the probability
+of that word being in a document of that topic, as computed by the model.
 It can be seen that some topics share terms - however, these shared terms are not very distinct terms.
 The model even successfully modeled trending topics that evening.
 The network graph can be seen in~\ref{fig:lda_network_graph}

@@ -2,12 +2,111 @@
 \chapter{Combining Sentiment Analysis and Topic Modeling}
 \label{ch:combiningSentimentAnalysisAndTopicModeling}
 
-To combine topic modeling and sentiment analysis, they were all put into one sparkjob, to limit required bandwith to execution nodes (the dictionary doesn't need to be transmitted as often).
-Also of course the amount of events emitted via the sockets is reduced.
-It's okay since the jobs are still small enough for kafka to distribute them efficiently in a distributed setting.
-And this makes it easier to combine the results of both analyses on a per-status (per-RDD) basis.
+% TODO write about "Joint sentiment/topic model for sentiment analysis" here or in the related-work section
 
-Showing some figures that visualize the combination of sentiment by topic.
-Haven't thought this through yet, but it should also be around the 4 to 5 page mark.
+In this chapter, the best sentiment analysis model from~\ref{ch:sentimentAnalysis}, naive Bayes,
+is combined with the topic model built in~\ref{ch:topicModeling}, an LDA topic model,
+to perform the sentiment analysis by topic model referred to in~\ref{ch:backgroundTheory}.
+\\
+This is achieved by simply performing the sentiment analysis on a Twitter status and attributing the result to each topic,
+weighed by the percentage the status belongs to that topic given by the topic model.
+A pseudo-code implementation of that can be seen in~\ref{pseudo_code:sentiment_topic_summing}.
 
-\pagebreak[5]
+\begin{figure}
+    \caption{Summing up sentiments by topic for each status.}
+    \label{pseudo_code:sentiment_topic_summing}
+    % @formatter:off
+    \begin{algorithmic}
+        \State $topic\_sentiments \gets {}$ % TODO make sure that {} is the right way to init an object in pseudocode
+        \For{$status$ in $statuses$}
+            \State $topic\_probabilities \gets LDA(status)$
+            \State $sentiment \gets naive_bayes(status)$
+            \For{$topic,probability$ in $topic\_probabilities$}
+                \State $topic\_sentiments[topic][sentiment] \gets topic\_sentiments[topic][sentiment] + probability$
+    \end{algorithmic}
+    % @formatter:on
+\end{figure}
+
+This results in a 2-dimensional array where all values sum up to the number of statuses,
+since for each status the topic-probabilites sum up to 1.
+A table showing the results for each topic with relative as well as absolute values can be seen in~\ref{tab:combination}.
+The table also shows the sum of all probabilities, and the percentage of statuses in that topic.
+
+\begin{table}
+    \caption{Absolute and relative results of the sentiment-by-topic analysis.}
+    \label{tab:combination}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{llllllllllll} %
+        \toprule
+        & &
+        \multicolumn{2}{c}{Positive}
+        \multicolumn{2}{c}{Neutral}
+        \multicolumn{2}{c}{Negative}
+        \multicolumn{2}{c}{Irrelevant}
+        \multicolumn{2}{c}{Sum}
+        \\\cmidrule{3-12}
+        Topic
+        & Top 5 Terms
+        & \%
+        & Abs.
+        & \%
+        & Abs.
+        & \%
+        & Abs.
+        & \%
+        & Abs.
+        & \%
+        & Abs.
+        & \% (of all statuses)
+        & Abs.
+        \\\midrule
+0 & read, seo, old, board, actually & 64.40 & 11.14\% & 267.00 & 46.18\% & 56.67 & 9.80\% & 190.16 & 32.89\% & 578.23 & 9.00\% \\\midrule
+1 & time, single, playing, weekend, face & 74.44 & 11.43\% & 313.13 & 48.09\% & 92.87 & 14.26\% & 170.75 & 26.22\% & 651.19 & 10.14\% \\\midrule
+2 & need, give, damn, remember, already & 59.00 & 9.24\% & 302.46 & 47.39\% & 80.35 & 12.59\% & 196.43 & 30.78\% & 638.24 & 9.94\% \\\midrule
+3 & people, back, prove, sorry, tonight & 96.24 & 13.93\% & 320.69 & 46.40\% & 78.08 & 11.30\% & 196.10 & 28.37\% & 691.11 & 10.76\% \\\midrule
+4 & trump, enough, world, love, adamu & 69.94 & 11.08\% & 326.17 & 51.65\% & 79.75 & 12.63\% & 155.64 & 24.65\% & 631.50 & 9.83\% \\\midrule
+5 & home, people, morning, appears, shit & 82.30 & 12.48\% & 278.07 & 42.16\% & 94.26 & 14.29\% & 204.97 & 31.08\% & 659.59 & 10.27\% \\\midrule
+6 & love, win, chance, follow, enter & 63.83 & 10.96\% & 297.55 & 51.08\% & 53.85 & 9.24\% & 167.27 & 28.72\% & 582.51 & 9.07\% \\\midrule
+7 & mtvhottest, lady, gaga, larsson, zara & 42.43 & 7.65\% & 253.08 & 45.62\% & 43.23 & 7.79\% & 216.02 & 38.94\% & 554.75 & 8.64\% \\\midrule
+8 & miss, sexy, sex, naked, outfit & 79.47 & 11.54\% & 344.14 & 49.97\% & 63.95 & 9.29\% & 201.15 & 29.21\% & 688.71 & 10.72\% \\\midrule
+9 & tell, someone, feel, every, preaching & 74.32 & 10.80\% & 327.11 & 47.54\% & 94.52 & 13.74\% & 192.12 & 27.92\% & 688.05 & 10.71\% \\\midrule
+        \\\bottomrule
+    \end{tabular}}
+\end{table}
+
+To visualize the sentiment by topic,
+the network graph used in~\ref{ch:topicModeling} was extended.
+The size of a node representing a topic indicates the topics' prevalence in the dataset.
+The color, on a hue-spectrum from red to green, represents the polarity.
+% TODO  seen in \ref{fig:hue_spectrum},
+On a 360\° hue-spectrum in the HSV-color-space, 0\° is red, and 120\° is green.
+The opacity is determined by the subjectivity.
+The exact formulae can be seen in~\ref{math:visualization}.
+
+
+\begin{figure}
+    \caption{Definition of precision, recall and F-measure~\cite{Hong2010}.}
+    \label{math:visualization}
+    \begin{align*}
+        % TODO proper variable names, introduced at the beginning, i.e. p = sum of "positive" probabilites for topic
+        size = positive + negative + neutral + irrelevant
+        hue = positive / (positive + negative)
+        opacity = (positive + negative) / (positive + negative + neutral)
+        size = percentage of statuses in that topic \* 2000 && Size between 0 and 2000
+    \end{math}
+\end{figure}
+
+To make these values visually more differentiable, they were then scaled.
+Hue was linearly scaled s.t. the smallest value was 0\° (red) and the  biggest value was 120\° (green).
+The saturation was linearly scaled s.t. the smallest opacity was 0\%,
+and the biggest opacity was 80\%.
+20\% were then added to each node so that each node would be visible.
+The size was linearly scaled to be between 0 and 2000.
+The resulting network graph can be seen in~\ref{fig:combined_network_graph}.
+
+\begin{figure}
+    \centering
+    \caption{Network graph of the LDA topic model created from the stream sample dataset}
+    \label{fig:combined_network_graph}
+    \includegraphics[width=\textwidth]{../figures/combined_network_graph.pdf}
+\end{figure}

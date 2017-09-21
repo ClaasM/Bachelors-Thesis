@@ -28,6 +28,11 @@ Component-based project structure (vs. asset-based)
 \section{Implementation}
 \label{sec:implementation}
 
+To combine topic modeling and sentiment analysis, they were all put into one sparkjob, to limit required bandwith to execution nodes (the dictionary doesn't need to be transmitted as often).
+Also of course the amount of events emitted via the sockets is reduced.
+It's okay since the jobs are still small enough for kafka to distribute them efficiently in a distributed setting.
+And this makes it easier to combine the results of both analyses on a per-status (per-RDD) basis.
+
 \subsection{Backend}
 \label{subsec:backend}
 
