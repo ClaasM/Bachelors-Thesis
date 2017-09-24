@@ -81,38 +81,124 @@
           </div>
         </div>
       </div>
-
       <button class="btn btn-primary"
               ng-click="updateSettings()">
         <span ng-if="isLoading"><i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;Loading</span>
         <span ng-if="isStreaming"><i class="fa fa-refresh"></i>&nbsp;Update Settings</span>
         <span ng-if="!isLoading && !isStreaming"><i class="fa fa-play"></i>&nbsp;Start</span>
-
       </button>
-
     </div>
+
     <div class="results row">
       <h2>Results</h2>
-      <div class="col-xs-12 col-md-4">
+      <p>
+        {{SLIDING_WINDOW}} Tweets moving average
+      </p>
+      <div class="col-xs-12 col-md-6">
+        <h2>Sentiment</h2>
+        <div class="sentiment">
+          #positive tweets / (#positive tweets + #negative tweets)
+          <canvas id="sentiment_chart" style="width:100%; height:200px"></canvas>
+          All sentiment counts in sliding window
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Sentiment</th>
+              <th>Percentage</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>positive</td>
+              <td ng-bind="results.sentiment.positive"></td>
+            </tr>
+            <tr>
+              <td>neutral</td>
+              <td ng-bind="results.sentiment.neutral"></td>
+            </tr>
+            <tr>
+              <td>negative</td>
+              <td ng-bind="results.sentiment.negative"></td>
+            </tr>
+            <tr>
+              <td>irrelevant</td>
+              <td ng-bind="results.sentiment.irrelevant"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-md-6">
+        <h2>Topics</h2>
+        <div class="topics">
+          &nbsp;
+          <canvas id="topics_chart" style="width:100%; height:200px"></canvas>
+          Showing the top 3 terms for each topic.
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Topic ID</th>
+              <th>Term 1</th>
+              <th>Term 2</th>
+              <th>Term 3</th>
+              <th>Term 4</th>
+              <th>Term 5</th>
+              <th>Percentage</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="(id,topic) in results.topics track by $index">
+              <td ng-bind="id" ng-style="{'color':colors[id]}"></td>
+              <td ng-bind="topic.terms[0]"></td>
+              <td ng-bind="topic.terms[1]"></td>
+              <td ng-bind="topic.terms[2]"></td>
+              <td ng-bind="topic.terms[3]"></td>
+              <td ng-bind="topic.terms[4]"></td>
+              <td ng-bind="topic.probability"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-xs-12">
+        <h2>Sentiment by Topic Combination</h2>
+        <div class="sentiment_by_topic">
+          #positive tweets / (#positive tweets + #negative tweets) by topic
+          <canvas id="sentiment_by_topic_chart" style="width:100%; height:200px"></canvas>
+          All sentiment counts by topic in sliding window
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Topic ID</th>
+              <th>Positive</th>
+              <th>Neutral</th>
+              <th>Negative</th>
+              <th>Irrelevant</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="(id,topic) in results.sentiment_by_topic track by $index">
+              <td ng-bind="id" ng-style="{'color':colors[id]}"></td>
+              <td ng-bind="topic['positive']"></td>
+              <td ng-bind="topic['neutral']"></td>
+              <td ng-bind="topic['negative']"></td>
+              <td ng-bind="topic['irrelevant']"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-xs-12">
         <h2>Tweets</h2>
         <p ng-if="results.tweets.length == 0">
           <b>No tweets, yet</b>
         </p>
-        <p class="tweet" ng-repeat="tweet in results.tweets track by $index">
-          <b>{{tweet.name}}:</b>{{tweet.text}}
+        <p class="tweet" ng-repeat="data in results.data | reverse">
+          <b>{{data.tweet.user.name}}:</b>{{data.tweet.text}}
         </p>
-      </div>
-      <div class="col-xs-12 col-md-4">
-        <h2>Sentiment</h2>
-        <x-sentiment x-results="results"></x-sentiment>
-      </div>
-      <div class="col-xs-12 col-md-4">
-        <h2>Topics</h2>
-        <x-topics x-results="results"></x-topics>
-      </div>
-      <div class="col-xs-12 col-md-4">
-        <h2>Wordcount</h2>
-        <x-wordcount x-results="results"></x-wordcount>
       </div>
     </div>
   </div>

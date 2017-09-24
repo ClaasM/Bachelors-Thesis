@@ -13,16 +13,15 @@ os.environ['PYSPARK_SUBMIT_ARGS'] \
     = '--packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.0.2 pyspark-shell'
 
 
-def emit_each(event, sid, data):
+def emit(event, sid, data):
     """
-    Emits an array of elements, each as its own event
+    Emits arbitrary data to the client identified via the sid
     :param event:
     :param sid:
     :param data:
     :return:
     """
-    for element in data:
-        socketio.emit(event, data=element, room=sid)
+    socketio.emit(event, data=data, room=sid)
 
 
 class TwitterKafkaConsumer(object):
@@ -53,7 +52,7 @@ class TwitterKafkaConsumer(object):
                                      sentiment_classifier=self.sentiment_classifier,
                                      lda_model=self.lda_model))
         # Emit each analysis result to the client to update the dashboard
-        analyzed.foreachRDD(lambda rdd: emit_each('dashboard.update', sid, rdd.collect()))
+        analyzed.foreachRDD(lambda rdd: emit('dashboard.update', sid, rdd.collect()))
         # Start the streaming
         self.ssc.start()
 

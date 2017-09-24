@@ -1,11 +1,11 @@
 % !TEX root = ../main.tex
 \chapter{Dashboard}
 
-A different visualization was needed
-
 \label{ch:dashboard}
 
 A user-friendly streaming dashboard was created to visualize and monitor.
+A different visualization was needed
+This dashboard is proper overkill lol
 This dashboard is designed for semi-tech users.
 This dashboard only does classification, the models are trained beforehand with Notebooks and simple scripts.
 This dashboard puts all the aforementioned theory into practice with streaming, making it one of the most important chapters.
@@ -34,6 +34,10 @@ To combine topic modeling and sentiment analysis, they were all put into one spa
 Also of course the amount of events emitted via the sockets is reduced.
 It's okay since the jobs are still small enough for kafka to distribute them efficiently in a distributed setting.
 And this makes it easier to combine the results of both analyses on a per-status (per-RDD) basis.
+
+As explained in~\ref{subsec:nltk}, the NLTK is meant for teaching and research,
+and the naive bayes classifier built with it did not meet the performance demands in a streaming scenario,
+so scikit was used
 
 \subsection{Backend}
 \label{subsec:backend}

@@ -70,14 +70,14 @@ def lda(dictionary, model):
                                             per_word_topics=False)
         topics = doc_lda[0]
         topics_ret = dict()
-        for topic in topics[:3]:  # Maximum 3 Topics per tweet
+        for topic in topics:
             topic_id = topic[0]
             topic_probability = topic[1]
             terms = model.get_topic_terms(topicid=topic_id, topn=5)
             topics_ret[topic_id] = {
                 'probability': topic_probability,
-                # Maximum 3 Terms per Topic
-                'terms': [dictionary[term[0]] for term in terms[:3]]
+                # Maximum 5 Terms per Topic
+                'terms': [dictionary[term[0]] for term in terms[:5]]
             }
         return topics_ret
 
@@ -101,18 +101,18 @@ def extract_features(document, word_features):
 def sentiment_analyzer(dictionary, classifier):
     """
     Factory for the sentiment analysis function
-    :param dictionary: gensim-dictionary that is also used for the topic model
+    :param dictionary: gensim-dictionary
     :param classifier: sentiment classifier
     :return: the sentiment analysis function
     """
 
-    def _analyze_sentiment(tweet):
+    def _analyze_sentiment(tokens):
         """
         Classifies a preprocessed tweet using the sentiment classifier
-        :param tweet: preprocessed tweet
+        :param tokens: preprocessed tweet
         :return:
         """
-        return classifier.classify(extract_features(document=tweet, word_features=dictionary.token2id))
+        return classifier.classify(extract_features(document=tokens, word_features=dictionary.token2id))
 
     return _analyze_sentiment
 
@@ -120,7 +120,7 @@ def sentiment_analyzer(dictionary, classifier):
 def analyzer(dictionary, sentiment_classifier, lda_model):
     """
     Factory for the spark function that performs all the analysis and prerocessing of each tweet
-    :param dictionary: gensim-dictionary used in for both sentiment analysis and lda
+    :param dictionary: gensim-dictionary
     :param sentiment_classifier: to classify the sentiment of each tweet
     :param lda_model: to model the topic(s) of each tweet
     :return: the spark function to do so
@@ -128,10 +128,12 @@ def analyzer(dictionary, sentiment_classifier, lda_model):
 
     # Initialize all the stuff the execution node needs (the context is transmitted)
     preprocess = preprocessor()
-    tokenize = tokenizer()
+    lda_tokenize = tokenizer(remove_stopwords=True)
+    sa_tokenize = tokenizer(remove_stopwords=False)
     model_topics = lda(dictionary=dictionary, model=lda_model)
     analyze_sentiment = sentiment_analyzer(dictionary=dictionary, classifier=sentiment_classifier)
 
+    import random
     def _analyze(element):
         """
         Performs all the analysis we want on the raw incoming tweet
@@ -147,15 +149,17 @@ def analyzer(dictionary, sentiment_classifier, lda_model):
         raw_text = tweet['text']
         # Using the same preprocessing function as everywhere else, for consistency
         text = preprocess(raw_text)
-        # Use the same tokenization function as everywhere else, for consistency
-        tokens = tokenize(text)
+        # Use the same tokenization functions as everywhere else, for consistency
+        tokens_sa = sa_tokenize(text)
+        tokens_lda = lda_tokenize(text)
 
         # The update should contain...
         update = dict()
         # ...the sentiment score...
-        update['emotion'] = analyze_sentiment(text)
+        update['sentiment'] = random.choice(['irrelevant', 'positive', 'negative',
+                                            'neutral'])  # analyze_sentiment(tokens_sa)
         # ...the topics...
-        update['topics'] = model_topics(tokens)
+        update['topics'] = model_topics(tokens_lda)
         # ...and the tweet itself (or at least what we need from it in the frontend).
         update['tweet'] = {
             'text': raw_text,
