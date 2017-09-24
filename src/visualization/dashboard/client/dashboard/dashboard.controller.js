@@ -62,7 +62,7 @@ angular.module('Dashboard')
       };
       //TODO remove site, retweet and firehose, and all then unused code parts
       // Number of tweets shown in the recent tweets-part and window size for the charts
-      $scope.SLIDING_WINDOW = 100;
+      $scope.SLIDING_WINDOW = 200;
 
       $scope.timeseries = {
         sentiment: new TimeSeries(),
@@ -72,11 +72,11 @@ angular.module('Dashboard')
 
       //Initialize all charts
       var sentiment_chart = new SmoothieChart({responsive: true, minValue: 0, maxValue: 100});
-      sentiment_chart.streamTo(document.getElementById("sentiment_chart"), 20000);
+      sentiment_chart.streamTo(document.getElementById("sentiment_chart"), 2000);
       var topics_chart = new SmoothieChart({responsive: true, minValue: 0, maxValue: 100});
-      topics_chart.streamTo(document.getElementById("topics_chart"), 20000);
+      topics_chart.streamTo(document.getElementById("topics_chart"), 2000);
       var sentiment_by_topic_chart = new SmoothieChart({responsive: true, minValue: 0, maxValue: 100});
-      sentiment_by_topic_chart.streamTo(document.getElementById("sentiment_by_topic_chart"), 20000);
+      sentiment_by_topic_chart.streamTo(document.getElementById("sentiment_by_topic_chart"), 2000);
 
       sentiment_chart.addTimeSeries($scope.timeseries.sentiment, {
         strokeStyle: '#00ff00',
@@ -86,28 +86,31 @@ angular.module('Dashboard')
 
       var socket = io();
       $scope.updateSettings = function () {
-        socket.emit('dashboard.update', $scope.streamSettings[$scope.selectedStream]);
+        socket.emit('dashboard.update-settings', $scope.streamSettings[$scope.selectedStream]);
         $scope.isLoading = true;
         $scope.isStreaming = false;
+      };
+
+      //Initialize the dashboard
+      $scope.results = {data: []};
+      // Overwrite the push function so we can use it as a fixed size queue
+      $scope.results.data.push = function () {
+        if (this.length >= $scope.SLIDING_WINDOW) {
+          this.shift();
+        }
+        return Array.prototype.push.apply(this, arguments);
       };
 
       socket.on('dashboard.update-success', function () {
         //This is emitted by the server if the update was successful
         $scope.isStreaming = true;
         $scope.isLoading = false;
-        //Reset the dashboard
-        $scope.results = {data: []};
-        // Overwrite the push function so we can use it as a fixed size queue
-        $scope.results.data.push = function () {
-          if (this.length >= $scope.SLIDING_WINDOW) {
-            this.shift();
-          }
-          return Array.prototype.push.apply(this, arguments);
-        };
       });
 
       //Called whenever a set of new tweets arrives via the stream, is analyzed and then sent to the client
       socket.on('dashboard.update', function (new_data) {
+
+        console.log(new_data.length);
 
         //Add the data to the FIFO queue
         _.forEach(new_data, function (data) {

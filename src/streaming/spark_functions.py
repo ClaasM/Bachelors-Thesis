@@ -92,9 +92,9 @@ def extract_features(document, word_features):
     :return:
     """
     document_words = set(document)
-    features = {}
+    features = []
     for word in word_features:
-        features['contains(%s)' % word] = (word in document_words)
+        features.append(word in document_words)
     return features
 
 
@@ -112,7 +112,7 @@ def sentiment_analyzer(dictionary, classifier):
         :param tokens: preprocessed tweet
         :return:
         """
-        return classifier.classify(extract_features(document=tokens, word_features=dictionary.token2id))
+        return classifier.predict([extract_features(document=tokens, word_features=dictionary.token2id)])[0]
 
     return _analyze_sentiment
 
@@ -133,8 +133,8 @@ def analyzer(dictionary, sentiment_classifier, lda_model):
     model_topics = lda(dictionary=dictionary, model=lda_model)
     analyze_sentiment = sentiment_analyzer(dictionary=dictionary, classifier=sentiment_classifier)
 
-    import random
     def _analyze(element):
+
         """
         Performs all the analysis we want on the raw incoming tweet
         :param element: the incoming tweet
@@ -156,8 +156,7 @@ def analyzer(dictionary, sentiment_classifier, lda_model):
         # The update should contain...
         update = dict()
         # ...the sentiment score...
-        update['sentiment'] = random.choice(['irrelevant', 'positive', 'negative',
-                                            'neutral'])  # analyze_sentiment(tokens_sa)
+        update['sentiment'] = analyze_sentiment(tokens_sa)
         # ...the topics...
         update['topics'] = model_topics(tokens_lda)
         # ...and the tweet itself (or at least what we need from it in the frontend).

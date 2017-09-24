@@ -14,7 +14,7 @@ def stop_pipeline():
         session['producer'].stop()
 
 
-@socketio.on('dashboard.update')
+@socketio.on('dashboard.update-settings')
 def update(settings):
     """
     Starts or updates the pipeline

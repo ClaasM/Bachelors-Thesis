@@ -38,7 +38,7 @@ class TwitterKafkaConsumer(object):
         self.lda_model = LdaModel.load(dir_path + '/../../models/lda/gensim/tweets_stream.lda')
 
         # Load sentiment model
-        classifier_f = open(dir_path + "/../../models/naive_bayes/nltk_naive_bayes.pickle", "rb")
+        classifier_f = open(dir_path + "/../../models/naive_bayes/scikit_naive_bayes_multinomial.pickle", "rb")
         self.sentiment_classifier = pickle.load(classifier_f)
         classifier_f.close()
 
