@@ -19,7 +19,7 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         super().__init__()
         self.sid = sid
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        with open(dir_path + '/../../config.json') as config_data:
+        with open(dir_path + '/../../twitter.access.json') as config_data:
             config = json.load(config_data)
         auth = tweepy.OAuthHandler(config['consumer_key'], config['consumer_secret'])
         auth.set_access_token(access_token, access_token_secret)

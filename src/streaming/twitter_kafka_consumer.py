@@ -1,16 +1,28 @@
 import os
 import pickle
 
+from gensim.corpora import Dictionary
+from gensim.models import LdaModel
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
-from gensim.models import LdaModel
-from gensim.corpora import MmCorpus, Dictionary
+from server import socketio
 from src.streaming import spark_functions
-from src.visualization.dashboard.server.api.dashboard import emit_each, emit
 
 os.environ['PYSPARK_SUBMIT_ARGS'] \
     = '--packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.0.2 pyspark-shell'
+
+
+def emit_each(event, sid, data):
+    """
+    Emits an array of elements, each as its own event
+    :param event:
+    :param sid:
+    :param data:
+    :return:
+    """
+    for element in data:
+        socketio.emit(event, data=element, room=sid)
 
 
 class TwitterKafkaConsumer(object):
@@ -23,11 +35,11 @@ class TwitterKafkaConsumer(object):
 
         # Load dictionary and corpus, which is needed to classify new documents (=tweets)
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        self.dictionary = Dictionary.load(dir_path + '/../../data/processed/tweets.dict')
-        self.lda_model = LdaModel.load(dir_path + '/../../models/lda_model/gensim/tweets.lda_model')
+        self.dictionary = Dictionary.load(dir_path + '/../../data/processed/tweets_stream.dict')
+        self.lda_model = LdaModel.load(dir_path + '/../../models/lda/gensim/tweets_stream.lda')
 
         # Load sentiment model
-        classifier_f = open("./../../models/sentiment_classifier/nltk_naive_bayes.pickle", "rb")
+        classifier_f = open(dir_path + "/../../models/naive_bayes/nltk_naive_bayes.pickle", "rb")
         self.sentiment_classifier = pickle.load(classifier_f)
         classifier_f.close()
 

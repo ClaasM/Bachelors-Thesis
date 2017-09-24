@@ -1,6 +1,6 @@
 import re
 import nltk
-
+import json
 from nltk.tokenize import RegexpTokenizer
 
 """
@@ -140,7 +140,9 @@ def analyzer(dictionary, sentiment_classifier, lda_model):
         """
 
         # The actual tweet is the second element in a tupel
-        tweet = element[1]
+        tweet_str = element[1]
+        # It's still a string, so parse it
+        tweet = json.loads(tweet_str)
         # Just the text needed
         raw_text = tweet['text']
         # Using the same preprocessing function as everywhere else, for consistency
