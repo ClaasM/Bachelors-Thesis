@@ -100,13 +100,15 @@ The system scales vertically, enabling high throughput and redundance.
 % Whats the problem?
 The amount of data being processed when streaming social network data,
 especially with multiple users and when streaming a broad set of activities,
-commands large amounts of computing power that cannot be provided by solely scaling up
+commands large amounts of computing power that cannot be provided by solely scaling up,
 meaning increasing the performance of a single machine.
 Instead, the performance required is achieved by scaling out,
 meaning distributing the computation across multiple machines~\cite{Wolke2010}.
 \par % Spark solves it!
 Spark manages this scaling out by abstracting these machines as so-called execution nodes (also called worker nodes or slave nodes),
 on which programs (tasks) called sparkjobs are run.
+These abstract execution nodes can also be separate processes on a single machine,
+efficiently utilizing multiple cores. % TODO maybe a screencap of many python processes
 The distribution of tasks to these nodes, and the collection of results from them,
 is managed by the master node (also called driver node).
 It utilizes Apache Hadoop to persist data across these nodes~\cite{Zaharia2016}.
@@ -161,8 +163,8 @@ as can be seen in the wordcount-example in~\ref{code:wordcount}.
 \begin{figure}
     \caption{Consuming data from a stream and processing them in batches}
     \label{code:wordcount}
-        \begin{minted}{python}
-            % @formatter:off
+    \begin{minted}{python}
+        % @formatter:off
 # Stream the data in 1-second windows
 streaming_context = StreamingContext(sc, 1)  # 1 second window
 # Connect to a kafka stream, specifying which kafka-topics to consume. See section "Kafka" for an explanation of topics.
@@ -172,7 +174,7 @@ counts = stream.flatMap(lambda line: line.split(" ")) \
     .map(lambda word: (word, 1)) \
     .reduceByKey(lambda a, b: a + b)
             % @formatter:on
-        \end{minted}
+    \end{minted}
 \end{figure}
 
 Spark also allows for more complex functions to be applied to the data.
@@ -189,8 +191,8 @@ A simple example of this can be seen in~\ref{code:factory}.
 \begin{figure}
     \caption{Demonstration of using packages and outside-variables on execution nodes}
     \label{code:factory}
-        \begin{minted}{python}
-            % @formatter:off
+    \begin{minted}{python}
+        % @formatter:off
 # Factory to create a match-function that matches a text against a compiled regular expression
 def matcher(pattern):
     # imports...
@@ -207,8 +209,8 @@ def matcher(pattern):
 # Usage:
 someRDD.map(matcher("ab*"))
             % @formatter:on
-            %TODO can man den code safe einrücken ohne dass es die Darstellung kaputt macht? Ausprobieren
-        \end{minted}
+        %TODO can man den code safe einrücken ohne dass es die Darstellung kaputt macht? Ausprobieren
+    \end{minted}
 \end{figure}
 
 \subsection{NLTK}
@@ -227,8 +229,8 @@ A simple exemplary use-case can be seen in~\ref{code:nltk}.
 \begin{figure}
     \caption{Example usage of the NLTK in a Python shell}
     \label{code:nltk}
-        \begin{minted}{python}
-            % @formatter:off
+    \begin{minted}{python}
+        % @formatter:off
 import nltk
 text = "the quick brown fox jumps over the lazy dog"
 # The NLTK offers, for example, word tokenization
@@ -241,8 +243,8 @@ wrapped.concordance("fox")
 Displaying 1 of 1 matches:
                       the quick brown fox jumps over the lazy dog
             % @formatter:on
-            %TODO can man den code safe einrücken ohne dass es die Darstellung kaputt macht? Ausprobieren
-        \end{minted}
+        %TODO can man den code safe einrücken ohne dass es die Darstellung kaputt macht? Ausprobieren
+    \end{minted}
 \end{figure}
 
 Some of the more complex functionality and methods for classification that border on machine learning territory were also used,
@@ -255,7 +257,7 @@ As with any programming project, high-quality, well documented and structured co
 Since the programming language used in this thesis is Python, and it is in large parts data-science,
 the "Cookiecutter Data Science" %TODO quote properly
 project structure is used~\cite{dsCookieCutter}.
-This project structure follows a type-based separation, an explanation or the individual folders can be seen in~\ref{forest:dscookiecutter}.
+This project structure follows a type-based separation, an explanation of the individual folders can be seen in~\ref{forest:dscookiecutter}.
 
 % TODO use the folder icon in all forest https://tex.stackexchange.com/questions/5073/making-a-simple-directory-tree
 \begin{figure}
