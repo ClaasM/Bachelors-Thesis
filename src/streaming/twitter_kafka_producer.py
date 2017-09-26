@@ -39,7 +39,9 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         # Start the new stream with new settings
         stream_type = settings['type']
         del settings['type']
-        del settings['filter_level']  # TODO find a way to be able to use unicode --> Make a tweepy3 fork maybe?
+        if 'filter_level' in settings:
+            del settings['filter_level']  # TODO find a way to be able to use unicode --> Make a tweepy3 fork maybe?
+
         if stream_type == 'site':
             self.twitter_stream.sitestream(**settings, async=True)
         elif stream_type == 'user':

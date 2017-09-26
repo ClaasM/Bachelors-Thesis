@@ -345,6 +345,7 @@ This will be explored further in~\ref{ch:sentimentAnalysis}.
 
 Another dataset was collected by streaming the sample stream described in\ref{subsec:streaming},
 again only keeping english tweets.
+The statuses were collected on the 18$^{th}$ of august 2017.
 The statuses received via the stream were written to a database until 10000 statuses were collected.
 This dataset will be used for (unsupervised) topic modeling, since it is representative of all activity on Twitter.
 A wordcloud of the statuses collected from the sample stream can be seen in~\ref{fig:wordloud_pre}~
@@ -360,7 +361,7 @@ A wordcloud of the statuses collected from the sample stream can be seen in~\ref
 
 Some of the biggest "words" in the wordcloud are "RT", "it" and "be",
 or even some digits, which have no informativeness with regards to sentiment or topic,
-which demonstrates the necessity of preprocessing, shown in the next chapter.
+demonstrating the necessity of preprocessing, shown in the next chapter.
 
 
 \section{Preprocessing and Tokenization}

@@ -50,7 +50,9 @@ angular.module('Dashboard')
           languages: ['en']
         },
         'sample': {
-          type: 'sample'
+          type: 'sample',
+          languages: ['en']
+
         },
         'retweet': {
           type: 'retweet'
@@ -71,12 +73,21 @@ angular.module('Dashboard')
       };
 
       //Initialize all charts
-      var sentiment_chart = new SmoothieChart({responsive: true, minValue: 0, maxValue: 100});
-      sentiment_chart.streamTo(document.getElementById("sentiment_chart"), 2000);
-      var topics_chart = new SmoothieChart({responsive: true, minValue: 0, maxValue: 100});
-      topics_chart.streamTo(document.getElementById("topics_chart"), 2000);
-      var sentiment_by_topic_chart = new SmoothieChart({responsive: true, minValue: 0, maxValue: 100});
-      sentiment_by_topic_chart.streamTo(document.getElementById("sentiment_by_topic_chart"), 2000);
+      //Set the width of the chart manually since the responsive option of smoothie chart doesnt work in current browsers
+      var sentiment_chart = new SmoothieChart({minValue: 0, maxValue: 100});
+      var sentiment_chart_element = document.getElementById("sentiment_chart");
+      sentiment_chart_element.width = document.getElementById("sentiment-chart-container").offsetWidth;
+      sentiment_chart.streamTo(sentiment_chart_element, 2000);
+
+      var topics_chart = new SmoothieChart({minValue: 0, maxValue: 100});
+      var topics_chart_element = document.getElementById("topics_chart");
+      topics_chart_element.width = document.getElementById("topics-chart-container").offsetWidth;
+      topics_chart.streamTo(topics_chart_element, 2000);
+
+      var sentiment_by_topic_chart = new SmoothieChart({minValue: 0, maxValue: 100});
+      var sentiment_by_topic_element = document.getElementById("sentiment_by_topic_chart");
+      sentiment_by_topic_element.width = document.getElementById("sentiment-by-topic-chart-container").offsetWidth;
+      sentiment_by_topic_chart.streamTo(sentiment_by_topic_element, 2000);
 
       sentiment_chart.addTimeSeries($scope.timeseries.sentiment, {
         strokeStyle: '#00ff00',
