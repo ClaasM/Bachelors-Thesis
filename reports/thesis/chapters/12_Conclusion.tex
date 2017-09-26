@@ -2,19 +2,50 @@
 \chapter{Conclusion}
 \label{ch:conclusion}
 
-Streaming is more intensive (example: NLTK failed, scikit needed)
 
-Hypothesize counteractions to impending shitstorms using real-time detection (is this the right chapter for that?).
-
-Tweets present a challenge to existing sentiment analysis solutions
---> It was found that word negation has little effect.
-
-"Twitter with its open API to crawl, one-sided nature of relationship,
-and the retweet mechanism to relay information offers an unprecedented
-opportunity for computer scientists, sociologists, linguists,
-and physicists to study human behavior. Our work is the first
-step towards exploring the great potentials of this new platform.", ~\ref{Kwak2010}
-
-Around 1 page.
-\pagebreak[1]
-
+In this thesis, sentiment analysis and topic modeling were combined and applied to streamed social network data from Twitter.
+% Each paragraph concludes one chapter
+It was theorized that organizations do not use social media to its full potential,
+and that monitoring what users talk about, and how they feel about it,
+could be of value,
+while it was established that manual analyses would be too slow and labor-intensive.
+\\
+Therefore, the goal was set to provide an automated real-time monitoring solution to semi-technical users.
+\\
+In the next chapters, technologies and methods that could be used to accomplish this were explored and compared.
+Kafka was introduced for streaming, and Spark to enable distributed analyses of incoming statuses from Twitter.
+It was discovered that while Spark itself does not yet offer sufficient functionality to perform all the analyses,
+it could be used in conjunction with other libraries.
+\\
+Still, for this scenario, the Kafka-Spark pipeline proved to be over-the-top.
+However, in a multi-user scenario, with many more incoming statuses to be analyzed,
+its scaling capabilities would make it worth the overhead.
+\\
+While comparing sentiment analysis methods, it was found that sophisticated sentiment analysis methods do not adapt well
+to the case of short Twitter statuses, and that a simple multinomial naive bayes on preprocessed text achieves the
+best performance.
+For example, tagging negated words had no effect, even though it improved results significantly when working with
+other types of text artifacts~\cite{Hoffmann2005}.
+The dataset used also proved to be highly topical, putting the models' validity into question,
+even though it was already established to be the most suitable dataset.
+\\
+For topic modeling, LDA and NMF were compared.
+However, since the results were subjectively very similar, the choice fell on the more established LDA.
+\\
+Both analyses were combined, to give an assessment of sentiment by topic, and the results were visualized,
+indicating inherent differences in sentiment for different topics.
+\\
+Sentiment analysis, topic modeling and the combination of both was then implemented as a user-friendly dashboard that would
+allow users to monitor and analyse Twitter streams in real time without requiring programming abilities.
+A set of challenges regarding the performance requirements when having to perform these analyses in real-time,
+and the visualization of these results, were encountered and solved.
+\\
+The resulting application showed the static topic model to not be perfectly accurate anymore,
+due to only temporarily relevant topics.
+Still, the application provides interesting insights into activity on Twitter,
+and fulfills its purpose of enabling monitoring and analyses of streamed social network data.
+\\
+The statement that Twitter with its API offers a never-seen-before opportunity for
+many kinds of researchers~\ref{Kwak2010} could be confirmed,
+and not only will the findings of this thesis be of value to other computer scientists,
+but it is also a first step towards opening up this opportunity to a broader audience.

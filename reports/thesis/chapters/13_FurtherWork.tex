@@ -1,0 +1,32 @@
+% !TEX root = ../main.tex
+\chapter{Further Work}
+\label{ch:furtherWork}
+
+Due to the findings in~\ref{ch:dashboard}, % TODO more precise
+a different approach to topic modeling could be of value.
+A topic model that either filters out topics that are only temporary,
+or a "evolving" model, that is continuously retrained on the sample stream using online LDA~\cite{hoffman2010online},
+might be a good starting point for further research.
+In the latter case, the dashboard would only show the deviation of topics in a stream from those in the sample stream.
+Supervised topic modeling approaches could also be used to model topics in a dimension that is less dependent on the input parameters,
+which, as shown in~\ref{fig:dashboard-topics}, influence the prevalence of topics in a stream.
+This would achieve a higher informativeness for the user, since it is of little value for the user to
+see that the topic which has the keyword he/she is tracking in its top 5 terms is the most prevalent.
+\par
+The currently available datasets to train sentiment analysis models are either flawed in how they are labeled, highly topical,
+or to small, as described in~\ref{sec:theSandersDataset} and shown in the comparison by Saif~\etAl~\cite{Saif2013}.
+Many researchers would benefit from a publicly available sample dataset, representative for all of Twitter,
+as collected in~\ref{sec:streamingSampleDataset}, with hand-labeled sentiment.
+This could, for example, be achieved by listening to the sample stream for a prolonged time,
+taking a sample from the collected data, and labeling it using a micro-working service such as Amazon Mechanical Turk,
+which even has job category specifically designed for sentiment analysis of Twitter statuses~\cite{mturk}.
+\par
+Further development of the platform itself to make it suitable to conduct actual research
+would also enable many more future opportunities.
+For this, other analyses besides topic modeling and sentiment analysis could be added,
+since the platform is, to this point, developed to be easily expandable.
+Another area of development on the application, and the theory behind it,
+would be to incorporate a measure of informativeness of a status,
+by which the results could be weighed to achieve higher accuracy.
+This informativeness measure could also be used to filter out spam and bots,
+enabling quantification of their impact in real time~\cite{haustein2016tweets}.

@@ -267,5 +267,18 @@ were outperformed by a multinomial naive Bayes classifier.
 \par
 However, the results of these tests need to be handled carefully,
 since the training dataset is highly topical as shown by the performance discrepancies between different dictionaries in~\ref{subsec:naivebayes}.
+Also, when comparing the sentiment distribution of the Sanders dataset, seen in~\ref{fig:sanders_sentiment},
+to the sentiment distribution of the sample stream dataset as classified by the multinomial naive bayes, seen in~\ref{fig:sample_sentiment},
+it seems to be more opinionated, containing fewer statuses labeled as "irrelevant" in favor of positive and negative tweets.
+
+\begin{figure}
+    \centering
+    \caption{The distribution of labels in the sample stream dataset.}
+    \label{fig:sample_sentiment}
+    \includegraphics[width=10cm]{../figures/sample_sentiment.pdf}
+\end{figure}
+
+This indicates that the dataset is not only highly topical, but also not perfectly representative in terms of sentiment.
+
 \par
 The multinomial naive Bayes classifer created in~\ref{subsec:naivebayes} was saved and will be used in the coming chapters.
