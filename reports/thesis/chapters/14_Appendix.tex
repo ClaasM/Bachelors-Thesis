@@ -1,6 +1,61 @@
 % !TEX root = ../main.tex
-\chapter{Detailed Descriptions}
-%\section{Detailed Validation Results}
-\label{chapter:DetailedDescriptions}\label{appendix}
-%\inputminted{c++}{../../src/wos_native.cuh}
+\chapter{Appendix}
+\label{ch:appendix}
+
+\section{Preprocessing and Tokenization Function Factories}
+\label{sec:preprocessingAndTokenizationFunctionFactories}
+The Python code of the preprocessing and tokenization functions,
+in the factory pattern, can be seen in~\ref{code:preprocessing_tokenization}.
+
+\begin{figure}
+    \caption{Implementation of corpus-creation.}
+    \label{code:preprocessing_tokenization}
+    % @formatter:off
+    \begin{minted}{python}
+def preprocessor():
+    """
+    Removes all #hashtags, @mentions and other commonly used special characters used directly in front of
+    or behind valid words as well as URL's and then only keeps valid words.
+    :param text: the text to be preprocessed
+    :return: the preprocessed text
+    """
+
+    def _preprocess(text):
+        # Remove url's
+        text = re.sub(r"http\S+", "", text)
+        # Remove all the other stuff
+        return " ".join([word for word in re.split("[\s;,.#:-@!?'\"]", text) if word.isalpha()])
+
+    return _preprocess
+
+
+def tokenizer(remove_stopwords=True):
+    """
+    Tokenization function for LDA. Used for training _and_ during streaming
+    :return:
+    """
+    regex_tokenizer = RegexpTokenizer(r'\w+')
+    # nltk stopword list plus some miscellaneous terms with low informativeness
+    stoplist = set(['amp', 'get', 'got', 'hey', 'hmm', 'hoo', 'hop', 'iep', 'let', 'ooo', 'par',
+                    'pdt', 'pln', 'pst', 'wha', 'yep', 'yer', 'aest', 'didn', 'nzdt', 'via',
+                    'one', 'com', 'new', 'like', 'great', 'make', 'top', 'awesome', 'best',
+                    'good', 'wow', 'yes', 'say', 'yay', 'would', 'thanks', 'thank', 'going',
+                    'new', 'use', 'should', 'could', 'best', 'really', 'see', 'want', 'nice',
+                    'while', 'know', 'que', 'sur', 'con'] + nltk.corpus.stopwords.words("english"))
+
+    def _tokenize(text):
+        # Tokenize
+        tokens = regex_tokenizer.tokenize(text.lower())
+        # Remove words with length < 3
+        tokens = [token for token in tokens if len(token) > 2]
+        if remove_stopwords:
+            # Remove stop words
+            tokens = [token for token in tokens if token not in stoplist]
+        return tokens
+
+    return _tokenize
+    \end{minted}
+    % @formatter:on
+\end{figure}
+
 \newpage

@@ -66,55 +66,54 @@ This directory does not contain the code used for creating and analyzing the str
 which, as described in~\ref{sec:projectStructure}, is located under \texttt{Thesis/streaming}.
 On the first level, the structure is type-based, separating between client- and server-related code.
 Since the type of asset (python-scripts for the server-related code, HTML/CSS/Javascript for the client-related code)
-remains constant on every level below that, the structure is then switched to component-based.
+remains constant on every level below that, the structure is then switched to a feature-based one.
 With this structure, full advantage can be taken of the modular nature of AngularJS~\cite{angularDocs}.
 % TODO search for Javascript to make casing/hyphenation consistent
 The structure of the dashboard-application part of the project can be seen in~\ref{forest:dashboard}.
 
-% TODO use the folder icon in all forest https://tex.stackexchange.com/questions/5073/making-a-simple-directory-tree
 \begin{figure}
     \caption{Structure of the dashboard-application part of the project under \texttt{Thesis/src/visualization}}
     \label{forest:dashboard}
+    % @formatter:off
     \begin{forest}
-        % @formatter:off
-% TODO can this be safely indented? same as code
-  for tree={
-    font=\ttfamily,
-    grow'=0,
-    child anchor=west,
-    parent anchor=south,
-    anchor=west,
-    calign=first,
-    edge path={
-      \noexpand\path [draw, \forestoption{edge}]
-      (!u.south west) +(7.5pt,0) |- node[fill,inner sep=1.25pt] {} (.child anchor)\forestoption{edge label};
-    },
-    before typesetting nodes={
-      if n=1
-        {insert before={[,phantom]}}
-        {}
-    },
-    fit=band,
-    before computing xy={l=15pt},
-  }
-[visualization
-  [dashboard \textit{contains client and server code for the dashboard application}
-    [client
-      [main \textit{The main (home) page}
-      ]
-      [main \textit{The actual dashboard}
-      ]
-    ]
-    [server
-      [api \textit{Facilitates interaction between the frontend and the stream}
-      ]
-      [auth \textit{All functionality for the authentication with Twitter}
-      ]
-    ]
-  ]
-]
-        % @formatter:on
+        for tree={
+            font=\ttfamily,
+            grow'=0,
+            child anchor=west,
+            parent anchor=south,
+            anchor=west,
+            calign=first,
+            inner xsep=7pt,
+            edge path={
+              \noexpand\path [draw, \forestoption{edge}]
+              (!u.south west) +(7.5pt,0) |- (.child anchor) pic {folder} \forestoption{edge label};
+            },
+            before typesetting nodes={
+              if n=1
+                {insert before={[,phantom]}}
+                {}
+            },
+            fit=band,
+            before computing xy={l=15pt},
+          }
+        [visualization
+          [dashboard \textit{contains client and server code for the dashboard application}
+            [client
+              [main \textit{The main (home) page}
+              ]
+              [main \textit{The actual dashboard}
+              ]
+            ]
+            [server
+              [api \textit{Facilitates interaction between the frontend and the stream}
+              ]
+              [auth \textit{All functionality for the authentication with Twitter}
+              ]
+            ]
+          ]
+        ]
     \end{forest}
+    % @formatter:on
 \end{figure}
 
 \section{Implementation and Testing}

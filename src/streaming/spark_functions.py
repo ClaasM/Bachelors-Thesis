@@ -35,6 +35,7 @@ def tokenizer(remove_stopwords=True):
     :return:
     """
     regex_tokenizer = RegexpTokenizer(r'\w+')
+    # nltk stopword list plus some miscellaneous terms with low informativeness
     stoplist = set(['amp', 'get', 'got', 'hey', 'hmm', 'hoo', 'hop', 'iep', 'let', 'ooo', 'par',
                     'pdt', 'pln', 'pst', 'wha', 'yep', 'yer', 'aest', 'didn', 'nzdt', 'via',
                     'one', 'com', 'new', 'like', 'great', 'make', 'top', 'awesome', 'best',

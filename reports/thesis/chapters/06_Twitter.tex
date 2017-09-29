@@ -6,13 +6,14 @@
 \label{sec:twitter}
 
 Twitter is a form of so-called microblogging, which is defined as a form of blogging with small-sized pieces of content,
-usually text up to a character-count of 200, which in the case of Twitter are called Tweets or statuses.
+usually text up to a character-count of 200, which, in the case of Twitter, are called Tweets or statuses
+(where this thesis will stick to the latter since it is the predominant terminology used in the official documentation~\ref{twitterDocs}).
 This enables light-weight, mobile and easy sharing of opinions, status and activities~\cite{Finin2007},
-which lead to rapid adoption and user growth~\cite{mcgiboney2009twitter}.
+which proved popular among users and lead to rapid adoption and growth~\cite{mcgiboney2009twitter}.
 \par
 As shown in~\ref{tab:comparison}, the relationships of following users and being followed by users on Twitter is unreciprocated,
 which means it requires no active accepting of followers.\\
-This leads to only 22.1\% of users being followed by someone, also follow that user back~\ref{Kwak2010}.
+This leads to only 22.1\% of users who are being followed by someone, also being followed back by that someone back~\ref{Kwak2010}.
 Although Twitter offers the option to protect ones account, which means followers need to be accepted,
 and users can be blocked, thereby denying them seeing ones content, these options are only used in rare cases,
 making the form of relationships they represent the exception~\ref{Kwak2010}.\\
@@ -28,7 +29,6 @@ The relationship between different kinds of entities present on Twitter can be s
 \end{figure}
 
 \par
-% TODO statuses/tweets persistence
 This thesis will focus on analyzing statuses in real time.
 Statuses on Twitter can not only contain text, but also rich media like images, gifs, or videos, as well as surveys.
 The text itself can also contain links, mention other users by containing \texttt{@<user\_name>},
@@ -36,13 +36,9 @@ and contain any number of the infamous hashtag (\texttt{\#hastag}), used to labe
 A status can also be a so-called retweet of another status, adding to its content and exposing the other status to the retweeting users' followers.
 Research shows that statuses are mostly retweeted shortly after they are published, and often lead to chains of retweets,
 which not only spreads information fast, but also diffuses it~\ref{Kwak2010}.\\
-As mentioned in~\ref{ch:goals}, one of the goals of this thesis is to be able to observe and detect such a spreading in real time
-and analyze its influence on the overall userbase.
 \par
 For the purpose of this thesis we will only focus on the text of a status and do not assign any special meaning to links,
 mentions, hashtags or whether a status is a retweet.\\
-
-% TODO add that retweets mean nothing has to be weighed by likes or something to get sentiment
 
 \section{The Twitter API}
 \label{sec:theApi}
@@ -56,8 +52,9 @@ A Python-library called Tweepy, which contains utility functions for interaction
 \subsection{JSON}
 \label{subsec:json}
 
-JSON (\textbf{J}ava\textbf{S}cript \textbf{O}bject \textbf{N}otation) is data format originally conceptualized by ECMA international
-for the programming language Javascript to be light-weight, human-readable yet easy for machines to generate and parse.
+JSON (\textbf{J}ava\textbf{S}cript \textbf{O}bject \textbf{N}otation) is a data format originally conceptualized by ECMA international
+for the programming language Javascript.
+It was designed to be light-weight, human-readable yet easy for machines to generate and parse.
 Due to this, and the fact that it uses conventions familiar to developers of C-like languages,
 it has since become a widespread data-interchange format with libraries for parsing and generation in many languages~\cite{jsonDocs}.
 A small example for an object in this format can be seen in~\ref{code:json}.
@@ -109,7 +106,7 @@ The Twitter API follows the REST (\textbf{RE}presentational \textbf{S}tate \text
 The REST-paradigm defines a set of architectural rules to ensure interoperability of distributed systems,
 like clients and servers on the internet.
 To achieve that, among other things,
-it defines a set methods that specify different kinds of operations that can be performed on data~\cite{Jakl2008}.
+it defines a set of methods that specify different kinds of operations that can be performed on data~\cite{Jakl2008}.
 The most prevalent methods mentioned in the RFC are listed below~\cite{RFC2616}.
 
 \begin{enumerate}
@@ -126,14 +123,13 @@ The most prevalent methods mentioned in the RFC are listed below~\cite{RFC2616}.
 There are more methods specified by the RFC~\cite{RFC2616} that will not be used in this thesis.
 \par
 The resources (also called API endpoints) offered by the Twitter REST-API are rate-limited,
-which means any one application or Twitter-user using the API can make a limited number of requests to the API.
+which means any one application or Twitter-user using the API can make a limited number of requests to the API
+per 15-minute time window.
 Every request send to the API needs to be authenticated,
 either as a Twitter user or as an application that can be registered in Twitter's developer console.
-Furthermore, there are some resources which can only be accessed when a specific Twitter user authenticates
-against the API, because they are user-specific, like publishing a status.
+There are some resources which can only be accessed when a specific Twitter user authenticates
+with the API, because they are user-specific, like publishing a status~\cite{twitterDocs}.
 Some examples can be seen in ~\ref{tab:twitter_endpoints}.
-% TODO this would be a good place to elaborate some more
-% TODO the rate limiting part, for example, is kind of lost int here
 
 \begin{table}
     \caption{A selection of resources offered by the Twitter REST API~\cite{twitterDocs}}
@@ -172,24 +168,25 @@ Some examples can be seen in ~\ref{tab:twitter_endpoints}.
         \\
         \bottomrule
     \end{tabular}
-%}
+    %}
 \end{table}
 
 \subsection{Processing Data at Rest and Data in Motion}
 \label{subsec:dataAtRest-DataInMotion}
 
-The previous subsection discussed the data at rest offered by the Twitter API.
-Processing data at rest (not to be confused with REST) is processing data from a persistent data storage, like a database, in batches~\cite{Nandi2015}.
+The previous subsection discussed the "data at rest" offered by the Twitter API.
+Processing data at rest (not to be confused with REST) means processing data from a persistent data storage, like a database, in batches~\cite{Nandi2015}.
 Since this thesis aims to provide analysis in real time, one option would be to request the latest entities in fixed intervals from
 Twitters API.
 \par
-However, that would be inefficient, and introduces latency to the analysis,
+However, this approach would be inefficient, and introduces latency to the analysis,
 since events like the posting of statuses can only be analyzed after the next request is answered, not immediately when they occur.
-This is amplified by the fact that the number of requests than can be made to the API is limited by the rate-limit.
+This is amplified by the fact that the number of requests than can be made to the API is limited by the rate-limit,
+so a delay would have to be put in between requests.
 \par
 To analyze events right when they occur, the data has to be processed in motion, meaning ingesting data in real time via a stream~\cite{Nandi2015}.
 This thesis aims to process data in motion.
-Thankfully, Twitter offers a Streaming API, which is explained in the next subsection. % TODO is it okay to reference chapters and stuff like this?
+Thankfully, Twitter offers a Streaming API, which is explained in the next subsection.
 
 
 \subsection{Streaming}
@@ -198,18 +195,17 @@ Thankfully, Twitter offers a Streaming API, which is explained in the next subse
 Although the Twitter documentation distinguishes between the REST API for processing data at rest and the the Streaming API for processing data in motion,
 the streaming API is also REST-based.
 The user sends a HTTP-request to a streaming-endpoint, but the the API doesn't respond and close the requests,
-but instead keeps the connection open and sends successive responses until the connection closes.
+but instead keeps the connection open and sends successive responses until the connection is closed from the outside.
 These responses have the same format as in the REST-API, and represent Twitter entities like statuses or direct messages~\cite{twitterDocs}.
 A diagram from the Twitter documentation visualizing this behaviour can be seen in~\ref{fig:twitter_streaming}.
 
 % include diagram
 \begin{figure}
     \centering
-    \caption{Diagram from the Twitter documentation showing how the Twitter streaming-API works}
+    \caption{Diagram from the Twitter documentation showing how the Twitter streaming-API works~\cite{twitterDocs}}
     \label{fig:twitter_streaming}
     \includegraphics[width=10cm]{../images/twitter_streaming_diagram.png}
 \end{figure}
-
 
 Twitter itself offers 6 different endpoints for 6 different streams, all of which are explained in~\ref{tab:twitter_streams}.
 
@@ -270,31 +266,31 @@ Twitter itself offers 6 different endpoints for 6 different streams, all of whic
         \\
         \bottomrule
     \end{tabular}
-%}
+    %}
 \end{table}
 
-This thesis will work with the sample, user and filter stream, since only these are publicly available.
-The main focus will be the sample stream, since it gives a representative sample of all activity on twitter.
+This thesis will work with the sample- and filter-stream, since only these are publicly available and do not depend on a specific user,
+to give reproducible results.
+The main focus will be the sample stream, since it gives a representative sample of all activity on Twitter.
 While these streaming endpoints are not rate limited in the number of entities streamed,
 they are limited in regards to the number of connection requests any one user or application can make.
 \par
 Compared to the general use-case for Kafka shown in~\ref{fig:kafka}, in this thesis,
 every producer will produce events for exactly one topic, with the producer being a specific Twitter stream and the topic beint a unique identifier for it.
-%TODO maybe show adjusted diagram here if its not clear
 The advantage of using the Twitter streaming-API compared to repeatedly polling the REST-API for the use-case of this thesis
 is that it is more efficient and has less latency.
 
 \section{The Sanders Dataset}
 \label{sec:theSandersDataset}
 
-% TODO go deeper into the whole topic-thing, since we use it for topic modeling later
 To train the sentiment analysis models, a set of statuses labeled with sentiment was needed.
-Evaluation using the comparison in~\cite{Saif2013} showed the Sanders-dataset~\cite{sanders} to be most-suited to train twitter sentiment analysis models.
-At 4347 available statuses, it is large enough to train an accurate model and is hand-labeled instead of relying on emoticons for labeling, which might be inaccurate.
+Evaluation using the comparison in~\cite{Saif2013} showed the Sanders-dataset~\cite{sanders} to be most-suited to train Twitter sentiment analysis models.
+At 4347 available statuses, it is large enough to train an accurate model and is hand-labeled instead of relying on, for example, emoticons for labeling, which might be flawed.
 Also, Twitter's terms of service forbid the distribution of statuses outside of their API, which ruled out all datasets that did.
-% TODO maybe write about why we don't use the dataset supplied with the NLTK (no idea how they were selected, they don't seem random since they're very opinionated, no information on how they were labeled)
+Even though the NLTK~\ref{subsec:nltk} contains a Twitter sentiment sample dataset,
+there is no information available on how it was collected and labeled, which is why it wasn't considered.
 The Sanders-dataset only contains the statuses unique identifier (id), along with the sentiment label ("positive", "negative", "neutral" or "irrelevant").
-The existing scripts to hydrate the dataset (replace the id with the actual status by requesting them from the API) were either slow or deprecated and dysfunctional,
+The existing scripts to hydrate the dataset (meaning to replace the id with the actual status by requesting them from the API) were either slow or deprecated and dysfunctional,
 which is why a new script was written.
 Unfortunately no real statuses can be shown, but~\ref{tab:sanders_sample} shows some fictional examples.
 
@@ -337,18 +333,18 @@ The distribution of labels on the dataset can be seen in~\ref{fig:sanders_sentim
 
 The statuses were collected using the search terms "@apple", "\#google", "\#microsoft" and "\#twitter",
 which not only renders them unusable to create a topic model since that makes them highly topical,
-but might also negatively impact the ability of sentiment analysis models trained on them to generalize on a representative sample.
+but might also negatively impact the ability of sentiment analysis models trained on them to generalize over other data.
 This will be explored further in~\ref{ch:sentimentAnalysis}.
 
 \section{The Streaming Sample Dataset}
 \label{sec:streamingSampleDataset}
 
-Another dataset was collected by streaming the sample stream described in\ref{subsec:streaming},
+Another dataset was collected by streaming the sample stream described in~\ref{subsec:streaming},
 again only keeping english tweets.
 The statuses were collected on the 18$^{th}$ of august 2017.
-The statuses received via the stream were written to a database until 10000 statuses were collected.
+The statuses received via the stream were written to a database until 7000 statuses were collected.
 This dataset will be used for (unsupervised) topic modeling, since it is representative of all activity on Twitter.
-A wordcloud of the statuses collected from the sample stream can be seen in~\ref{fig:wordloud_pre}~
+A wordcloud of the statuses collected from the sample stream can be seen in~\ref{fig:wordloud_pre}.
 
 % include diagram
 \begin{figure}
@@ -356,13 +352,11 @@ A wordcloud of the statuses collected from the sample stream can be seen in~\ref
     \caption{Wordcloud of the statuses collected from the sample stream.}
     \label{fig:wordloud_pre}
     \includegraphics[width=10cm]{../images/wordcloud_pre.png}
-    % TODO turn into pdf
 \end{figure}
 
 Some of the biggest "words" in the wordcloud are "RT", "it" and "be",
 or even some digits, which have no informativeness with regards to sentiment or topic,
 demonstrating the necessity of preprocessing, shown in the next chapter.
-
 
 \section{Preprocessing and Tokenization}
 \label{sec:preprocessingAndTokenization}
@@ -374,10 +368,12 @@ which in this case means removing all elements of text that have no influence on
 modeling and analysis unnecessarily difficult.\\
 Furthermore, since all the algorithms that will be used later on are bag-of-words algorithms,
 which means they disregard the order of words in text, a tokenization function needs to be created
-to split sentences in the right places and only keep tokens (terms, words) relevant for modeling and analysis.\\
-To achieve consistent results, the same preprocessing and tokenization functions need to be used for all models, analyses and datasets.
+to split sentences in the right places and only keep tokens (terms, words) relevant for modeling and analysis.
+\\
 At this point it is important to mention that while the tokenization does not, strictly speaking, tokenize the documents,
-but rather splits them into terms, this thesis will stick to the NLTK's~\cite{nltkDocs} nomenclature.
+but rather splits them into terms, this thesis will stick to the NLTK's~\cite{nltkDocs} nomenclature, and call the terms tokens.
+\\
+To achieve consistent results, the same preprocessing and tokenization functions need to be used for all models, analyses and datasets.
 The following steps were taken.
 
 \begin{enumerate}
@@ -394,15 +390,16 @@ The following steps were taken.
         \item Terms of length 1 are removed
         \item Terms that can be found in NLTK's stopwords list for the english language
         (containing a fixed selection of terms with low informativeness for bag-of-words algorithms),
-        were removed. \textit{This only applies to topic modeling}
+        were removed. \textit{(This only applies to topic modeling)}
         \item Terms that can be found in an additional self-devised stopwords list specific to this case were removed
-        % TODO put this stopword list plus the code in the appendix and reference it here
     \end{enumerate}
 \end{enumerate}
 
+The Python implementation of these functions can be found in the Appendix in~\ref{sec:preprocessingAndTokenizationFunctionFactories}.
+\par
 While some approaches to removing terms with low informativeness rely on removing terms that occur in too many or too few documents,
 in this thesis, a stopword list is used,
-since only english statuses for which extensive stopword lists exist will be considered~\cite{Porter2001}.
+since only english statuses will be considered, and extensive stopword lists exit for the english language~\cite{Porter2001}.
 The change to the wordcloud of the statuses collected from the sample stream after preprocessing and tokenization (including stopword removal) can be seen in~\ref{fig:wordloud_post}.
 
 \begin{figure}
@@ -410,5 +407,4 @@ The change to the wordcloud of the statuses collected from the sample stream aft
     \caption{Wordcloud of the statuses collected from the sample stream after preprocessing and tokenization.}
     \label{fig:wordloud_post}
     \includegraphics[width=10cm]{../images/wordcloud_post.png}
-    % TODO turn into pdf
 \end{figure}

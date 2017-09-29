@@ -259,94 +259,121 @@ Since the programming language used is Python, and it is in large parts data-sci
 the "Cookiecutter Data Science" project structure is used~\cite{dsCookieCutter}.
 This project structure follows a type-based separation, an explanation of the individual folders can be seen in~\ref{forest:dscookiecutter}.
 
-
-% TODO ===continue with iterating here===
-
-% TODO use the folder icon in all forest https://tex.stackexchange.com/questions/5073/making-a-simple-directory-tree
 \begin{figure}
-    \caption{The folder structure of the "Cookiecutter Data Science"~\cite{dsCookieCutter}} %TODO quote properly
+    \caption{The folder structure of the "Cookiecutter Data Science"~\cite{dsCookieCutter}}
     \label{forest:dscookiecutter}
+    % @formatter:off
     \begin{forest}
-        % @formatter:off
-% TODO can this be safely indented? same as code
-  for tree={
-    font=\ttfamily,
-    grow'=0,
-    child anchor=west,
-    parent anchor=south,
-    anchor=west,
-    calign=first,
-    edge path={
-      \noexpand\path [draw, \forestoption{edge}]
-      (!u.south west) +(7.5pt,0) |- node[fill,inner sep=1.25pt] {} (.child anchor)\forestoption{edge label};
-    },
-    before typesetting nodes={
-      if n=1
-        {insert before={[,phantom]}}
-        {}
-    },
-    fit=band,
-    before computing xy={l=15pt},
-  }
-[Thesis
-  [data \textit{all data}
-    [external \textit{data from external sources}
-    ]
-    [interim \textit{data that has started\, but not finished processing}
-    ]
-    [processed \textit{data that is ready to be used}
-    ]
-    [raw \textit{collected\, yet unprocessed data}
-    ]
-  ]
-  [docs \textit{documentation of the project}
-  ]
-  [models \textit{trained model binaries}
-  ]
-  [notebooks \textit{Jupyter notebooks used for exploration}
-  ]
-  [references \textit{references and attributions for the code}
-  ]
-  [reports \textit{written reports such as this thesis}
-  ]
-  [src \textit{all code}
-    [data \textit{code related to acquisition and processing of data}
-    ]
-    [models \textit{code related to training the models}
-    ]
-    [streaming \textit{code used for streaming data}
-    ]
-    [visualization \textit{code used to visualize results}
-    ]
-  ]
-]
-        % @formatter:on
+          for tree={
+            font=\ttfamily,
+            grow'=0,
+            child anchor=west,
+            parent anchor=south,
+            anchor=west,
+            calign=first,
+            inner xsep=7pt,
+            edge path={
+              \noexpand\path [draw, \forestoption{edge}]
+              (!u.south west) +(7.5pt,0) |- (.child anchor) pic {folder} \forestoption{edge label};
+            },
+            before typesetting nodes={
+              if n=1
+                {insert before={[,phantom]}}
+                {}
+            },
+            fit=band,
+            before computing xy={l=15pt},
+          }
+        [Thesis
+          [data \textit{all data}
+            [external \textit{data from external sources}
+            ]
+            [interim \textit{data that has started\, but not finished processing}
+            ]
+            [processed \textit{data that is ready to be used}
+            ]
+            [raw \textit{collected\, yet unprocessed data}
+            ]
+          ]
+          [docs \textit{documentation of the project}
+          ]
+          [models \textit{trained model binaries}
+          ]
+          [notebooks \textit{Jupyter notebooks used for exploration}
+          ]
+          [references \textit{references and attributions for the code}
+          ]
+          [reports \textit{written reports such as this thesis}
+          ]
+          [src \textit{all code}
+            [data \textit{code related to acquisition and processing of data}
+            ]
+            [models \textit{code related to training the models}
+            ]
+            [streaming \textit{code used for streaming data}
+            ]
+            [visualization \textit{code used to visualize results}
+            ]
+          ]
+        ]
     \end{forest}
+    % @formatter:on
 \end{figure}
-% TODO maybe uncomment this and remove the references directory from the forest above
-% Since few of the externally sourced parts of code required attribution, and there was little previous work to reference in code, the \texttt{/references} directory remained unused and was removed.
+
 Additionally, a \texttt{/streaming} directory was created under \texttt{/src}, which accommodates all streaming-related modules.
-Beyond the structure given by the cookie cutter, further down in the directory tree, feature-based separation is employed,
+Below the structure given by the cookie cutter, further down in the directory tree, feature-based separation is employed,
 to make the code easily expandable with further analysis and modeling beyond what is implemented in this thesis.
-A part of the folder structure showcasing this project structure can be seen in the \texttt{notebooks} directive, shown in~\ref{forest:featurebased}.
+A part of the folder structure showcasing this structure can be seen in the \texttt{notebooks} directive, shown in~\ref{forest:featurebased}.
 
 
-% another forest
+\begin{figure}
+    \caption{The feature-based separation employed on lower levels of the project structure}
+    \label{forest:featurebased}
+    % @formatter:off
+    \begin{forest}
+          for tree={
+            font=\ttfamily,
+            grow'=0,
+            child anchor=west,
+            parent anchor=south,
+            anchor=west,
+            calign=first,
+            inner xsep=7pt,
+            edge path={
+              \noexpand\path [draw, \forestoption{edge}]
+              (!u.south west) +(7.5pt,0) |- (.child anchor) pic {folder} \forestoption{edge label};
+            },
+            before typesetting nodes={
+              if n=1
+                {insert before={[,phantom]}}
+                {}
+            },
+            fit=band,
+            before computing xy={l=15pt},
+          }
+          [notebooks \textit{Jupyter notebooks used for exploration}
+            [datasets \textit{All notebooks used to explore data}
+            ]
+            [topic_modeling \textit{Notebooks used for topic modeling}
+            ]
+            [sentiment_analysis \textit{Notebooks used for sentiment analysis}
+            ]
+            [combination \textit{Notebooks used to combine topic modeling and sentiment analysis}
+            ]
+          ]
+    \end{forest}
+    % @formatter:on
+\end{figure}
 
 
-Using the DS cookie cutter, except the streaming folder is one under source because it is used by data to collect training data and by visualization for the dashboard.
-Generally a modular approach that can be easily expanded with further analysis/monitoring beyond the LDA/Sentiment Analysis with Naive Bayes combination has been build.
+% TODO figure out what to do with this
 
+%\section{Architecture}
+%\label{sec:architecture}
 
-\section{Architecture}
-\label{sec:architecture}
+%Explaining the choice of architecture with some figures.
+%architecture diagram from the book?
+%Explaining how all the previously mentioned technologies work together
+%Processing Data in motion, page 49
+%In our case, we only have one execution node, but Kafka and Spark are designed such that there should not be a problem with more nodes
 
-Explaining the choice of architecture with some figures.
-% TODO architecture diagram from the book
-Explaining how all the previously mentioned technologies work together
-
-Processing Data in motion, page 49
-
-In our case, we only have one execution node, but Kafka and Spark are designed such that there should not be a problem with more nodes
-
-% TODO do this at then end, its not perfectly clear what to put here right now
