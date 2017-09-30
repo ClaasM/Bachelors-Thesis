@@ -2,7 +2,7 @@
 \chapter{Dashboard}
 \label{ch:dashboard}
 
-Since the one of the goals of this thesis was to make these analyses available to a broader,
+Since one of the goals of this thesis was to make these analyses available to a broader,
 semi-technical audience, as described in~\ref{ch:goals},
 a user-friendly streaming dashboard was created.
 \\
@@ -16,7 +16,8 @@ making it one of the most important chapters.
 
 To make it easily accessible, it was decided to implement the dashboard as a web-based application.
 Since it has to perform the analyses on streamed data from Twitter,
-and the streaming API is rate limit as described in~\ref{subsec:streaming},
+and the streaming API is rate limit in the number of connections that can be opened,
+as described in~\ref{subsec:streaming},
 each user needs to authenticate with a Twitter account.
 That way, the application can scale with the number of users,
 without the number of connection requests being limited by the application-rate-limit.
@@ -60,15 +61,14 @@ minification, transpilation etc. were used.
 \section{Dashboard Code Structure}
 \label{sec:dashboardCodeStructure}
 
-The dashboard application is located under \texttt{Thesis/src/visualization} in the structure of the whole thesis explained
-in~\ref{forest:dscookiecutter}.
+In the structure of the whole thesis explained
+in~\ref{forest:dscookiecutter}, the dashboard application is located under \texttt{Thesis/src/visualization}.
 This directory does not contain the code used for creating and analyzing the stream,
 which, as described in~\ref{sec:projectStructure}, is located under \texttt{Thesis/streaming}.
 On the first level, the structure is type-based, separating between client- and server-related code.
 Since the type of asset (python-scripts for the server-related code, HTML/CSS/Javascript for the client-related code)
 remains constant on every level below that, the structure is then switched to a feature-based one.
 With this structure, full advantage can be taken of the modular nature of AngularJS~\cite{angularDocs}.
-% TODO search for Javascript to make casing/hyphenation consistent
 The structure of the dashboard-application part of the project can be seen in~\ref{forest:dashboard}.
 
 \begin{figure}
@@ -116,14 +116,12 @@ The structure of the dashboard-application part of the project can be seen in~\r
     % @formatter:on
 \end{figure}
 
-\section{Implementation and Testing}
+\section{Implementation}
 \label{sec:implementation}
 
-%TODO put some vital code pieces in the appendix
-
 Updating the settings was implemented as a HTML-form, styled with Bootstrap~\cite{bootstrapDocs},
-and allows selecting which stream to analyze and modifying all its parameters as per the documentation~\cite{twitterDocs},
-also explained in~\cite{subsec:streaming}.
+which allows selecting which stream to analyze, and enables the user to modify all its parameters
+described in the documentation~\cite{twitterDocs} and~\cite{subsec:streaming}.
 A screenshot of the settings dialog of the dashboard can be seen in~\ref{fig:dashboard-settings}.
 
 \begin{figure}
@@ -139,16 +137,16 @@ which then closes the existing stream (if any), and opens a stream with the new 
 Incoming statuses are relayed into the Kafka messaging system described in~\ref{subsec:kafka}.
 Kafka then distributes the statuses to the Spark execution nodes as described in~\ref{subsec:spark}.
 \\
-Preprocessing, tokenization, analyses and classifications was combined into one sparkjob.
-This saves bandwidth, as some data like the dictionary might otherwise be transmitted to the execution nodes twice,
+Preprocessing, tokenization, analyses and classifications were combined into one sparkjob.
+This saves bandwidth, as some data like the dictionary might otherwise be transmitted to the same execution nodes twice,
 since both sentiment analysis and topic modeling use it.
 Also, this way, each status only needs to go through one execution node,
 and the computational power required per status is still small enough for Kafka to distribute them efficiently.
 Furthermore, this makes it easier to combine the results of sentiment analysis and topic modeling later on.
 However, as explained in~\ref{subsec:nltk}, the NLTK is meant for teaching and research,
 and the naive bayes classifier built with it did not meet the performance demands in a streaming scenario,
-so an exact replica of the classifier was built using scikit~\cite{scikitDocs}, and used instead.
-The resulting function, applied on the incoming statuses on the execuption nodes, can be seen in~\ref{fig:spark_job}
+so an exact replica of the classifier was built using scikit~\cite{scikitDocs}, and was used instead.
+The resulting function, applied on the incoming statuses on the execution nodes, can be seen in~\ref{fig:spark_job}
 
 \begin{figure}
     \caption{Example usage of the NLTK in a Python shell}
@@ -190,26 +188,29 @@ The resulting function, applied on the incoming statuses on the execuption nodes
 \end{figure}
 
 The update containing the results and the tweet itself is then sent to the master node,
-which is also the server as seen in~\ref{fig:architecture},
-and sent to the client via a websocket.
+which is also the server, as seen in~\ref{fig:architecture}.
+The server then sends it to the client via a websocket.
 \par
 The client keeps a FIFO-queue of all incoming updates, facilitating a sliding window of the analysed statuses.
 This way, a moving average can be calculated on the values, which represents the overall, \textit{average},
-sentiment and topics on Twitter, without too much delay.
+sentiment and topics on the stream, without too much delay.
 The size of this queue, or \textit{window size}, has to be chosen carefully to reduce noise without suppressing actual signals.
 A good window size was found to be \texttt{200}.
-As described in~\ref{sec:requirement}, the visualizations needed to be changed to incorporate a time-line.
-To visualize changes in the incoming tweets in real time, the results were plotted in a continually moving line chart over time.
+As described in~\ref{sec:requirement}, the visualizations needed to be changed to incorporate a timeline.
+To visualize changes in the incoming statuses live, the results were plotted in a continually moving line chart over time.
 The library Smoothie Chart~\cite{smoothieDocs} was used to implement these charts.
-For all of these charts, one vertical gridline represents one second.
-\par % testing TODO maybe subsection
+For all of these charts, one vertical section represents one second.
+
+\section{Testing}
+\label{sec:testing}
+
 For testing, the filter stream was used,
 the language was set to english (since our models are trained on english data only),
 and only one keyword was tracked.
-% First test: sentiment TODO again, these should be sub
+\par
 First, the keyword was set to\texttt{iPhone},
 and the stream was left running until the queue was filled and all results calculated from fewer elements
-(which might look noisy) were no longer visible on the time-line. % TODO is timeline not a word? Make consistent!
+(which might look noisy) were no longer visible on the timeline.
 Then, to artificially provoke a change in sentiment,
 the streaming settings were updated to only track the keyword \texttt{people} without resetting the charts or the queue (and therefore the moving average).
 This illustrates what a sudden change in sentiment for a stream would look like if it were observed naturally.
@@ -222,13 +223,12 @@ The resulting graph, and the associated values, can be seen in~\ref{fig:dashboar
     \includegraphics[width=10cm]{../images/dashboard_sentiment.png}
 \end{figure}
 
-% Second test
-4 and 9, at the cost of 5
+\par
 After running the stream with these settings for a while, a natural change in topics was observed, which can be seen in~\ref{fig:dashboard-topics}.
-Even though the keyword was still \texttt{people}, and the dominating topic was, obviously, topic number 5,
+Even though the keyword was still \texttt{people}, and the dominating topic was, as expected, topic number 5,
 for which this keyword is one of the most likely ones, the prevalence of this topic decreased in favor of topics 4 and 9,
 indicating a wave of tweets associated with these topics occurring at that moment.
-These events could be observed regularly, and might even indicate bot activity~\cite{chu2012detecting}.
+These events were observed regularly, and might even indicate bot activity~\cite{chu2012detecting}.
 
 \begin{figure}
     \centering
@@ -237,8 +237,7 @@ These events could be observed regularly, and might even indicate bot activity~\
     \includegraphics[width=10cm]{../images/dashboard_topics.png}
 \end{figure}
 
-% Third test
-
+\par
 To calculate the sentiment by topic for the combination-visualization,
 the sliding window was set to 1000, since topics with little prevalence and few opinionated statuses
 (those that are labeled positive or negative) would give very noisy results otherwise.
@@ -247,9 +246,9 @@ That window size was found to give the right balance between reducing noise and 
 Even though the sentiments by topic were mostly free of noise, they did not converge,
 indicating that some topics have an inherently different sentiment.
 \par
-As with the visualization of sentiment, % TODO reference here if that becomes a subsection
+As with the visualization of sentiment,
 the settings were changed from tracking \texttt{apple} to tracking \texttt{weekend}, to illustrate a change in sentiment by topic.
-This still gave interesting results, however, showing that depending on which keywords the stream is parameterized with,
+This still gave interesting results, showing that depending on which keywords the stream is tracking,
 the sentiment per topic differs.
 The resulting graph and associated values can be seen in~\ref{fig:dashboard-sentiment-by-topic}.
 
@@ -260,5 +259,4 @@ The resulting graph and associated values can be seen in~\ref{fig:dashboard-sent
     \includegraphics[width=10cm]{../images/dashboard_sentiment_by_topic.png}
 \end{figure}
 
-\par
 The part of the dashboard showing actual statuses coming in to give the user a feeling for the stream is not shown here due to Twitter's TOS.
