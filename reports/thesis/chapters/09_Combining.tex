@@ -2,11 +2,11 @@
 \chapter{Combining Sentiment Analysis and Topic Modeling}
 \label{ch:combiningSentimentAnalysisAndTopicModeling}
 
-% TODO write about "Joint sentiment/topic model for sentiment analysis" here or in the related-work section
+% TODO write about "Joint sentiment/topic model for sentiment analysis" here and/or in the related-work section
 
 In this chapter, the best sentiment analysis model from~\ref{ch:sentimentAnalysis}, naive Bayes,
 is combined with the topic model built in~\ref{ch:topicModeling}, an LDA topic model,
-to perform the sentiment analysis by topic model referred to in~\ref{ch:backgroundTheory}.
+to perform the sentiment analysis by topic model referred to in~\ref{sec:backgroundTheory}.
 \\
 This is achieved by simply performing the sentiment analysis on a Twitter status and attributing the result to each topic,
 weighed by the percentage the status belongs to that topic given by the topic model.
@@ -17,7 +17,7 @@ A pseudo-code implementation of that can be seen in~\ref{pseudo_code:sentiment_t
     \label{pseudo_code:sentiment_topic_summing}
     % @formatter:off
     \begin{algorithmic}
-        \State $topic\_sentiments \gets {}$ % TODO make sure that {} is the right way to init an object in pseudocode
+        \State $topic\_sentiments \gets {}$ %
         \For{$status$ in $statuses$}
             \State $topic\_probabilities \gets LDA(status)$
             \State $sentiment \gets naive_bayes(status)$
@@ -30,12 +30,13 @@ A pseudo-code implementation of that can be seen in~\ref{pseudo_code:sentiment_t
 \end{figure}
 
 This results in a 2-dimensional array where all values sum up to the number of statuses,
-since for each status the topic-probabilites sum up to 1.
-A table showing the results for each topic with relative as well as absolute values can be seen in~\ref{tab:combination}.
+since for each status the topic-probabilities sum up to 1.
+This was then performed on the sample stream dataset collected in~\ref{sec:streamingSampleDataset}.
+A table showing the results for each topic with relative as well as absolute values for the sentiment classes  can be seen in~\ref{tab:combination}.
 The table also shows the sum of all probabilities, and the percentage of statuses in that topic.
 
 \begin{table}
-    \caption{Absolute and relative results of the sentiment-by-topic analysis.}
+    \caption{Absolute and relative results of the sentiment-by-topic analysis on the sample stream dataset.}
     \label{tab:combination}
     %\resizebox{\textwidth}{!}{%
     \begin{tabular}{l l l l l l l l l l l l} %
@@ -76,18 +77,23 @@ The table also shows the sum of all probabilities, and the percentage of statuse
 To visualize the sentiment by topic,
 the network graph used in~\ref{ch:topicModeling} was extended.
 The size of a node representing a topic indicates the topics' prevalence in the dataset.
-The color, on a hue-spectrum from red to green, represents the polarity.
-% TODO  seen in \ref{fig:hue_spectrum},
-On a 360\degree hue-spectrum in the HSV-color-space, 0\degree is red, and 120\degree is green.
+The color, on a hue-spectrum from red to green represents the polarity.
+On a 360\degree hue-spectrum in the HSV-color-space, as seen in~\ref{fig:hue_spectrum}, 0\degree is red, and 120\degree is green.
+
+\begin{figure}
+    \centering
+    \caption{Hue-spectrum~\cite{hueSpectrum}}
+    \label{fig:hue_spectrum}
+    \includegraphics[width=\textwidth]{../images/hue_spectrum.png}
+\end{figure}
+
 The opacity is determined by the subjectivity.
 The exact formulae can be seen in~\ref{math:visualization}.
 
-
 \begin{figure}
-    \caption{Definition of precision, recall and F-measure~\cite{Hong2010}.}
+    \caption{The formulae used to extend the network graph }
     \label{math:visualization}
     \begin{align*}
-        % TODO proper variable names, introduced at the beginning, i.e. p = sum of "positive" probabilites for topic
         size = positive + negative + neutral + irrelevant
         hue = positive / (positive + negative)
         opacity = (positive + negative) / (positive + negative + neutral)
@@ -96,10 +102,10 @@ The exact formulae can be seen in~\ref{math:visualization}.
 \end{figure}
 
 To make these values visually more differentiable, they were then scaled.
-Hue was linearly scaled s.t. the smallest value was 0\degree (red) and the biggest value was 120\degree (green).
-The saturation was linearly scaled s.t. the smallest opacity was 0\%,
+Hue was linearly scaled such that the smallest value was 0\degree (red) and the biggest value was 120\degree (green).
+The saturation was linearly scaled such that the smallest opacity was 0\%,
 and the biggest opacity was 80\%.
-20\% were then added to each node so that each node would be visible.
+20\% were then added to each node, making sure each node is visible.
 The size was linearly scaled to be between 0 and 2000.
 The resulting network graph can be seen in~\ref{fig:combined_network_graph}.
 
