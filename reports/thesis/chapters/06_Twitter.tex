@@ -274,6 +274,24 @@ to give reproducible results.
 The main focus will be the sample stream, since it gives a representative sample of all activity on Twitter.
 While these streaming endpoints are not rate limited in the number of entities streamed,
 they are limited in regards to the number of connection requests any one user or application can make.
+To give a feeling for the rate at which statuses will need to be analyzed,
+the number of statuses per second for two different streams were recorded over a 10 second period.
+The first stream was the sample stream, with the language set to english.
+The second stream was the filter stream, tracking only the keyword \texttt{iPhone}, and the language also set to english.
+The data was recorded on the 30$^th$ of September 2017.
+The results can be seen in~\ref{fig:stream_frequency}.
+
+% include diagram
+\begin{figure}
+    \centering
+    \caption{The number of incoming statuses per second for 2 different streams}
+    \label{fig:sanders_sentiment}
+    \includegraphics[width=10cm]{../figures/stream_frequencies.pdf}
+\end{figure}
+
+It has to be noted that the results are not representative of the share of statuses containing the keyword \texttt{iPhone},
+since the Twitter streaming API only sends an indeterminate, small part of all statuses posted~\cite{twitterDocs}.
+
 \par
 Compared to the general use-case for Kafka shown in~\ref{fig:kafka}, in this thesis,
 every producer will produce events for exactly one topic, with the producer being a specific Twitter stream and the topic beint a unique identifier for it.
