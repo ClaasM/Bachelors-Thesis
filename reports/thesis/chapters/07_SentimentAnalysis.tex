@@ -2,11 +2,10 @@
 \chapter{Sentiment Analysis}
 \label{ch:sentimentAnalysis}
 
-% TODO redo all of these analyses, filter out non-english tweets for all these
 Semantic orientation describes the strength and polarity of words and phrases used in text.
 Extraction of subjectivity and polarity of the text from the semantic orientation of its words and phrases is called sentiment analysis.
 The huge volume of text-based interactions on social media make it difficult
-to read and organize them and analyze their sentiment by humans.
+to read and organize them, and manually analyze their sentiment.
 Focusing on single instances of interaction also makes it difficult to extract the overall sentiment,
 necessitating a solution that performs and summarizes the analysis automatically, fast, and gives human-comprehensible results~\cite{Sarlan2014}.
 
@@ -49,10 +48,10 @@ The Python-code achieving this encoding can be seen in~\ref{code:extract_feature
     \label{code:extract_features}
     % @formatter:off
     \begin{minted}{python}
-features = {} # Contains every word in the dictionary and whether the status contains it.
-# Using the previously created dictionary
-for word in dictionary:
-    features['contains(\%s)' \% word] = (word in document_words)
+        features = {} # Contains every word in the dictionary and whether the status contains it.
+        # Using the previously created dictionary
+        for word in dictionary:
+            features['contains(\%s)' \% word] = (word in document_words)
     \end{minted}
     % @formatter:on
 \end{figure}
@@ -60,8 +59,8 @@ for word in dictionary:
 NLTK's implementation of this algorithm is used~\cite{nltkDocs}.
 This implementation assumes the distribution of each feature $P(feature i|label)$ to be multinomial,
 making it a multinomial naive Bayes, which has shown the best performance in previous work~\cite{Go2009}.
-The data from the hydrated Sanders dataset created in~\ref{sec:theSandersDataset} was shuffled and split into $10\%$ test data and $90\%$ training data.
-This classifier achieved an accuracy of $74\%$.
+The data from the hydrated Sanders dataset created in~\ref{sec:theSandersDataset} was shuffled and split into 10\% test data and 90\% training data.
+This classifier achieved a training accuracy of 75\%.
 In addition to accuracy, the performance measures precision, recall and F-measure,
 the definition of which can be seen in~\ref{math:precision_recall_fmeasure}, were computed.
 
@@ -84,7 +83,7 @@ the definition of which can be seen in~\ref{math:precision_recall_fmeasure}, wer
 Intuitively, precision and recall can be understood the percentage of positives that are real positives,
 and the percentage of real positives that were labeled as positives, respectively.
 The F-measure is their harmonic mean.
-The measures, for each sentiment-class, can be seen in~\ref{tab:mnb_results}.
+These measures, for each sentiment-class, can be seen in~\ref{tab:mnb_results}.
 
 \begin{table}
     \caption{Sentiment classification results using multinomial naive Bayes}
@@ -108,7 +107,6 @@ The measures, for each sentiment-class, can be seen in~\ref{tab:mnb_results}.
     \end{tabular}}
 \end{table}
 
-% TODO maybe a bit of interpretation
 Class distribution and absolute counts for each class can be seen in~\ref{tab:naive_bayes_results}.
 
 \begin{table}
@@ -137,7 +135,7 @@ Class distribution and absolute counts for each class can be seen in~\ref{tab:na
 \end{table}
 
 When the dictionary created from the sample stream was used to extract the features as shown in~\ref{code:extract_features},
-the accuracy dropped to $62\%$, confirming that the Sanders dataset, and the dictionary created from it, is highly topical.
+the accuracy dropped to 62\%, confirming that the Sanders dataset, and the dictionary created from it, is highly topical.
 
 \subsection{NLTK Sentiment Analyzer}
 \label{subsec:nltksentimentanalyzer}
@@ -167,7 +165,6 @@ these results indicate that marking negated words does not have the same positiv
 \subsection{VADER}
 \label{subsec:vader}
 
-% TODO Interestingly, Vader performs better on the dataset provided by the nltk (which is collected using...) than the sanders-dataset
 VADER (\textbf{V}alence \textbf{A}ware \textbf{D}ictionary for s\textbf{E}ntiment \textbf{R}easoning))
 is a gold standard of lexical features together with five general rules embodying grammatical and syntactical conventions
 that were devised in a human-centered approach.
@@ -177,10 +174,19 @@ NLTK's implementation of VADER returns scores between 0 and 1 for positivity, ne
 as well as a compound score between -1 and 1, where the direction represents polarity and the magnitude represents subjectivity.
 A test was conducted involving only the statuses labeled "positive", "negative" or "neutral",
 to avoid the ambiguity of the "irrelevant"-label.
-The optimal threshold for which a status will be classified as neutral was chosen
+The optimal threshold for which a status will be classified as neutral was found
 at an absolute value for the compound score of 0.8, giving an accuracy of 68\%.
-% TODO insert {-bracketed mathematical respresentation of that here
-Still, this accuracy remained below that of the naive Bayes approach at 75\% when using the same, filtered statuses.
+
+\begin{equation}
+   class(x) =
+   \begin{cases}
+     neutral & \text{for } |compound\_sentiment(x)| \textless 0.8 \\
+     positive & \text{for } compound\_sentiment(x) \geq 0.8 \\
+     negative & \text{for } compound\_sentiment(x) \leq -0.8 \\
+   \end{cases}
+\end{equation}
+
+Still, this accuracy remained below that of the naive Bayes approach at 74\% when using the same filtered subset of statuses.
 Detailed results can be seem in~\ref{tab:vader_results}.
 
 \begin{table}
@@ -203,6 +209,34 @@ Detailed results can be seem in~\ref{tab:vader_results}.
     \end{tabular}}
 \end{table}
 
+Interestingly, VADER performs better on the dataset provided by the NLTK than the sanders-dataset.
+The demonstration of this can be seen in~\ref{code:vader_demo}.
+However, as described in~\ref{sec:theSandersDataset}, it is not known how the sample dataset in the NLTK was collected and labeled,
+which is why these results are disregarded.
+
+\begin{figure}
+    \caption{The demonstration of VADER using the sample dataset from the NLTK}
+    \label{code:vader_demo}
+    % @formatter:off
+    \begin{minted}{python}
+        import nltk.sentiment.util
+        nltk.sentiment.util.demo_vader_tweets()
+
+        Loaded 1 tweets
+        (...)
+        Loaded 5000 tweets
+
+        Accuracy: 0.861
+        F-measure [neg]: 0.8524416135881105
+        F-measure [pos]: 0.8686200378071833
+        Precision [neg]: 0.9083710407239819
+        Precision [pos]: 0.8234767025089605
+        Recall [neg]: 0.803
+        Recall [pos]: 0.919
+    \end{minted}
+    % @formatter:on
+\end{figure}
+
 \subsection{TextBlob}
 \label{subsec:textblob}
 
@@ -214,7 +248,6 @@ TextBlob returns a polarity score between -1 and 1 as well as a subjectivity sco
 As in the previous subsection, the Sanders dataset is used for evaluation, disregarding statuses labeled as irrelevant.
 A scatter plot of the polarity and subjectivity score on the axes and label represented as the color can be seen in~\ref{fig:textblob}.
 
-
 \begin{figure}
     \centering
     \caption{Scatter plot of the polarity and subjectivity score computed by TextBlob on the axes and label represented as the color.}
@@ -224,17 +257,27 @@ A scatter plot of the polarity and subjectivity score on the axes and label repr
 
 The plot clearly shows the algorithms incapability of distinguishing subjective from neutral statuses,
 which is why a quantitative accuracy test was conducted using only tweets labeled as negative or positive.
-% TODO insert {-bracketed mathematical respresentation of that here
+
+\begin{equation}
+   class(x) =
+   \begin{cases}
+     positive & \text{for } compound\_sentiment(x) \geq 0 \\
+     negative & \text{for } compound\_sentiment(x) \textless 0\\
+   \end{cases}
+\end{equation}
+
 The TextBlob's sentiment analysis algorithm achieved an accuracy of 64\% on this filtered dataset,
-whereas the current frontrunner, the multinomial naive bayes, achieved an accuracy of 72\% on the same filtered dataset.
+whereas the current frontrunner, the multinomial naive bayes approach,
+achieved an accuracy of 72\% on the same filtered subset of statuses.
 
-\subsection{Google Cloud}
-\label{subsec:googlecloud} % TODO korrekte Bezeichnung
+\subsection{Google Cloud Platform}
+\label{subsec:googlecloud}
 
-The natural language API by Google Cloud offers sentiment analysis as a service.
-For any documented, provided in a supported language, the API returns a magnitude starting from 0 with an undocumented upper bound
+The natural language API by the Google Cloud Platform offers sentiment analysis as a service.
+For any document, provided in a supported language, the API returns a magnitude starting from 0, with an undocumented upper bound
 (although the highest observed was 4.1) and a score between -1 and 1.
-Magnitude and subjectivity as well as score and polarity are similarly described in the their relative documentation~\cite{gcloudDocs}\cite{textblobDocs}.
+Magnitude and subjectivity as well as score and polarity are similarly described in the their respective documentations~\cite{gcloudDocs}\cite{textblobDocs},
+which is why they are assumed to mean the same.
 \par
 The API is billed on a per-request basis, so all statuses from the Sanders dataset were classified once and persisted in a CSV-file.
 Again, statuses labeled as irrelevant were filtered out to avoid ambiguity.
@@ -251,13 +294,21 @@ As for the VADER-classifier in~\ref{subsec:vader}, these values are mapped to th
 choosing an optimal threshold for which a status will be classified as neutral.
 The optimal magnitude-threshold was found at a magnitude of 0.9, giving an accuracy of 49\%,
 which is just marginally better than guessing neutral, with 47\% of statuses being labeled neutral.
-Without neutral-labeled statuses, an accuracy of 73\% was achieved.
+
+\begin{equation}
+   class(x) =
+   \begin{cases}
+     neutral & \text{for } |compound\_sentiment(x)| \textless 0.9 \\
+     positive & \text{for } compound\_sentiment(x) \geq 0.9 \\
+     negative & \text{for } compound\_sentiment(x) \leq -0.9 \\
+   \end{cases}
+\end{equation}
 
 \section{Comparison and Conclusion}
 \label{sec:comparison}
 
-When comparing the results of the different methods presented, it is suprising to see the simplest,
-a multinomial naive Bayes, turned out to be most accurate.\\
+When comparing the results of the different methods presented, it is surprising to see the simplest,
+a multinomial naive Bayes, turned out to be the most accurate.\\
 This indicates that short text statuses on micro-blogs like Twitter present a special challenge to sentiment analysis
 that cannot be solved with current approaches.
 Additions to existing algorithms, like marking negated words, that showed improved results with regular texts,
@@ -265,11 +316,16 @@ showed no improvement to the multinomial naive Bayes classifier when working wit
 Furthermore, even methods specifically designed for this special challenge, like VADER,
 were outperformed by a multinomial naive Bayes classifier.
 \par
-However, the results of these tests need to be handled carefully,
-since the training dataset is highly topical as shown by the performance discrepancies between different dictionaries in~\ref{subsec:naivebayes}.
-Also, when comparing the sentiment distribution of the Sanders dataset, seen in~\ref{fig:sanders_sentiment},
-to the sentiment distribution of the sample stream dataset as classified by the multinomial naive bayes, seen in~\ref{fig:sample_sentiment},
-it seems to be more opinionated, containing fewer statuses labeled as "irrelevant" in favor of positive and negative tweets.
+However, the results of these tests need to be handled carefully.
+As explained in~\ref{sec:theSandersDataset},
+and also indicated by the performance discrepancies between different dictionaries in~\ref{subsec:naivebayes},
+the dataset used is highly topical.
+\par
+The sample stream dataset introduced in~\ref{sec:streamingSampleDataset} was then classified using the multinomial naive bayes classifier from~\ref{subsec:naivebayes}.
+When comparing the sentiment distribution of this dataset, seen in~\ref{fig:sample_sentiment},
+to that of the Sanders dataset, seen in~\ref{fig:sanders_sentiment},
+one can see that it seems to be more opinionated,
+containing fewer statuses labeled as "irrelevant" in favor of positive and negative tweets.
 
 \begin{figure}
     \centering
@@ -279,6 +335,4 @@ it seems to be more opinionated, containing fewer statuses labeled as "irrelevan
 \end{figure}
 
 This indicates that the dataset is not only highly topical, but also not perfectly representative in terms of sentiment.
-
-\par
-The multinomial naive Bayes classifer created in~\ref{subsec:naivebayes} was saved and will be used in the coming chapters.
+Still, the multinomial naive Bayes classifier was saved and will be used in the upcoming chapters.
