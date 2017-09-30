@@ -18,7 +18,7 @@ as seen in~\ref{fig:sample_topic_distribtion_new}.
 This time, topics with top terms that indicate some event, like "mtvhottest", are lower in prevalence,
 in favor of topics with more general terms.\\
 This indicates that while the dashboard can reliably show changes in what users are talking about on Twitter,
-as demonstrated in~\ref{sec:implementation}, % TODO more accurate ref with the new structure
+as demonstrated in~\ref{sec:testing},
 it might not be able to accurately model new, emerging topics.
 \\
 For this reason, it also does not make sense to compare the sentiment by topic distributions,
@@ -34,8 +34,12 @@ to the sentiment distribution observed through the dashboard on the 27$^th$ of S
     \includegraphics[width=\textwidth]{../images/dashboard_sentiment_sample.png}
 \end{figure}
 
+This comparison shows that the sentiment on the stream remained on a similar level than in the sample dataset,
+and did not change as much as the topics did, indicating that while the topics twitter users post statuses about change,
+the overall, average sentiment, remains relatively constant.
+
 \par
-In spite of these imperfections, the dashboard still provides interesting insights and monitoring capabilities.
+In spite of some shortcomings, the dashboard therefore still provides interesting insights and monitoring capabilities.
 \\
 It can, for example, be used to track a companies Twitter feed during a critical event, using the user stream.
 This would provide an objective indication of the events impact on customer sentiment,
