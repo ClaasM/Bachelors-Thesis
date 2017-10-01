@@ -77,8 +77,8 @@ A small example for an object in this format can be seen in~\ref{code:json}.
 \begin{figure}
     \caption{A shortened JSON representation of a fictional Twitter status}
     \label{code:json}
-    \begin{minted}{json}
     % @formatter:off
+    \begin{minted}{json}
     {
         "created_at" : "Fri Jan 20 20:04:05 +0000 2017",
         "id" : "123",
@@ -95,8 +95,8 @@ A small example for an object in this format can be seen in~\ref{code:json}.
             "screen_name" : "user"
         }
     }
-        % @formatter:on
     \end{minted}
+    % @formatter:on
 \end{figure}
 
 \subsection{REST}
@@ -134,7 +134,7 @@ Some examples can be seen in ~\ref{tab:twitter_endpoints}.
 \begin{table}
     \caption{A selection of resources offered by the Twitter REST API~\cite{twitterDocs}}
     \label{tab:twitter_endpoints}
-    %\resizebox{\textwidth}{!}{%
+    \resizebox{\textwidth}{!}{
     \begin{tabular}{lllll} %
         \toprule
         & & \multicolumn{2}{c}{Authentication} & \\
@@ -167,8 +167,7 @@ Some examples can be seen in ~\ref{tab:twitter_endpoints}.
         & Posts a status for the authenticated user
         \\
         \bottomrule
-    \end{tabular}
-    %}
+    \end{tabular}}
 \end{table}
 
 \subsection{Processing Data at Rest and Data in Motion}
@@ -212,11 +211,11 @@ Twitter itself offers 6 different endpoints for 6 different streams, all of whic
 \begin{table}
     \caption{All streams offered by Twitter~\cite{twitterDocs}}
     \label{tab:twitter_streams}
-    %\resizebox{\textwidth}{!}{%
+    \resizebox{\textwidth}{!}{%
     \begin{tabular}{llllll} %
         \toprule
-        & & \multicolumn{2}{c}{Authentication} & \\
-        \cmidrule{3-4}
+        & & & \multicolumn{2}{c}{Authentication} \\
+        \cmidrule{4-5}
         Name
         & Method
         & URI
@@ -254,19 +253,18 @@ Twitter itself offers 6 different endpoints for 6 different streams, all of whic
         & \texttt{site}
         & & &
         \\
-        \cmidrule{2-3}
+        \cmidrule{1-3}
         Retweet stream
-        & \multicolumn{2}{c}{Unknown}
-        & \multicolumn{2}{c}{Not publicly available, disregarded in this thesis} &
+        & \multicolumn{2}{c}{\textit{Unknown}}
+        & \multicolumn{3}{c}{Not publicly available, disregarded}
         \\
-        \cmidrule{2-3}
+        \cmidrule{1-3}
         Firehose
-        & \multicolumn{2}{c}{Unknown}
+        & \multicolumn{2}{c}{\textit{Unknown}}
         & & &
         \\
         \bottomrule
-    \end{tabular}
-    %}
+    \end{tabular}}
 \end{table}
 
 This thesis will work with the sample- and filter-stream, since only these are publicly available and do not depend on a specific user,
@@ -315,7 +313,6 @@ Unfortunately no real statuses can be shown, but~\ref{tab:sanders_sample} shows 
 \begin{table}
     \caption{Some fictional statuses with labels}
     \label{tab:sanders_sample}
-    \resizebox{\textwidth}{!}{%
     \begin{tabular}{lllll} %
         \toprule
         Text
@@ -335,7 +332,7 @@ Unfortunately no real statuses can be shown, but~\ref{tab:sanders_sample} shows 
         & \texttt{irrelevant}
         \\
         \bottomrule
-    \end{tabular}}
+    \end{tabular}
 \end{table}
 
 The resulting dataset was then filtered to only contain english statuses.
@@ -369,7 +366,7 @@ A wordcloud of the statuses collected from the sample stream can be seen in~\ref
     \centering
     \caption{Wordcloud of the statuses collected from the sample stream.}
     \label{fig:wordloud_pre}
-    \includegraphics[width=10cm]{../images/wordcloud_pre.png}
+    \includegraphics[width=12cm]{../images/wordcloud_pre.png}
 \end{figure}
 
 Some of the biggest "words" in the wordcloud are "RT", "it" and "be",
@@ -395,7 +392,7 @@ To achieve consistent results, the same preprocessing and tokenization functions
 The following steps were taken.
 
 \begin{enumerate}
-    \item Precrocessing
+    \item Preprocessing
     \begin{enumerate}
         \item All URL's were removed by using a regular expression matching everything from "http" up to the next whitespace
         \item All punctuation as well as the Twitter-specific characters \texttt{@} and \texttt{\#} were removed
@@ -424,5 +421,5 @@ The change to the wordcloud of the statuses collected from the sample stream aft
     \centering
     \caption{Wordcloud of the statuses collected from the sample stream after preprocessing and tokenization.}
     \label{fig:wordloud_post}
-    \includegraphics[width=10cm]{../images/wordcloud_post.png}
+    \includegraphics[width=12cm]{../images/wordcloud_post.png}
 \end{figure}

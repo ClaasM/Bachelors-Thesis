@@ -25,15 +25,15 @@ The dataset was preprocessed using the preprocessing and tokenization functions 
 The naive Bayes algorithm works by first expressing the probability of a label given the features,
 in this case the sentiment given the bag of words that is the status, with Bayes rule:
 
-\begin{math}
+\begin{equation}
     P(label|features) = \frac{P(label)*P(features|label)}{P(features)}
-\end{math}
+\end{equation}
 
 The algorithm then naively assumes that all features are independent, giving:
 
-\begin{math}
+\begin{equation}
     P(label|features) = \frac{P(label)*P(feature 1|label)*...*P(feature n|label)}{P(features)}
-\end{math}
+\end{equation}
 
 
 The denominator $P(features)$ is not explicitly calculated.
@@ -68,15 +68,16 @@ the definition of which can be seen in~\ref{math:precision_recall_fmeasure}, wer
     \caption{Definition of precision, recall and F-measure~\cite{Hong2010}.}
     \label{math:precision_recall_fmeasure}
     \begin{math}
-        p_t = number of true positives
-        p_f = number of false positives
-        n_t = number of true negatives
-        n_f = number of false negatives
         \\
-        Precision = \frac{p_t}{p_t + p_f}
-        Recall = \frac{p_t}{p_t + n_f}
+        p_t = \textrm{number of true positives}\\
+        p_f = \textrm{number of false positives}\\
+        n_t = \textrm{number of true negatives}\\
+        n_f = \textrm{number of false negatives}\\
         \\
-        F-Measure = \frac{2 \* Precision \* Recall}{Precision + Recall}
+        Precision = \frac{p_t}{p_t + p_f}\\
+        Recall = \frac{p_t}{p_t + n_f}\\
+        \\
+        F-Measure = \frac{2 \* Precision \* Recall}{Precision + Recall}\\
     \end{math}
 \end{figure}
 
@@ -88,7 +89,7 @@ These measures, for each sentiment-class, can be seen in~\ref{tab:mnb_results}.
 \begin{table}
     \caption{Sentiment classification results using multinomial naive Bayes}
     \label{tab:mnb_results}
-    \resizebox{\textwidth}{!}{%
+    \centering
     \begin{tabular}{llll} %
         \toprule
         Sentiment
@@ -104,7 +105,7 @@ These measures, for each sentiment-class, can be seen in~\ref{tab:mnb_results}.
         \\\midrule
         positive & 0.318 & 0.440 & 0.250
         \\\bottomrule
-    \end{tabular}}
+    \end{tabular}
 \end{table}
 
 Class distribution and absolute counts for each class can be seen in~\ref{tab:naive_bayes_results}.
@@ -112,11 +113,12 @@ Class distribution and absolute counts for each class can be seen in~\ref{tab:na
 \begin{table}
     \caption{Sentiment classification using multinomial naive Bayes}
     \label{tab:naive_bayes_results}
-    \resizebox{\textwidth}{!}{%
+    \centering
     \begin{tabular}{lllll} %
         \toprule
         & \multicolumn{2}{c}{Test Data} & \multicolumn{2}{c}{Classification Result}\\
-        \cmidrule{3-4}
+        \cmidrule{2-3}
+        \cmidrule{4-5}
         Sentiment
         & Count
         & Percentage
@@ -131,7 +133,7 @@ Class distribution and absolute counts for each class can be seen in~\ref{tab:na
         \\\midrule
         positive & 41 & 9\%   & 15 & 3\%
         \\\bottomrule
-    \end{tabular}}
+    \end{tabular}
 \end{table}
 
 When the dictionary created from the sample stream was used to extract the features as shown in~\ref{code:extract_features},
@@ -178,12 +180,12 @@ The optimal threshold for which a status will be classified as neutral was found
 at an absolute value for the compound score of 0.8, giving an accuracy of 68\%.
 
 \begin{equation}
-   class(x) =
-   \begin{cases}
-     neutral & \text{for } |compound\_sentiment(x)| \textless 0.8 \\
-     positive & \text{for } compound\_sentiment(x) \geq 0.8 \\
-     negative & \text{for } compound\_sentiment(x) \leq -0.8 \\
-   \end{cases}
+    class(x) =
+    \begin{cases}
+        neutral & \text{for } |compound\_sentiment(x)| \textless 0.8 \\
+        positive & \text{for } compound\_sentiment(x) \geq 0.8 \\
+        negative & \text{for } compound\_sentiment(x) \leq -0.8 \\
+    \end{cases}
 \end{equation}
 
 Still, this accuracy remained below that of the naive Bayes approach at 74\% when using the same filtered subset of statuses.
@@ -192,7 +194,7 @@ Detailed results can be seem in~\ref{tab:vader_results}.
 \begin{table}
     \caption{Sentiment classification using VADER}
     \label{tab:vader_results}
-    \resizebox{\textwidth}{!}{%
+    \centering
     \begin{tabular}{llll} %
         \toprule
         Sentiment
@@ -206,7 +208,7 @@ Detailed results can be seem in~\ref{tab:vader_results}.
         \\\midrule
         positive & 0.171 & 0.448 & 0.105
         \\\bottomrule
-    \end{tabular}}
+    \end{tabular}
 \end{table}
 
 Interestingly, VADER performs better on the dataset provided by the NLTK than the sanders-dataset.
@@ -259,11 +261,11 @@ The plot clearly shows the algorithms incapability of distinguishing subjective 
 which is why a quantitative accuracy test was conducted using only tweets labeled as negative or positive.
 
 \begin{equation}
-   class(x) =
-   \begin{cases}
-     positive & \text{for } compound\_sentiment(x) \geq 0 \\
-     negative & \text{for } compound\_sentiment(x) \textless 0\\
-   \end{cases}
+    class(x) =
+    \begin{cases}
+        positive & \text{for } compound\_sentiment(x) \geq 0 \\
+        negative & \text{for } compound\_sentiment(x) \textless 0\\
+    \end{cases}
 \end{equation}
 
 The TextBlob's sentiment analysis algorithm achieved an accuracy of 64\% on this filtered dataset,
@@ -296,12 +298,12 @@ The optimal magnitude-threshold was found at a magnitude of 0.9, giving an accur
 which is just marginally better than guessing neutral, with 47\% of statuses being labeled neutral.
 
 \begin{equation}
-   class(x) =
-   \begin{cases}
-     neutral & \text{for } |compound\_sentiment(x)| \textless 0.9 \\
-     positive & \text{for } compound\_sentiment(x) \geq 0.9 \\
-     negative & \text{for } compound\_sentiment(x) \leq -0.9 \\
-   \end{cases}
+    class(x) =
+    \begin{cases}
+        neutral & \text{for } |compound\_sentiment(x)| \textless 0.9 \\
+        positive & \text{for } compound\_sentiment(x) \geq 0.9 \\
+        negative & \text{for } compound\_sentiment(x) \leq -0.9 \\
+    \end{cases}
 \end{equation}
 
 \section{Comparison and Conclusion}
@@ -331,7 +333,7 @@ containing fewer statuses labeled as "irrelevant" in favor of positive and negat
     \centering
     \caption{The distribution of labels in the sample stream dataset.}
     \label{fig:sample_sentiment}
-    \includegraphics[width=10cm]{../figures/sample_sentiment.pdf}
+    \includegraphics[width=12cm]{../figures/sample_sentiment.pdf}
 \end{figure}
 
 This indicates that the dataset is not only highly topical, but also not perfectly representative in terms of sentiment.

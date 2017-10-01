@@ -77,7 +77,7 @@ The structure of the dashboard-application part of the project can be seen in~\r
     % @formatter:off
     \begin{forest}
         for tree={
-            font=\ttfamily,
+            font=\footnotesize,
             grow'=0,
             child anchor=west,
             parent anchor=south,
@@ -128,7 +128,7 @@ A screenshot of the settings dialog of the dashboard can be seen in~\ref{fig:das
     \centering
     \caption{The settings dialog of the dashboard}
     \label{fig:dashboard-settings}
-    \includegraphics[width=10cm]{../images/dashboard_settings.png}
+    \includegraphics[width=\textwidth]{../images/dashboard_settings.png}
 \end{figure}
 
 When clicking the update-button, the current settings are sent to the server via a websocket,
@@ -149,7 +149,7 @@ so an exact replica of the classifier was built using scikit~\cite{scikitDocs}, 
 The resulting function, applied on the incoming statuses on the execution nodes, can be seen in~\ref{fig:spark_job}
 
 \begin{figure}
-    \caption{Example usage of the NLTK in a Python shell}
+    \caption{The function used in the Spark job on incoming statuses}
     \label{fig:spark_job}
     % @formatter:off
     \begin{minted}{python}
@@ -220,7 +220,7 @@ The resulting graph, and the associated values, can be seen in~\ref{fig:dashboar
     \centering
     \caption{The sentiment chart plus values, showing the change in sentiment after changing the stream settings}
     \label{fig:dashboard-sentiment}
-    \includegraphics[width=10cm]{../images/dashboard_sentiment.png}
+    \includegraphics[\textwidth]{../images/dashboard_sentiment.png}
 \end{figure}
 
 \par
@@ -234,7 +234,7 @@ These events were observed regularly, and might even indicate bot activity~\cite
     \centering
     \caption{The topics chart plus values, showing the naturally occuring change in topic distribution}
     \label{fig:dashboard-topics}
-    \includegraphics[width=10cm]{../images/dashboard_topics.png}
+    \includegraphics[\textwidth]{../images/dashboard_topics.png}
 \end{figure}
 
 \par
@@ -256,7 +256,7 @@ The resulting graph and associated values can be seen in~\ref{fig:dashboard-sent
     \centering
     \caption{The sentiment by topic chart plus values, showing the change in sentiment by topic after changing the stream settings}
     \label{fig:dashboard-sentiment-by-topic}
-    \includegraphics[width=10cm]{../images/dashboard_sentiment_by_topic.png}
+    \includegraphics[\textwidth]{../images/dashboard_sentiment_by_topic.png}
 \end{figure}
 
 The part of the dashboard showing actual statuses coming in to give the user a feeling for the stream is not shown here due to Twitter's TOS.

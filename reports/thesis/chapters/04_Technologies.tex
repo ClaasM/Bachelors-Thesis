@@ -71,17 +71,16 @@ In the publish/subscribe paradigm, subscribers register their interest in a cert
 and are asynchronously notified by the system when an event is published that matches the criteria~\cite{Eugster2003}.
 In Kafka, the publishing entities are called producers, and the subscribing entities are called consumers.
 A stream of events (called messages in Kafka) of a particular type that a consumer can subscribe to is defined by a topic~\cite{Kreps2015}.
+\ref{fig:kafka} shows a simplified, typical configuration of a messaging system powered by Kafka.
 
 % include diagram
 \begin{figure}
     \centering
     \caption{Simplified diagram of a typical Kafka setup.}
     \label{fig:kafka}
-    % TODO smaller maybe it somehow fits next to the python table.
-    \includegraphics[width=\textwidth]{../figures/kafka.pdf}
+    \includegraphics[width=10cm]{../figures/kafka.pdf}
 \end{figure}
 
-\ref{fig:kafka} shows a simplified, typical configuration of a messaging system powered by Kafka.
 The Kafka cluster is a set of message brokers, being replicated and running on different machines, that can each contain messages for every topic,
 which are then distributed to the subscribing consumers~\cite{Kreps2015}.
 The system scales vertically, enabling high throughput and redundancy.
@@ -97,6 +96,7 @@ commands large amounts of computing power that cannot be provided by solely scal
 meaning increasing the performance of a single machine.
 Instead, the performance required is achieved by scaling out,
 meaning distributing the computation across multiple machines~\cite{Wolke2010}.
+
 \par % Spark solves it!
 Spark manages this scaling out by abstracting these machines as so-called execution nodes (also called worker nodes or slave nodes),
 on which programs (tasks), called sparkjobs, are run.
@@ -106,7 +106,7 @@ efficiently utilizing multiple cores, as seen in~\ref{fig:spark_processes}.
 % include diagram
 \begin{figure}
     \centering
-    \caption{Spark utilizing multiple cores by spawning Python processes for parallel processing.}
+    \caption{Spark utilizing multiple cores by spawning Python processes \\for parallel processing.}
     \label{fig:spark_processes}
     \includegraphics[width=10cm]{../images/python_processes.png}
 \end{figure}
@@ -144,10 +144,13 @@ see ~\ref{code:simpleParallelization} for a simple example.
     % @formatter:off
     \begin{minted}{python}
         data = [1, 2, 3, 4, 5]
-        # Wrap the data into a RDD, which is distributed across execution nodes by Spark, ready for parallel processing
-        # sc is the so-called streaming context, which provides an interface with the cluster
+        # Wrap the data into a RDD, which is distributed across execution nodes by Spark,
+        # ready for parallel processing
+        # sc is the so-called streaming context,
+        # which provides an interface with the cluster
         distributedData = sc.parallelize(data)
-        # Add a map-action that increments each value, distributed across execution nodes
+        # Add a map-action that increments each value,
+        # distributed across execution nodes
         incrementedData = distributedData.map(lambda a: a + 1)
         # Run a reduce-transformation, which is run on the driver node
         # The RDD is automatically collected (persisted) to the driver node
@@ -170,8 +173,12 @@ as can be seen in the wordcount-example in~\ref{code:wordcount}.
     \begin{minted}{python}
         # Stream the data in 1-second windows
         streaming_context = StreamingContext(sc, 1)  # 1 second window
-        # Connect to a kafka stream, specifying which kafka-topics to consume. See section "Kafka" for an explanation of topics.
-        stream = KafkaUtils.createStream(streaming_context, 'docker:2181', "stream-1", {"topic-1": 1})
+        # Connect to a kafka stream, specifying which kafka-topics to consume.
+        # See section "Kafka" for an explanation of topics.
+        stream = KafkaUtils.createStream(streaming_context,
+                                        'docker:2181',
+                                        "stream-1",
+                                        {"topic-1": 1})
         # Each window, count each word in each line
         counts = stream.flatMap(lambda line: line.split(" ")) \
             .map(lambda word: (word, 1)) \
@@ -196,7 +203,8 @@ A simple example of this can be seen in~\ref{code:factory}.
     \label{code:factory}
     % @formatter:off
     \begin{minted}{python}
-        # Factory to create a match-function that matches a text against a compiled regular expression
+        # Factory to create a match-function that matches a text against
+        # a compiled regular expression
         def matcher(pattern):
             # imports...
             import re
@@ -204,7 +212,8 @@ A simple example of this can be seen in~\ref{code:factory}.
             compiled = re.compile(pattern)
 
             def match(text):
-                # ...are serialized and transmitted to the execution node to be used in the function
+                # ...are serialized and transmitted to the execution node
+                # to be used in the function
                 return re.match(compiled, text)
 
             return match
@@ -239,7 +248,8 @@ A simple exemplary use-case can be seen in~\ref{code:nltk}.
         tokens = nltk.tokenize.word_tokenize(text)
         tokens
         Out[3]: ['the', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog']
-        # It also offers a wrapper-class for text that enables, for example, searching it and displaying the results.
+        # It also offers a wrapper-class for text that enables, for example,
+        # searching it and displaying the results.
         wrapped = nltk.Text(tokens)
         wrapped.concordance("fox")
         Displaying 1 of 1 matches:
@@ -265,7 +275,7 @@ This project structure follows a type-based separation, an explanation of the in
     % @formatter:off
     \begin{forest}
           for tree={
-            font=\ttfamily,
+            font=\footnotesize,
             grow'=0,
             child anchor=west,
             parent anchor=south,
@@ -332,7 +342,7 @@ A part of the folder structure showcasing this structure can be seen in the \tex
     % @formatter:off
     \begin{forest}
           for tree={
-            font=\ttfamily,
+            font=\footnotesize,
             grow'=0,
             child anchor=west,
             parent anchor=south,

@@ -22,7 +22,8 @@ A pseudo-code implementation of that can be seen in~\ref{pseudo_code:sentiment_t
             \State $topic\_probabilities \gets LDA(status)$
             \State $sentiment \gets naive_bayes(status)$
             \For{$topic,probability$ in $topic\_probabilities$}
-                \State $topic\_sentiments[topic][sentiment] \gets topic\_sentiments[topic][sentiment] + probability$
+                \State $topic\_sentiments[topic][sentiment]
+                    \gets topic\_sentiments[topic][sentiment] + probability$
             \EndFor
         \EndFor
     \end{algorithmic}
@@ -38,7 +39,7 @@ The table also shows the sum of all probabilities, and the percentage of statuse
 \begin{table}
     \caption{Absolute and relative results of the sentiment-by-topic analysis on the sample stream dataset.}
     \label{tab:combination}
-    %\resizebox{\textwidth}{!}{%
+    \resizebox{\textwidth}{!}{%
     \begin{tabular}{l l l l l l l l l l l l} %
         \toprule
         & &
@@ -71,7 +72,7 @@ The table also shows the sum of all probabilities, and the percentage of statuse
         8 & miss, sexy, sex, naked, outfit & 79.47 & 11.54\% & 344.14 & 49.97\% & 63.95 & 9.29\% & 201.15 & 29.21\% & 688.71 & 10.72\% \\\midrule
         9 & tell, someone, feel, every, preaching & 74.32 & 10.80\% & 327.11 & 47.54\% & 94.52 & 13.74\% & 192.12 & 27.92\% & 688.05 & 10.71\% \\\midrule
         \\\bottomrule
-    \end{tabular}
+    \end{tabular}}
 \end{table}
 
 To visualize the sentiment by topic,
@@ -84,21 +85,23 @@ On a 360\degree hue-spectrum in the HSV-color-space, as seen in~\ref{fig:hue_spe
     \centering
     \caption{Hue-spectrum~\cite{hueSpectrum}}
     \label{fig:hue_spectrum}
-    \includegraphics[width=\textwidth]{../images/hue_spectrum.png}
+    \includegraphics[width=10cm]{../images/hue_spectrum.png}
 \end{figure}
 
 The opacity is determined by the subjectivity.
 The exact formulae can be seen in~\ref{math:visualization}.
 
 \begin{figure}
-    \caption{The formulae used to extend the network graph }
+    \caption{The formulae used to extend the network graph}
     \label{math:visualization}
-    \begin{align*}
-        size = positive + negative + neutral + irrelevant
-        hue = positive / (positive + negative)
-        opacity = (positive + negative) / (positive + negative + neutral)
-        size = percentage of statuses in that topic \* 2000 && Size between 0 and 2000
-    \end{align*}
+    \begin{math}
+        \\
+        size = positive + negative + neutral + irrelevant\\
+        hue = positive / (positive + negative)\\
+        opacity = (positive + negative) / (positive + negative + neutral)\\
+        prevalence = \textrm{percentage of statuses in that topic}\\
+        size = prevalence \times 2000\\
+    \end{math}
 \end{figure}
 
 To make these values visually more differentiable, they were then scaled.

@@ -62,7 +62,8 @@ The implementation of the dictionary creation process can be seen in~\ref{code:c
                 term_count_dictionary[term] += 1
 
         # keep terms that occur more than once
-        terms = [[(term, term_count_dictionary[term]) for term in tweet if term_count_dictionary[term] > 1] for tweet in tweets]
+        terms = [[(term, term_count_dictionary[term]) for term in tweet
+                if term_count_dictionary[term] > 1] for tweet in tweets]
     \end{minted}
     % @formatter:on
 \end{figure}
@@ -140,7 +141,7 @@ The LDAvis visualization for this model can be seen in~\ref{ldavis}.
     \centering
     \caption{LDAvis visualization of the topic model trained on the sample dataset.}
     \label{fig:ldavis}
-    \includegraphics[width=10cm]{../images/LDAvis.png}
+    \includegraphics[width=\textwidth]{../images/LDAvis.png}
 \end{figure}
 
 \par
