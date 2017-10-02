@@ -4,9 +4,9 @@
 
 When streaming from the sample stream, from which the sample dataset was collected,
 the topic distribution does not approach that of the sample dataset.
-While the topic distribution on the training dataset is close to equally distributed as seen in~\ref{fig:sample_topic_distribution},
+While the topic distribution on the training dataset is close to equally distributed as seen in~\autoref{fig:sample_topic_distribution},
 the same cannot be said for the topic distribution on the same stream on September $27^{th}$ 2017, more than two months later,
-as seen in~\ref{fig:sample_topic_distribtion_new}.
+as seen in~\autoref{fig:sample_topic_distribtion_new}.
 
 \begin{figure}
     \centering
@@ -18,18 +18,18 @@ as seen in~\ref{fig:sample_topic_distribtion_new}.
 This time, topics with top terms that indicate some event, like "mtvhottest", are lower in prevalence,
 in favor of topics with more general terms.\\
 This indicates that while the dashboard can reliably show changes in what users are talking about on Twitter,
-as demonstrated in~\ref{sec:testing},
+as demonstrated in~\autoref{sec:testing},
 it might not be able to accurately model new, emerging topics.
 \\
 For this reason, it also does not make sense to compare the sentiment by topic distributions,
 since the meaning of topics changed.
 \par
-The same comparison was however made for sentiment analysis, comparing the sentiment distribution in the sample dataset, seen in~\ref{fig:sample_sentiment},
-to the sentiment distribution observed through the dashboard on the 27$^th$ of September 2017, seen in~\ref{fig:sample_sentiment_distribtion_new}.
+The same comparison was however made for sentiment analysis, comparing the sentiment distribution in the sample dataset, seen in~\autoref{fig:sample_sentiment},
+to the sentiment distribution observed through the dashboard on the 27$^th$ of September 2017, seen in~\autoref{fig:sample_sentiment_distribtion_new}.
 
 \begin{figure}
     \centering
-    \caption{Sentiment distribution of new data, with the naive bayes model trained on the sanders dataset}
+    \caption{Sentiment distribution of new data, with the naive bayes model trained on the Sanders dataset}
     \label{fig:sample_sentiment_distribtion_new}
     \includegraphics[width=\textwidth]{../images/dashboard_sentiment_sample.png}
 \end{figure}

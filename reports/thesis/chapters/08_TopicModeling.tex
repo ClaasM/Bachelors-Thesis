@@ -9,7 +9,7 @@ on which a similarity measure for the its content can be defined and used to "co
 Topic models are useful when dealing with large quantities of unstructured documents,
 that need to be automatically structured, grouped or filtered for knowledge extraction,
 for example to provide similar/related content at the end of blog entries,
-or to automatically tag content with relevant keywords~\ref{blei2009topic}.
+or to automatically tag content with relevant keywords~\cite{blei2009topic}.
 \par
 In this chapter, methods for topic modeling will be explored,
 and a suitable model for the use-case of this thesis will be determined.
@@ -26,8 +26,8 @@ the models can provide a human-understandable representation of a topic by listi
 Similar to the previous chapter, multiple methods to perform topic modeling will be explained and demonstrated.
 However, since no labeled dataset of a representative sample of statuses on Twitter and their respective topics is available,
 only subjective assessments can be made to their performance.
-Although the Sanders-dataset was collected by filtering a stream for specific keywords as described in~\ref{sec:theSandersDataset},
-and these could be used as labels for a supervised approach such as supervised LDA~\ref{Blei2008},
+Although the Sanders-dataset was collected by filtering a stream for specific keywords as described in~\autoref{sec:theSandersDataset},
+and these could be used as labels for a supervised approach such as supervised LDA~\cite{Blei2008},
 the dataset is not representative of all activity on Twitter and not suitable for training such a model.
 Therefore, only unsupervised approaches will be considered,
 and subjective choices will be made as to what constitutes a "topic" in the context of this thesis,
@@ -40,12 +40,12 @@ Both algorithms use TF-IDF (\textbf{T}erm \textbf{F}requency - \textbf{I}nverse 
 In the TF-IDF scheme, first, a dictionary of terms (words, usually) that the documents are made of is formed.
 In this case, this dictionary will be created by taking all the terms (words) in the dataset,
 and removing those that occur only once, to reduce its size.
-Also, contrary to~\ref{ch:sentimentAnalysis}, in this chapter,
-the tokenization function will also remove stopwords, as described in~\ref{sec:preprocessingAndtermization}.
+Also, contrary to~\autoref{ch:sentimentAnalysis}, in this chapter,
+the tokenization function will also remove stopwords, as described in~\autoref{sec:preprocessingAndTokenization}.
 Another strategy that could've been used for scenarios where comprehensive stopword lists are not available
 would be to remove a percentage or absolute number of most and least frequent terms,
 which have little informativeness since they occur in too many or too few documents.
-The implementation of the dictionary creation process can be seen in~\ref{code:create_corpus}.
+The implementation of the dictionary creation process can be seen in~\autoref{code:create_corpus}.
 
 \begin{figure}
     \caption{Implementation of corpus-creation}
@@ -90,7 +90,7 @@ each of which is characterized as a distribution over words.
 This thesis will provide an outside view of this method, while explaining important hyperparameters and their impact.
 LDA is a bag-of-words model, which means there are no syntax rules.
 \\
-An LDA model takes the TF-IDF model created in~\ref{subsec:tfidf} as an input to determine the dirichlet distributions,
+An LDA model takes the TF-IDF model created in~\autoref{subsec:tfidf} as an input to determine the dirichlet distributions,
 and two major hyperparameters, $\alpha$ and $\eta$,
 both of which are parameters of the internal dirichlet-distributions.
 \\
@@ -110,15 +110,15 @@ When classifying a document, this matrix is used to allocate a distribution of t
 \par
 %First, try the default settings
 For LDA topic modeling, the gensim library was used~\cite{gensimDocs}.
-The dataset used was the streaming sample dataset described in~\ref{sec:streamingSampleDataset},
-since the Sanders dataset is topically not representative of Twitter, as described in~\ref{sec:theSandersDataset}.
+The dataset used was the streaming sample dataset described in~\autoref{sec:streamingSampleDataset},
+since the Sanders dataset is topically not representative of Twitter, as described in~\autoref{sec:theSandersDataset}.
 
 To explore the results and determine the best hyperparameters, LDAvis was used.
 LDAvis plots the topics on a 2D-scatterplot, with the axes being the top 2 principal components
-in the hyperdimensional space of all topics, to visualize topic similarity and overlap~\cite{}.
+in the hyperdimensional space of all topics, to visualize topic similarity and overlap~\cite{ldavis}.
 It can also list the most relevant terms for each topic showing their frequencies in relation to their overall frequencies,
 where relevancy is determined through a formula developed by Sievert \etAl~\cite{sievert2014ldavis},
-which can be seen in~\ref{math:relevance}.
+which can be seen in~\autoref{math:relevance}.
 
 \begin{figure}
     \caption{Relevancy measure used in LDAvis, developed by Sievert \etAl~\cite{sievert2014ldavis}}
@@ -134,8 +134,8 @@ where 0.5 was found to be a good value.
 After some exploration, the best-suited hyperparameters were chosen.
 The number of topics was set to 10.
 $\eta$ was set to 0.01, which also showed good results in previous Twitter topic modeling research~\cite{Hong2010}.
-$\alpha$ is set to "auto", which means gensim learns it from the data provided, and proved to give better results than trying around.
-The LDAvis visualization for this model can be seen in~\ref{ldavis}.
+$\alpha$ is set to "auto", which means gensim learns it from the data provided, and proved to give better results than trial and error.
+The LDAvis visualization for this model can be seen in~\autoref{fig:ldavis}.
 
 \begin{figure}
     \centering
@@ -150,8 +150,8 @@ In the graph, each light-blue node represents a topic.
 For each topic, the 5 terms with the highest probabilities are connected with edges whose weight (thickness) represent the probability
 of that word being in a document of that topic, as computed by the model.
 It can be seen that some topics share terms - however, these shared terms are not very distinct terms.
-The model even successfully modeled trending topics on the evening when the data was collected as described in~\ref{sec:streamingSampleDataset}.
-The network graph can be seen in~\ref{fig:lda_network_graph}
+The model even successfully modeled trending topics on the evening when the data was collected as described in~\autoref{sec:streamingSampleDataset}.
+The network graph can be seen in~\autoref{fig:lda_network_graph}
 
 \begin{figure}
     \centering
@@ -161,7 +161,7 @@ The network graph can be seen in~\ref{fig:lda_network_graph}
 \end{figure}
 
 The training dataset was about equally distributed on the topic, as expected by the definition of LDA~\cite{Blei2003}.
-This can be seen in~\ref{fig:sample_topic_distribution}.
+This can be seen in~\autoref{fig:sample_topic_distribution}.
 
 \begin{figure}
     \centering
@@ -184,7 +184,7 @@ do not necessarily sum up to 1.
 The implementation of NMF in the scikit-learn library was used~\cite{scikitDocs}.
 The number of components (the number of topics in this case) was set to 10 to ensure comparability with the LDA results.
 Although several parameters were explored, the best results were accomplished with the default parameters.
-The resulting network graph can be seen in~\ref{fig:nmf_network_graph}.
+The resulting network graph can be seen in~\autoref{fig:nmf_network_graph}.
 
 \begin{figure}
     \centering

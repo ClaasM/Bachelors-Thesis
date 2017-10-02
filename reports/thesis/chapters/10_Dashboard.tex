@@ -3,12 +3,12 @@
 \label{ch:dashboard}
 
 Since one of the goals of this thesis was to make these analyses available to a broader,
-semi-technical audience, as described in~\ref{ch:goals},
+semi-technical audience, as described in~\autoref{ch:goals},
 a user-friendly streaming dashboard was created.
 \\
 This dashboard puts all the aforementioned theory into practice,
 using the Twitter streaming API instead of data at rest,
-as described in~\ref{subsec:dataAtRest-DataInMotion},
+as described in~\autoref{subsec:dataAtRest-DataInMotion},
 making it one of the most important chapters.
 
 \section{Requirements}
@@ -17,21 +17,21 @@ making it one of the most important chapters.
 To make it easily accessible, it was decided to implement the dashboard as a web-based application.
 Since it has to perform the analyses on streamed data from Twitter,
 and the streaming API is rate limit in the number of connections that can be opened,
-as described in~\ref{subsec:streaming},
+as described in~\autoref{subsec:streaming},
 each user needs to authenticate with a Twitter account.
 That way, the application can scale with the number of users,
 without the number of connection requests being limited by the application-rate-limit.
 \\
-A settings-dialog is required to enable the user to choose between any of the streams explained in~\ref{subsec:streaming},
+A settings-dialog is required to enable the user to choose between any of the streams explained in~\autoref{subsec:streaming},
 and to configure all their respective parameters.
 \\
 To give the user a feeling for the stream he/she configured,
 the 100 most recently streamed statuses are listed in a feed.
 \\
 Since the dashboard will not allow the user to train new models,
-the best model for sentiment analysis, developed in~\ref{ch:sentimentAnalysis},
-the best model for topic modeling, developed in~\ref{ch:topicModeling},
-and the combination of both, developed in~\ref{ch:combiningSentimentAnalysisAndTopicModeling}
+the best model for sentiment analysis, developed in~\autoref{ch:sentimentAnalysis},
+the best model for topic modeling, developed in~\autoref{ch:topicModeling},
+and the combination of both, developed in~\autoref{ch:combiningSentimentAnalysisAndTopicModeling}
 should be used to classify incoming statuses.
 \\
 The results of this classification should be visualized over time,
@@ -42,9 +42,9 @@ necessitating visualizations different to the previously used scatter plots, net
 
 The architecture of the dashboard is a simple client-server architecture.
 To facilitate the analyses of the Twitter stream,
-Kafka was used as a distributed messaging system as described in~\ref{subsec:kafka},
-and Spark was used for distributed processing of the messages, as described in~\ref{subsec:spark}.
-A simplified diagram of the architecture can be seen in~\ref{fig:architecture}.
+Kafka was used as a distributed messaging system as described in~\autoref{subsec:kafka},
+and Spark was used for distributed processing of the messages, as described in~\autoref{subsec:spark}.
+A simplified diagram of the architecture can be seen in~\autoref{fig:architecture}.
 
 \begin{figure}
     \centering
@@ -62,14 +62,14 @@ minification, transpilation etc. were used.
 \label{sec:dashboardCodeStructure}
 
 In the structure of the whole thesis explained
-in~\ref{forest:dscookiecutter}, the dashboard application is located under \texttt{Thesis/src/visualization}.
+in~\autoref{forest:dscookiecutter}, the dashboard application is located under \texttt{Thesis/src/visualization}.
 This directory does not contain the code used for creating and analyzing the stream,
-which, as described in~\ref{sec:projectStructure}, is located under \texttt{Thesis/streaming}.
+which, as described in~\autoref{sec:projectStructure}, is located under \texttt{Thesis/streaming}.
 On the first level, the structure is type-based, separating between client- and server-related code.
 Since the type of asset (python-scripts for the server-related code, HTML/CSS/Javascript for the client-related code)
 remains constant on every level below that, the structure is then switched to a feature-based one.
 With this structure, full advantage can be taken of the modular nature of AngularJS~\cite{angularDocs}.
-The structure of the dashboard-application part of the project can be seen in~\ref{forest:dashboard}.
+The structure of the dashboard-application part of the project can be seen in~\autoref{forest:dashboard}.
 
 \begin{figure}
     \caption{Structure of the dashboard-application part of the project under \texttt{Thesis/src/visualization}}
@@ -121,8 +121,8 @@ The structure of the dashboard-application part of the project can be seen in~\r
 
 Updating the settings was implemented as a HTML-form, styled with Bootstrap~\cite{bootstrapDocs},
 which allows selecting which stream to analyze, and enables the user to modify all its parameters
-described in the documentation~\cite{twitterDocs} and~\ref{subsec:streaming}.
-A screenshot of the settings dialog of the dashboard can be seen in~\ref{fig:dashboard-settings}.
+described in the documentation~\cite{twitterDocs} and~\autoref{subsec:streaming}.
+A screenshot of the settings dialog of the dashboard can be seen in~\autoref{fig:dashboard-settings}.
 
 \begin{figure}
     \centering
@@ -134,8 +134,8 @@ A screenshot of the settings dialog of the dashboard can be seen in~\ref{fig:das
 When clicking the update-button, the current settings are sent to the server via a websocket,
 which then closes the existing stream (if any), and opens a stream with the new settings.
 \par
-Incoming statuses are relayed into the Kafka messaging system described in~\ref{subsec:kafka}.
-Kafka then distributes the statuses to the Spark execution nodes as described in~\ref{subsec:spark}.
+Incoming statuses are relayed into the Kafka messaging system described in~\autoref{subsec:kafka}.
+Kafka then distributes the statuses to the Spark execution nodes as described in~\autoref{subsec:spark}.
 \\
 Preprocessing, tokenization, analyses and classifications were combined into one sparkjob.
 This saves bandwidth, as some data like the dictionary might otherwise be transmitted to the same execution nodes twice,
@@ -143,10 +143,10 @@ since both sentiment analysis and topic modeling use it.
 Also, this way, each status only needs to go through one execution node,
 and the computational power required per status is still small enough for Kafka to distribute them efficiently.
 Furthermore, this makes it easier to combine the results of sentiment analysis and topic modeling later on.
-However, as explained in~\ref{subsec:nltk}, the NLTK is meant for teaching and research,
+However, as explained in~\autoref{subsec:nltk}, the NLTK is meant for teaching and research,
 and the naive bayes classifier built with it did not meet the performance demands in a streaming scenario,
 so an exact replica of the classifier was built using scikit~\cite{scikitDocs}, and was used instead.
-The resulting function, applied on the incoming statuses on the execution nodes, can be seen in~\ref{fig:spark_job}
+The resulting function, applied on the incoming statuses on the execution nodes, can be seen in~\autoref{fig:spark_job}
 
 \begin{figure}
     \caption{The function used in the Spark job on incoming statuses}
@@ -188,7 +188,7 @@ The resulting function, applied on the incoming statuses on the execution nodes,
 \end{figure}
 
 The update containing the results and the tweet itself is then sent to the master node,
-which is also the server, as seen in~\ref{fig:architecture}.
+which is also the server, as seen in~\autoref{fig:architecture}.
 The server then sends it to the client via a websocket.
 \par
 The client keeps a FIFO-queue of all incoming updates, facilitating a sliding window of the analysed statuses.
@@ -196,7 +196,7 @@ This way, a moving average can be calculated on the values, which represents the
 sentiment and topics on the stream, without too much delay.
 The size of this queue, or \textit{window size}, has to be chosen carefully to reduce noise without suppressing actual signals.
 A good window size was found to be \texttt{200}.
-As described in~\ref{sec:requirement}, the visualizations needed to be changed to incorporate a timeline.
+As described in~\autoref{sec:requirement}, the visualizations needed to be changed to incorporate a timeline.
 To visualize changes in the incoming statuses live, the results were plotted in a continually moving line chart over time.
 The library Smoothie Chart~\cite{smoothieDocs} was used to implement these charts.
 For all of these charts, one vertical section represents one second.
@@ -208,23 +208,23 @@ For testing, the filter stream was used,
 the language was set to english (since our models are trained on english data only),
 and only one keyword was tracked.
 \par
-First, the keyword was set to\texttt{iPhone},
+First, the keyword was set to \texttt{iPhone},
 and the stream was left running until the queue was filled and all results calculated from fewer elements
 (which might look noisy) were no longer visible on the timeline.
 Then, to artificially provoke a change in sentiment,
 the streaming settings were updated to only track the keyword \texttt{people} without resetting the charts or the queue (and therefore the moving average).
 This illustrates what a sudden change in sentiment for a stream would look like if it were observed naturally.
-The resulting graph, and the associated values, can be seen in~\ref{fig:dashboard-sentiment}
+The resulting graph, and the associated values, can be seen in~\autoref{fig:dashboard-sentiment}
 
 \begin{figure}
     \centering
     \caption{The sentiment chart plus values, showing the change in sentiment after changing the stream settings}
     \label{fig:dashboard-sentiment}
-    \includegraphics[\textwidth]{../images/dashboard_sentiment.png}
+    \includegraphics[width=\textwidth]{../images/dashboard_sentiment.png}
 \end{figure}
 
 \par
-After running the stream with these settings for a while, a natural change in topics was observed, which can be seen in~\ref{fig:dashboard-topics}.
+After running the stream with these settings for a while, a natural change in topics was observed, which can be seen in~\autoref{fig:dashboard-topics}.
 Even though the keyword was still \texttt{people}, and the dominating topic was, as expected, topic number 5,
 for which this keyword is one of the most likely ones, the prevalence of this topic decreased in favor of topics 4 and 9,
 indicating a wave of tweets associated with these topics occurring at that moment.
@@ -234,7 +234,7 @@ These events were observed regularly, and might even indicate bot activity~\cite
     \centering
     \caption{The topics chart plus values, showing the naturally occuring change in topic distribution}
     \label{fig:dashboard-topics}
-    \includegraphics[\textwidth]{../images/dashboard_topics.png}
+    \includegraphics[width=\textwidth]{../images/dashboard_topics.png}
 \end{figure}
 
 \par
@@ -250,13 +250,13 @@ As with the visualization of sentiment,
 the settings were changed from tracking \texttt{apple} to tracking \texttt{weekend}, to illustrate a change in sentiment by topic.
 This still gave interesting results, showing that depending on which keywords the stream is tracking,
 the sentiment per topic differs.
-The resulting graph and associated values can be seen in~\ref{fig:dashboard-sentiment-by-topic}.
+The resulting graph and associated values can be seen in~\autoref{fig:dashboard-sentiment-by-topic}.
 
 \begin{figure}
     \centering
     \caption{The sentiment by topic chart plus values, showing the change in sentiment by topic after changing the stream settings}
     \label{fig:dashboard-sentiment-by-topic}
-    \includegraphics[\textwidth]{../images/dashboard_sentiment_by_topic.png}
+    \includegraphics[width=\textwidth]{../images/dashboard_sentiment_by_topic.png}
 \end{figure}
 
 The part of the dashboard showing actual statuses coming in to give the user a feeling for the stream is not shown here due to Twitter's TOS.

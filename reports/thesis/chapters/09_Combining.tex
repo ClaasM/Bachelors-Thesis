@@ -4,13 +4,13 @@
 
 % TODO write about "Joint sentiment/topic model for sentiment analysis" here and/or in the related-work section
 
-In this chapter, the best sentiment analysis model from~\ref{ch:sentimentAnalysis}, naive Bayes,
-is combined with the topic model built in~\ref{ch:topicModeling}, an LDA topic model,
-to perform the sentiment analysis by topic model referred to in~\ref{sec:backgroundTheory}.
+In this chapter, the best sentiment analysis model from~\autoref{ch:sentimentAnalysis}, naive Bayes,
+is combined with the topic model built in~\autoref{ch:topicModeling}, an LDA topic model,
+to perform the sentiment analysis by topic model referred to in~\autoref{sec:backgroundTheory}.
 \\
 This is achieved by simply performing the sentiment analysis on a Twitter status and attributing the result to each topic,
 weighed by the percentage the status belongs to that topic given by the topic model.
-A pseudo-code implementation of that can be seen in~\ref{pseudo_code:sentiment_topic_summing}.
+A pseudo-code implementation of that can be seen in~\autoref{pseudo_code:sentiment_topic_summing}.
 
 \begin{figure}
     \caption{Summing up sentiments by topic for each status.}
@@ -32,8 +32,8 @@ A pseudo-code implementation of that can be seen in~\ref{pseudo_code:sentiment_t
 
 This results in a 2-dimensional array where all values sum up to the number of statuses,
 since for each status the topic-probabilities sum up to 1.
-This was then performed on the sample stream dataset collected in~\ref{sec:streamingSampleDataset}.
-A table showing the results for each topic with relative as well as absolute values for the sentiment classes  can be seen in~\ref{tab:combination}.
+This was then performed on the sample stream dataset collected in~\autoref{sec:streamingSampleDataset}.
+A table showing the results for each topic with relative as well as absolute values for the sentiment classes  can be seen in~\autoref{tab:combination}.
 The table also shows the sum of all probabilities, and the percentage of statuses in that topic.
 
 \begin{table}
@@ -76,10 +76,10 @@ The table also shows the sum of all probabilities, and the percentage of statuse
 \end{table}
 
 To visualize the sentiment by topic,
-the network graph used in~\ref{ch:topicModeling} was extended.
+the network graph used in~\autoref{ch:topicModeling} was extended.
 The size of a node representing a topic indicates the topics' prevalence in the dataset.
 The color, on a hue-spectrum from red to green represents the polarity.
-On a 360\degree hue-spectrum in the HSV-color-space, as seen in~\ref{fig:hue_spectrum}, 0\degree is red, and 120\degree is green.
+On a 360\degree hue-spectrum in the HSV-color-space, as seen in~\autoref{fig:hue_spectrum}, 0\degree is red, and 120\degree is green.
 
 \begin{figure}
     \centering
@@ -89,7 +89,7 @@ On a 360\degree hue-spectrum in the HSV-color-space, as seen in~\ref{fig:hue_spe
 \end{figure}
 
 The opacity is determined by the subjectivity.
-The exact formulae can be seen in~\ref{math:visualization}.
+The exact formulae can be seen in~\autoref{math:visualization}.
 
 \begin{figure}
     \caption{The formulae used to extend the network graph}
@@ -110,7 +110,7 @@ The saturation was linearly scaled such that the smallest opacity was 0\%,
 and the biggest opacity was 80\%.
 20\% were then added to each node, making sure each node is visible.
 The size was linearly scaled to be between 0 and 2000.
-The resulting network graph can be seen in~\ref{fig:combined_network_graph}.
+The resulting network graph can be seen in~\autoref{fig:combined_network_graph}.
 
 \begin{figure}
     \centering
