@@ -11,17 +11,17 @@ usually text up to a character-count of 200, which, in the case of Twitter, are 
 This enables light-weight, mobile and easy sharing of opinions, status and activities~\cite{Finin2007},
 which proved popular among users and lead to rapid adoption and growth~\cite{mcgiboney2009twitter}.
 
-As shown in~\autoref{tab:comparison}, the relationships of following users and being followed by users on Twitter is unreciprocated,
+As shown in~\cref{tab:comparison}, the relationships of following users and being followed by users on Twitter is unreciprocated,
 which means it requires no active accepting of followers.\\
 This leads to only 22.1\% of users who are being followed by someone, also being followed back by that someone~\cite{Kwak2010}.
 Although Twitter offers the option to protect ones account, which means followers need to be accepted,
 and users can be blocked, thereby denying them seeing ones content, these options are only used in rare cases,
 making the form of relationships they represent the exception~\cite{Kwak2010}.\\
-The relationship between different kinds of entities present on Twitter can be seen in~\autoref{fig:twitter}
+The relationship between different kinds of entities present on Twitter can be seen in~\cref{fig:twitter}
 
 % include diagram
 \begin{figure}[htb]
-    \caption{Simplified diagram of Twitter entity relations.}
+    \caption{Simplified diagram of Twitter entity relations}
     \label{fig:twitter}
     \centering
     \includegraphics[width=\textwidth]{../figures/twitter_er.pdf}
@@ -33,7 +33,7 @@ The text itself can also contain links, mention other users by containing \textt
 and contain any number of the infamous hashtag (\texttt{\#hashtag}), used to label a status, all while being limited to 140 characters.
 A status can also be a so-called retweet of another status, adding to its content and exposing the other status to the retweeting users' followers.
 Research shows that statuses are mostly retweeted shortly after they are published, and often lead to chains of retweets,
-which not only spreads information fast, but also diffuses it~\cite{Kwak2010}.\\
+which not only spreads information fast, but also diffuses it~\cite{Kwak2010}.
 
 For the purpose of this thesis we will only focus on the text of a status and do not assign any special meaning to links,
 mentions, hashtags or whether a status is a retweet.\\
@@ -43,7 +43,7 @@ mentions, hashtags or whether a status is a retweet.\\
 
 Twitter is offering an API (\textbf{A}pplication \textbf{P}rogramming \textbf{I}nterface),
 through which developers and researchers can access machine-readable data,
-including the entities shown in~\autoref{fig:twitter}, from the platform.
+including the entities shown in~\cref{fig:twitter}, from the platform.
 This API transmits data encoded in JSON, and follows the REST-paradigm.
 A Python-library called Tweepy, which contains utility functions for interaction with the Twitter API, was used where adequate~\cite{tweepyDocs}.
 
@@ -55,7 +55,7 @@ for the programming language Javascript.
 It was designed to be light-weight, human-readable yet easy for machines to generate and parse.
 Due to this, and the fact that it uses conventions familiar to developers of C-like languages,
 it has since become a widespread data-interchange format with libraries for parsing and generation in many languages~\cite{jsonDocs}.
-A small example for an object in this format can be seen in~\autoref{code:json}.
+A small example for an object in this format can be seen in~\cref{code:json}.
 
 
 %{
@@ -126,7 +126,7 @@ Every request send to the API needs to be authenticated,
 either as a Twitter user or as an application that can be registered in Twitter's developer console.
 There are some resources which can only be accessed when a specific Twitter user authenticates
 with the API, because they are user-specific, like publishing a status~\cite{twitterDocs}.
-Some examples can be seen in ~\autoref{tab:twitter_endpoints}.
+Some examples can be seen in ~\cref{tab:twitter_endpoints}.
 
 \begin{table}
     \caption{A selection of resources offered by the Twitter REST API~\cite{twitterDocs}}
@@ -193,7 +193,7 @@ the streaming API is also REST-based.
 The user sends a HTTP-request to a streaming-endpoint, but the the API doesn't respond and closes the requests,
 but instead keeps the connection open and sends successive responses until the connection is closed from the outside.
 These responses have the same format as in the REST-API, and represent Twitter entities like statuses or direct messages~\cite{twitterDocs}.
-A diagram from the Twitter documentation visualizing this behaviour can be seen in~\autoref{fig:twitter_streaming}.
+A diagram from the Twitter documentation visualizing this behaviour can be seen in~\cref{fig:twitter_streaming}.
 
 % include diagram
 \begin{figure}
@@ -203,7 +203,7 @@ A diagram from the Twitter documentation visualizing this behaviour can be seen 
     \includegraphics[width=10cm]{../images/twitter_streaming_diagram.png}
 \end{figure}
 
-Twitter itself offers 6 different endpoints for 6 different streams, all of which are explained in~\autoref{tab:twitter_streams}.
+Twitter itself offers 6 different endpoints for 6 different streams, all of which are explained in~\cref{tab:twitter_streams}.
 
 \begin{table}
     \caption{All streams offered by Twitter~\cite{twitterDocs}}
@@ -274,7 +274,7 @@ the number of statuses per second for two different streams were recorded over a
 The first stream was the sample stream, with the language set to english.
 The second stream was the filter stream, tracking only the keyword \texttt{iPhone}, and the language also set to english.
 The data was recorded on the 30$^th$ of September 2017.
-The results can be seen in~\autoref{fig:stream_frequency}.
+The results can be seen in~\cref{fig:stream_frequency}.
 
 % include diagram
 \begin{figure}
@@ -287,7 +287,7 @@ The results can be seen in~\autoref{fig:stream_frequency}.
 It has to be noted that the results are not representative of the share of statuses containing the keyword \texttt{iPhone},
 since the Twitter streaming API only sends an indeterminate, small part of all statuses posted~\cite{twitterDocs}.
 
-Compared to the general use-case for Kafka shown in~\autoref{fig:kafka}, in this thesis,
+Compared to the general use-case for Kafka shown in~\cref{fig:kafka}, in this thesis,
 every producer will produce events for exactly one topic, with the producer being a specific Twitter stream and the topic beint a unique identifier for it.
 The advantage of using the Twitter streaming-API compared to repeatedly polling the REST-API for the use-case of this thesis
 is that it is more efficient and has less latency.
@@ -300,74 +300,67 @@ a set of statuses labeled with sentiment was needed.
 Evaluation using the comparison in~\cite{Saif2013} showed the Sanders-dataset~\cite{sanders} to be most-suited to train Twitter sentiment analysis models.
 At 4347 available statuses, it is large enough to train an accurate model and is hand-labeled instead of relying on, for example, emoticons for labeling, which might be flawed.
 Also, Twitter's terms of service forbid the distribution of statuses outside of their API, which ruled out all datasets that did.
-Even though the NLTK~\autoref{subsec:nltk} contains a Twitter sentiment sample dataset,
+Even though the NLTK~\cref{subsec:nltk} contains a Twitter sentiment sample dataset,
 there is no information available on how it was collected and labeled, which is why it wasn't considered.
 The Sanders-dataset only contains the statuses unique identifier (id), along with the sentiment label ("positive", "negative", "neutral" or "irrelevant").
 The existing scripts to hydrate the dataset (meaning to replace the id with the actual status by requesting them from the API) were either slow or deprecated and dysfunctional,
 which is why a new script was written.
-Unfortunately, due to Twitter's terms of service, no real statuses can be shown, but~\autoref{tab:sanders_sample} shows some fictional examples.
-
-\begin{table}
-    \caption{Some fictional statuses with labels}
-    \label{tab:sanders_sample}
-    \centering
-    \begin{tabular}{lllll} %
-        \toprule
-        Text
-        & Sentiment Label
-        \\
-        \midrule
-        Lmao I had a funny argument with Siri @Apple
-        & \texttt{positive}
-        \\
-        My \#iPad crashes constantly since the update.
-        & \texttt{negative}
-        \\
-        Can anyone recommend me an app for my iPhone?
-        & \texttt{neutral}
-        \\
-        Apple stellt neues iPhone vor \textit{(non-english)}
-        & \texttt{irrelevant}
-        \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-
+Unfortunately, due to Twitter's terms of service, no real statuses can be shown, but~\cref{tab:sanders_sample} shows some fictional examples.
 The resulting dataset was then filtered to only contain english statuses, which left 2946 statuses.
-The distribution of labels on the dataset can be seen in~\autoref{fig:sanders_sentiment}.
-
-% include diagram
-\begin{figure}
-    \centering
-    \caption{The distribution of labels in the Sanders dataset.}
-    \label{fig:sanders_sentiment}
-    \includegraphics[width=10cm]{../figures/sanders_sentiment.pdf}
-\end{figure}
+The distribution of labels on the dataset can be seen in~\cref{fig:sanders_sentiment}.
 
 The statuses were collected using the search terms "@apple", "\#google", "\#microsoft" and "\#twitter",
 which not only renders them unusable to create a topic model since that makes them highly topical,
 but might also negatively impact the ability of sentiment analysis models trained on them to generalize over other data.
 Furthermore, of the remaining english statuses, only 431 and 481 were labeled as positive and negative respectively,
 which might be too few to train an accurate model.
-This will be explored further in~\autoref{ch:sentimentAnalysis}.
+This will be explored further in~\cref{ch:sentimentAnalysis}.
+
+\begin{table}[t]
+    \begin{minipage}[t]{.56\textwidth }
+        \captionof{table}{Some fictional statuses with labels}
+        \label{tab:sanders_sample}
+        \centering
+        \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lllll} %
+            \toprule
+            Text
+            & Sentiment Label
+            \\
+            \midrule
+            Lmao I had a funny argument with Siri @Apple
+            & \texttt{positive}
+            \\
+            My \#iPad crashes constantly since the update.
+            & \texttt{negative}
+            \\
+            Can anyone recommend me an app for my iPhone?
+            & \texttt{neutral}
+            \\
+            Apple stellt neues iPhone vor \textit{(non-english)}
+            & \texttt{irrelevant}
+            \\
+            \bottomrule
+        \end{tabular}}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[t]{.4\textwidth}
+        \centering
+        \captionof{figure}{Sanders dataset label distribution}
+        \label{fig:sanders_sentiment}
+        \includegraphics[width=\textwidth]{../figures/sanders_sentiment.pdf}
+    \end{minipage}
+\end{table}
 
 \section{The Streaming Sample Dataset}
 \label{sec:streamingSampleDataset}
 
-Another dataset was collected by streaming the sample stream described in~\autoref{subsec:streaming},
+Another dataset was collected by streaming the sample stream described in~\cref{subsec:streaming},
 again only keeping english tweets.
 The statuses were collected on the 18$^{th}$ of august 2017.
 The statuses received via the stream were written to a database until 7000 statuses were collected.
 This dataset will be used for (unsupervised) topic modeling, since it is representative of all activity on Twitter.
-A wordcloud of the statuses collected from the sample stream can be seen in~\autoref{fig:wordloud_pre}.
-
-% include diagram
-\begin{figure}
-    \centering
-    \caption{Wordcloud of the statuses collected from the sample stream.}
-    \label{fig:wordloud_pre}
-    \includegraphics[width=12cm]{../images/wordcloud_pre.png}
-\end{figure}
+A wordcloud of the statuses collected from the sample stream can be seen in~\cref{fig:wordloud_pre}.
 
 Some of the biggest "words" in the wordcloud are "RT", "it" and "be",
 or even some digits, which have no informativeness with regards to sentiment or topic,
@@ -408,16 +401,27 @@ The following steps were taken.
     \end{enumerate}
 \end{enumerate}
 
-The Python implementation of these functions can be found in the Appendix in~\autoref{sec:preprocessingAndTokenizationFunctionFactories}.
+The Python implementation of these functions can be found in the Appendix in~\cref{sec:preprocessingAndTokenizationFunctionFactories}.
 
 While some approaches to removing terms with low informativeness rely on removing terms that occur in too many or too few documents,
 in this thesis, a stopword list is used,
 since only english statuses will be considered, and extensive stopword lists exit for the english language~\cite{Porter2001}.
-The change to the wordcloud of the statuses collected from the sample stream after preprocessing and tokenization (including stopword removal) can be seen in~\autoref{fig:wordloud_post}.
+The change to the wordcloud of the statuses collected from the sample stream after preprocessing and tokenization (including stopword removal) can be seen in~\cref{fig:wordloud_post}.
 
 \begin{figure}
     \centering
-    \caption{Wordcloud of the statuses collected from the sample stream after preprocessing and tokenization.}
-    \label{fig:wordloud_post}
-    \includegraphics[width=12cm]{../images/wordcloud_post.png}
+    \caption{Wordcloud of the statuses collected from the sample stream}
+    \label{fig:test}
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \caption{Before preprocessing and tokenization}
+        \label{fig:wordloud_pre}
+        \includegraphics[width=\textwidth]{../images/wordcloud_pre.png}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \caption{After preprocessing and tokenization}
+        \label{fig:wordloud_post}
+        \includegraphics[width=\textwidth]{../images/wordcloud_post.png}
+    \end{subfigure}
 \end{figure}

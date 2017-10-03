@@ -2,21 +2,21 @@
 \chapter{Further Work}
 \label{ch:furtherWork}
 
-Due to the findings in~\autoref{sec:testing},
+Due to the findings in~\cref{sec:testing},
 a different approach to topic modeling could be of value.
 A topic model that either filters out topics that are only temporary,
 or a "evolving" model, that is continuously retrained on the sample stream using online LDA~\cite{hoffman2010online},
 might be a good starting point for further research.
 In the latter case, the dashboard would only show the deviation of topics in a stream from those in the sample stream.
 Supervised topic modeling approaches could also be used to model topics in a dimension that is less dependent on the input parameters,
-which, as shown in~\autoref{fig:dashboard-topics}, influence the prevalence of topics in a stream.
+which, as shown in~\cref{fig:dashboard-topics}, influence the prevalence of topics in a stream.
 This would achieve a higher informativeness for the user, since it is of little value for the user to
 see that the topic which has the keyword he/she is tracking in its top 5 terms is the most prevalent.
 
 The currently available datasets to train sentiment analysis models are either flawed in how they are labeled, highly topical,
-or too small, as described in~\autoref{sec:theSandersDataset} and shown in the comparison by Saif~\etAl~\cite{Saif2013}.
+or too small, as described in~\cref{sec:theSandersDataset} and shown in the comparison by Saif~\etAl~\cite{Saif2013}.
 Many researchers would benefit from a publicly available sample dataset, representative for all of Twitter,
-as collected in~\autoref{sec:streamingSampleDataset}, with hand-labeled sentiment.
+as collected in~\cref{sec:streamingSampleDataset}, with hand-labeled sentiment.
 This could, for example, be achieved by listening to the sample stream for a prolonged time,
 taking a sample from the collected data, and labeling it using a micro-working service such as Amazon Mechanical Turk,
 which even has job category specifically designed for sentiment analysis of Twitter statuses~\cite{mturk}.
@@ -32,7 +32,7 @@ This informativeness measure could also be used to filter out spam and bots,
 enabling quantification of their impact in real time~\cite{haustein2016tweets}.
 It could be derived from the number of likes of a status, or its retweets.
 
-As explained in~\autoref{sec:twitter}, this thesis made many simplifying assumptions, disregarding content other then text, and not giving any special meaning
+As explained in~\cref{sec:twitter}, this thesis made many simplifying assumptions, disregarding content other then text, and not giving any special meaning
 to hashtags, user mentions or other special entities used on Twitter.
 Since these entities are also an active area of research~\cite{page2012linguistics},
 exploring their relevance in the context of streaming, sentiment analysis or topic modeling

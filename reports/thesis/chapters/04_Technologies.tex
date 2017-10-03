@@ -23,7 +23,7 @@ Python follows multiple paradigms;
 it is object-oriented, imperative, procedural and reflective~\cite{van2007python}.
 It also supports dynamic typing, which enables its users to focus on higher-level tasks, at the cost of computational efficiency \cite{Perez-schofield2010}.
 Since its initial release in 1991, these and more aspects have made it a popular choice among researches.
-As seen in~\autoref{table:python}, there are currently 2 supported versions of Python, which are not backwards compatible.
+As seen in~\cref{table:python}, there are currently 2 supported versions of Python, which are not backwards compatible.
 In this thesis, version 3.6.2 is used.
 Furthermore, virtualenv was used to make the development environment easily reproducible on other machines.
 
@@ -70,12 +70,12 @@ In the publish/subscribe paradigm, subscribers register their interest in a cert
 and are asynchronously notified by the system when an event is published that matches the criteria~\cite{Eugster2003}.
 In Kafka, the publishing entities are called producers, and the subscribing entities are called consumers.
 A stream of events (called messages in Kafka) of a particular type that a consumer can subscribe to is defined by a topic~\cite{Kreps2015}.
-\autoref{fig:kafka} shows a simplified, typical configuration of a messaging system powered by Kafka.
+\cref{fig:kafka} shows a simplified, typical configuration of a messaging system powered by Kafka.
 
 % include diagram
 \begin{figure}
     \centering
-    \caption{Simplified diagram of a typical Kafka setup.}
+    \caption{Simplified diagram of a typical Kafka setup}
     \label{fig:kafka}
     \includegraphics[width=10cm]{../figures/kafka.pdf}
 \end{figure}
@@ -99,12 +99,12 @@ meaning distributing the computation across multiple machines~\cite{Wolke2010}.
 Spark manages this scaling out by abstracting these machines as so-called execution nodes (also called worker nodes or slave nodes),
 on which programs (tasks), called sparkjobs, are run.
 These abstract execution nodes can also be separate processes on a single machine,
-efficiently utilizing multiple cores, as seen in~\autoref{fig:spark_processes}.
+efficiently utilizing multiple cores, as seen in~\cref{fig:spark_processes}.
 
 % include diagram
 \begin{figure}
     \centering
-    \caption{Spark utilizing multiple cores by spawning Python processes \\for parallel processing.}
+    \caption{Spark utilizing multiple cores by spawning Python processes \\for parallel processing}
     \label{fig:spark_processes}
     \includegraphics[width=10cm]{../images/python_processes.png}
 \end{figure}
@@ -112,7 +112,7 @@ efficiently utilizing multiple cores, as seen in~\autoref{fig:spark_processes}.
 The distribution of tasks to these nodes, and the collection of results from them,
 is managed by the master node (also called driver node).
 It utilizes Apache Hadoop to persist data across these nodes~\cite{Zaharia2016}.
-\autoref{fig:spark} illustrates this architecture.
+\cref{fig:spark} illustrates this architecture.
 
 % include diagram
 \begin{figure}
@@ -132,8 +132,7 @@ making it the biggest open source big data project~\cite{Zaharia2016}, with over
 To enable efficient implementation of big data tasks, Spark introduces a concept called RDDs
 (\textbf{R}esilient \textbf{D}istributed \textbf{D}atasets),
 through which the parallelization, distribution and persistence of data is abstracted for the developer~\cite{sparkDocs},
-see ~\autoref{code:simpleParallelization} for a simple example.
-\\%Replacement for par
+see ~\cref{code:simpleParallelization} for a simple example.
 
 \begin{figure}
     \caption{A simple code example showing how spark distributes data and collects the result back to the driver node (~\cite{sparkDocs}, modified)}
@@ -161,7 +160,7 @@ Furthermore, Spark is developed by the Apache Software Foundation, as is Kafka,
 which means they are designed to work well with each other.
 For example, the Python API of Spark offers a range of utility functions to build sparkjobs to consume a Kafka-stream very easily~\cite{sparkDocs}.
 which means constructing a sparkjob to act as a consumer for a Kafka-stream in a distributed setting can be achieved with very few lines of code,
-as can be seen in the wordcount-example in~\autoref{code:wordcount}.
+as can be seen in the wordcount-example in~\cref{code:wordcount}.
 
 \begin{figure}
     \caption{Consuming data from a stream and processing them in batches}
@@ -185,15 +184,15 @@ as can be seen in the wordcount-example in~\autoref{code:wordcount}.
 \end{figure}
 
 Spark also allows for more complex functions to be applied to the data.
-The previous examples~\autoref{code:simpleParallelization} and~\autoref{code:wordcount} exclusively used lambda expressions~\cite{pythonDocs},
+The previous examples~\cref{code:simpleParallelization} and~\cref{code:wordcount} exclusively used lambda expressions~\cite{pythonDocs},
 however, not all functions can be expressed as a lambda expression.
 Also, developers might need to use variables defined outside of the function because their initialization is computationally intensive,
 or uses data that is only available on the driver node.
 One real strength of Spark is that it can transmit variables used in a function, but defined outside of it, to the execution nodes, as long as they are serializable~\cite{sparkDocs}.
 This also includes imported packages, which enables developers to very easily use other libraries and frameworks on the execution nodes.
-Since one of Pythons paradigms is functional programming~\autoref{sec:languages},
+Since one of Pythons paradigms is functional programming~\cref{sec:languages},
 the factory-pattern was used in this thesis to create the functions executed on the execution nodes along with variables and packages used in it.
-A simple example of this can be seen in~\autoref{code:factory}.
+A simple example of this can be seen in~\cref{code:factory}.
 
 \begin{figure}
     \caption{Demonstration of using packages and outside-variables on execution nodes}
@@ -232,7 +231,7 @@ The NLTK is mainly used by students, teachers and researchers, as a self-study t
 and to prototype and build research systems such as this thesis.
 The community appreciates the shallow learning curve and that it is unopinionated~\cite{Bird2006}.
 It was used across the project of this thesis for utilitarian and miscellaneous tasks.
-A simple exemplary use-case can be seen in~\autoref{code:nltk}.
+A simple exemplary use-case can be seen in~\cref{code:nltk}.
 
 \begin{figure}
     \caption{Example usage of the NLTK in a Python shell}
@@ -256,7 +255,7 @@ A simple exemplary use-case can be seen in~\autoref{code:nltk}.
 \end{figure}
 
 Some of the more complex functionality and methods for classification that border on machine learning territory were also used,
-although they are explained in more detail in their respective chapters~\autoref{ch:sentimentAnalysis}.
+although they are explained in more detail in their respective chapters~\cref{ch:sentimentAnalysis}.
 
 \section{Project Structure}
 \label{sec:projectStructure}
@@ -264,7 +263,7 @@ although they are explained in more detail in their respective chapters~\autoref
 As with any programming project, high-quality, well documented and structured code is important in this thesis.
 Since the programming language used is Python, and it is in large parts data-science,
 the "Cookiecutter Data Science" project structure is used~\cite{dsCookieCutter}.
-This project structure follows a type-based separation, an explanation of the individual folders can be seen in~\autoref{forest:dscookiecutter}.
+This project structure follows a type-based separation, an explanation of the individual folders can be seen in~\cref{forest:dscookiecutter}.
 
 \begin{figure}
     \caption{The folder structure of the "Cookiecutter Data Science"~\cite{dsCookieCutter}}
@@ -330,7 +329,7 @@ This project structure follows a type-based separation, an explanation of the in
 Additionally, a \texttt{/streaming} directory was created under \texttt{/src}, which accommodates all streaming-related modules.
 Below the structure given by the cookie cutter, further down in the directory tree, feature-based separation is employed,
 to make the code easily expandable with further analysis and modeling beyond what is implemented in this thesis.
-A part of the folder structure showcasing this structure can be seen in the \texttt{notebooks} directive, shown in~\autoref{forest:featurebased}.
+A part of the folder structure showcasing this structure can be seen in the \texttt{notebooks} directive, shown in~\cref{forest:featurebased}.
 
 \begin{figure}
     \caption{The feature-based separation employed on lower levels of the project structure}
