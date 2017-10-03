@@ -4,13 +4,11 @@
 \label{ch:technologiesUsed}
 
 In this chapter, technologies used in the project and subsequently shown in use in the code samples in later chapters will be introduced.
-This enables a better understanding of these code samples and comprehension of the underlying theory.
-\\
+This enables a better understanding of these code samples and comprehension of the underlying theory.\\
 Technologies like libraries and frameworks that are specific to certain methodologies,
 meaning that they are or contain the implementation of said methodologies,
 and are only used for that implementation,
-will be explained in the respective methodologies's section of this thesis.
-\\
+will be explained in the respective methodologies's section of this thesis.\\
 Furthermore, the technologies used for the dashboard will only be explained in the respective chapter,
 since the dashboard is only used for the interaction \textit{with} and visualization \textit{of} the underlying analysis,
 not for the analysis itself.
@@ -98,7 +96,6 @@ meaning increasing the performance of a single machine.
 Instead, the performance required is achieved by scaling out,
 meaning distributing the computation across multiple machines~\cite{Wolke2010}.
 
-\par % Spark solves it!
 Spark manages this scaling out by abstracting these machines as so-called execution nodes (also called worker nodes or slave nodes),
 on which programs (tasks), called sparkjobs, are run.
 These abstract execution nodes can also be separate processes on a single machine,
@@ -125,7 +122,6 @@ It utilizes Apache Hadoop to persist data across these nodes~\cite{Zaharia2016}.
     \includegraphics[width=10cm]{../figures/spark.pdf}
 \end{figure}
 
-\par
 Spark also offers functionality to perform machine learning, data analysis and more on data from streams,
 files or databases, in a distributed setting, with just a few lines of code~\cite{sparkDocs}.
 This means that Spark unifies and simplifies a lot of tasks in one framework that previously required multiple technologies.
@@ -133,11 +129,11 @@ This has lead to a widespread adoption of Spark since its release in 2010,
 making it the biggest open source big data project~\cite{Zaharia2016}, with over 1100 contributors~\cite{sparkContributor}.
 
 % How does it do such magic? Going under the hood
-\par
 To enable efficient implementation of big data tasks, Spark introduces a concept called RDDs
 (\textbf{R}esilient \textbf{D}istributed \textbf{D}atasets),
 through which the parallelization, distribution and persistence of data is abstracted for the developer~\cite{sparkDocs},
 see ~\autoref{code:simpleParallelization} for a simple example.
+\\%Replacement for par
 
 \begin{figure}
     \caption{A simple code example showing how spark distributes data and collects the result back to the driver node (~\cite{sparkDocs}, modified)}
@@ -335,7 +331,6 @@ Additionally, a \texttt{/streaming} directory was created under \texttt{/src}, w
 Below the structure given by the cookie cutter, further down in the directory tree, feature-based separation is employed,
 to make the code easily expandable with further analysis and modeling beyond what is implemented in this thesis.
 A part of the folder structure showcasing this structure can be seen in the \texttt{notebooks} directive, shown in~\autoref{forest:featurebased}.
-
 
 \begin{figure}
     \caption{The feature-based separation employed on lower levels of the project structure}

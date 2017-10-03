@@ -10,7 +10,7 @@ usually text up to a character-count of 200, which, in the case of Twitter, are 
 (where this thesis will stick to the latter since it is the predominant terminology used in the official documentation~\cite{twitterDocs}).
 This enables light-weight, mobile and easy sharing of opinions, status and activities~\cite{Finin2007},
 which proved popular among users and lead to rapid adoption and growth~\cite{mcgiboney2009twitter}.
-\par
+
 As shown in~\autoref{tab:comparison}, the relationships of following users and being followed by users on Twitter is unreciprocated,
 which means it requires no active accepting of followers.\\
 This leads to only 22.1\% of users who are being followed by someone, also being followed back by that someone~\cite{Kwak2010}.
@@ -18,17 +18,15 @@ Although Twitter offers the option to protect ones account, which means follower
 and users can be blocked, thereby denying them seeing ones content, these options are only used in rare cases,
 making the form of relationships they represent the exception~\cite{Kwak2010}.\\
 The relationship between different kinds of entities present on Twitter can be seen in~\autoref{fig:twitter}
-\par
 
 % include diagram
-\begin{figure}
-    \centering
+\begin{figure}[htb]
     \caption{Simplified diagram of Twitter entity relations.}
     \label{fig:twitter}
-    \includegraphics[width=10cm]{../figures/twitter_er.pdf}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/twitter_er.pdf}
 \end{figure}
 
-\par
 This thesis will focus on analyzing statuses in real time.
 Statuses on Twitter can not only contain text, but also rich media like images, gifs, or videos, as well as surveys.
 The text itself can also contain links, mention other users by containing \texttt{@<user\_name>},
@@ -36,7 +34,7 @@ and contain any number of the infamous hashtag (\texttt{\#hashtag}), used to lab
 A status can also be a so-called retweet of another status, adding to its content and exposing the other status to the retweeting users' followers.
 Research shows that statuses are mostly retweeted shortly after they are published, and often lead to chains of retweets,
 which not only spreads information fast, but also diffuses it~\cite{Kwak2010}.\\
-\par
+
 For the purpose of this thesis we will only focus on the text of a status and do not assign any special meaning to links,
 mentions, hashtags or whether a status is a retweet.\\
 
@@ -121,7 +119,6 @@ The most prevalent methods mentioned in the RFC are listed below~\cite{RFC2616}.
 \end{enumerate}
 
 There are more methods specified by the RFC~\cite{RFC2616} that will not be used in this thesis.
-\par
 The resources (also called API endpoints) offered by the Twitter REST-API are rate-limited,
 which means any one application or Twitter-user using the API can make a limited number of requests to the API
 per 15-minute time window.
@@ -177,12 +174,12 @@ The previous subsection discussed the "data at rest" offered by the Twitter API.
 Processing data at rest (not to be confused with REST) means processing data from a persistent data storage, like a database, in batches~\cite{Nandi2015}.
 Since this thesis aims to provide analysis in real time, one option would be to request the latest entities in fixed intervals from
 Twitters API.
-\par
+
 However, this approach would be inefficient, and introduces latency to the analysis,
 since events like the posting of statuses can only be analyzed after the next request is answered, not immediately when they occur.
 This is amplified by the fact that the number of requests than can be made to the API is limited by the rate-limit,
 so a delay would have to be put in between requests.
-\par
+
 To analyze events right when they occur, the data has to be processed in motion, meaning ingesting data in real time via a stream~\cite{Nandi2015}.
 This thesis aims to process data in motion.
 Thankfully, Twitter offers a Streaming API, which is explained in the next subsection.
@@ -290,7 +287,6 @@ The results can be seen in~\autoref{fig:stream_frequency}.
 It has to be noted that the results are not representative of the share of statuses containing the keyword \texttt{iPhone},
 since the Twitter streaming API only sends an indeterminate, small part of all statuses posted~\cite{twitterDocs}.
 
-\par
 Compared to the general use-case for Kafka shown in~\autoref{fig:kafka}, in this thesis,
 every producer will produce events for exactly one topic, with the producer being a specific Twitter stream and the topic beint a unique identifier for it.
 The advantage of using the Twitter streaming-API compared to repeatedly polling the REST-API for the use-case of this thesis
@@ -387,11 +383,9 @@ In this case that means removing all elements of text that have no influence on 
 modeling and analysis unnecessarily difficult.\\
 Furthermore, since all the algorithms that will be used later on are bag-of-words algorithms,
 which means they disregard the order of words in text, a tokenization function needs to be created
-to split sentences in the right places and only keep tokens (terms, words) relevant for modeling and analysis.
-\\
+to split sentences in the right places and only keep tokens (terms, words) relevant for modeling and analysis.\\
 At this point it is important to mention that while the tokenization does not, strictly speaking, tokenize the documents,
-but rather splits them into terms, this thesis will stick to the NLTK's~\cite{nltkDocs} nomenclature, and call the terms tokens.
-\\
+but rather splits them into terms, this thesis will stick to the NLTK's~\cite{nltkDocs} nomenclature, and call the terms tokens.\\
 To achieve consistent results, the same preprocessing and tokenization functions need to be used for all models, analyses and datasets.
 The following steps were taken.
 
@@ -415,7 +409,7 @@ The following steps were taken.
 \end{enumerate}
 
 The Python implementation of these functions can be found in the Appendix in~\autoref{sec:preprocessingAndTokenizationFunctionFactories}.
-\par
+
 While some approaches to removing terms with low informativeness rely on removing terms that occur in too many or too few documents,
 in this thesis, a stopword list is used,
 since only english statuses will be considered, and extensive stopword lists exit for the english language~\cite{Porter2001}.

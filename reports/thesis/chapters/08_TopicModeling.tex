@@ -5,12 +5,12 @@
 Topic models are probabilistic models which are used to extract an underlying semantic structure from text artifacts, or documents.
 They are based on a hierarchical bayesian analysis on the terms in a document,
 on which a similarity measure for the its content can be defined and used to "connect" and cluster documents.
-\par
+
 Topic models are useful when dealing with large quantities of unstructured documents,
 that need to be automatically structured, grouped or filtered for knowledge extraction,
 for example to provide similar/related content at the end of blog entries,
 or to automatically tag content with relevant keywords~\cite{blei2009topic}.
-\par
+
 In this chapter, methods for topic modeling will be explored,
 and a suitable model for the use-case of this thesis will be determined.
 While it is easy for humans to gain an intuitive understanding what a document is about
@@ -68,7 +68,6 @@ The implementation of the dictionary creation process can be seen in~\autoref{co
     % @formatter:on
 \end{figure}
 
-\par
 To compute the TF-IDF values for a specific document,
 a term count vector is then formed containing how often each term in the dictionary occurs in that document,
 and normalized over the length to result in the frequency.
@@ -77,7 +76,7 @@ most words in the corpus do not occur in the document.
 Also, since some words might generally occur more often, thereby being less informative of the topic,
 the frequency for each term in the document is then divided by the frequency of that term in the dictionary,
 giving $term frequency / document frequency$, or $term frequency \* inverse document frequency$ (TF-IDF)~\cite{Blei2003}.
-\par
+
 The gensim library was used to create and save the TF-IDF model,
 which contains rows with two term identifiers (the terms themselves are saved in the dictionary) and a count of how often
 they cooccurr in any of the training documents, while omitting term-combinations that never coocurr, to reduce size~\cite{gensimDocs}.
@@ -88,26 +87,22 @@ they cooccurr in any of the training documents, while omitting term-combinations
 The basic idea behind LDA (\textbf{L}atent \textbf{D}irichlet \textbf{A}llocation) is to represent documents as a distribution of (latent) topics,
 each of which is characterized as a distribution over words.
 This thesis will provide an outside view of this method, while explaining important hyperparameters and their impact.
-LDA is a bag-of-words model, which means there are no syntax rules.
-\\
+LDA is a bag-of-words model, which means there are no syntax rules.\\
 An LDA model takes the TF-IDF model created in~\autoref{subsec:tfidf} as an input to determine the dirichlet distributions,
 and two major hyperparameters, $\alpha$ and $\eta$,
-both of which are parameters of the internal dirichlet-distributions.
-\\
+both of which are parameters of the internal dirichlet-distributions.\\
 $\alpha$ controls the per-document topic dirichlet distribution,
 where a higher value indicates that documents tend to be a mixture of many topics,
-and lower values lead to few topics with higher probability.
-\\
+and lower values lead to few topics with higher probability.\\
 $\eta$ (also sometimes denoted $\beta$) controls the per-topic word dirichlet distribution, where, as with $\alpha$,
 higher values lead to few words with high probabilities determining the topics,
-and vice-versa.
-\\
+and vice-versa.\\
 The output is a matrix where every row represents a topic,
 the columns are the terms from the dictionary,
 and every element represents the probability that the word belongs to the topic,
 with every column therefore adding up to 1.
 When classifying a document, this matrix is used to allocate a distribution of topics for which the probability to have generated that document is maximized~\cite{Blei2003}.
-\par
+
 %First, try the default settings
 For LDA topic modeling, the gensim library was used~\cite{gensimDocs}.
 The dataset used was the streaming sample dataset described in~\autoref{sec:streamingSampleDataset},
@@ -144,7 +139,6 @@ The LDAvis visualization for this model can be seen in~\autoref{fig:ldavis}.
     \includegraphics[width=\textwidth]{../images/LDAvis.png}
 \end{figure}
 
-\par
 Next, a different visualization, as a network graph, was devised to make a subjective assessment of the model.
 In the graph, each light-blue node represents a topic.
 For each topic, the 5 terms with the highest probabilities are connected with edges whose weight (thickness) represent the probability

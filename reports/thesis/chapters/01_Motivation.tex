@@ -21,8 +21,8 @@ Social media is defined as an application with a set of characterizing features 
 
 The first application that can be classified as social media according to these characterisitics
 was the web-based service \texttt{SixDegrees.com}, launched in 1997~\cite{Ellison2008}.
-
 A timeline of this and other selected social media application launches can be seen in~\autoref{fig:timeline}.
+
 \begin{figure}
     \caption{A timeline of selected social media launches.}
     \label{fig:timeline}
@@ -113,44 +113,37 @@ Also, only few of the social media applications analyzed offer networking capabi
 meaning there is no focus on creating relationships online that are then transferred into the real world.
 For these reasons, this thesis refrains form using the term social networking site (SNS), as commonly used in previous works~\cite{Ellison2008},
 and instead uses the term social media application.
-\par
 
 \section{Impact of Social Media}
 \label{sec:developmentOfSocialMedia}
 
 % Social media is big and growing
 The first indication of the growing importance and influence of social media can be found by looking at the growth numbers:
-Facebook, for example, has more than 1 billion users to date, and Twitter's userbase grew by 1\,382\% between February 2008 and February 2009 alone~\cite{mcgiboney2009twitter}.
-\par
-
-% Social media influences elections...
+Facebook, for example, has more than 1 billion users to date,
+and Twitter's userbase grew by 1\,382\% between February 2008 and February 2009 alone~\cite{mcgiboney2009twitter}.\\
 It is estimated that during the 2016 U.S. election, american adults read and remembered on the order of one to several so called fake news;
 untruths portrayed as news favoring a specific candidate.
 Although no assessment can be made as to whether the influence of fake news was pivotal to the election,
-evidence can be found supporting the claim that exposure to fake news influences a voters sentiment~\cite{Allcott2017}.
-\par
-% ...and companies
+evidence can be found supporting the claim that exposure to fake news influences a voters sentiment~\cite{Allcott2017}.\\
 Furthermore, social media applications changed the way organisations, communities and individuals communicate.
-Customers expect companies to listen to and engage with them on these channels - and past approaches to customer care are ill-suited for this new environment~\cite{Kietzmann2011}.
-\par
+Customers expect companies to listen to and engage with them on these channels -
+and past approaches to customer care are ill-suited for this new environment~\cite{Kietzmann2011}.
+
 Most of the recent growth in social media usage happened in a important target demographic for companies -
-65\% of american adults were using social media in 2015, almost 10 times more than in 2005, when only 7\% did~\cite{Perrin2015}.
-\par
+65\% of american adults were using social media in 2015, almost 10 times more than in 2005, when only 7\% did~\cite{Perrin2015}.\\
 Similar developments can be observed in the amount of goods and services sold via the internet:
 The share of e-commerce in the total U.S. retail sales grew from 4.2\% in the first quarter of 2010 to more than double that, 8.5\%,
 by the second quarter of 2017, a mere 7 years later~\cite{statistaECommerceGrowth}.
 This growth will continue and the change from traditional commerce to e-commerce
 will further influence the way customers interact with companies.
-\par
+
 The growing importance and influence of social media for companies and individuals,
 paired with the potential for misuse as demonstrated during the 2016 election,
-necessitates improved real-time monitoring capabilities for the affected stakeholders.
-\par
+necessitates improved real-time monitoring capabilities for the affected stakeholders.\\
 From an organizational standpoint, complaints, comments, questions and suggestions by the customer are not only unstructured,
 but also "designed by the customer", meaning that the organization has little influence on the way customers choose to communicate with them.
 Since many customers are already familiar with social media, it often becomes the medium of choice for communicating with companies.
-However, no standardized rules exist for these kind of transactions, making reporting, analysis and knowledge management on the companies side difficult~\cite{Culnan2015}.
-\par
+However, no standardized rules exist for these kind of transactions, making reporting, analysis and knowledge management on the companies side difficult~\cite{Culnan2015}.\\
 This thesis aims to explore and implement means of monitoring topics of interaction on social media in real-time,
 and combine this analysis with the associated sentiment, to provide informative insights for these stakeholders.
 
@@ -161,7 +154,7 @@ and combine this analysis with the associated sentiment, to provide informative 
 Twitter's main content type as shown in~\autoref{tab:comparison} consists of small, simple text entries, called tweets, with a maximum length of 140 characters,
 which makes it popular among researchers, and a good fit for the proof of concept that this thesis aims to provide.
 There are also technical benefits of using Twitter, which are explained further in~\autoref{ch:twitter}.
-\par
+
 %Social media is not used to its full potential by e.g. companies
 Culnan \etAl argue that social media applications offer great opportunity for companies,
 but while they are widely adopted and used,
@@ -169,7 +162,7 @@ companies struggle to achieve measurable business success with their social medi
 They found that identifying quantifiable metrics is an element of effective social media implementation for companies.
 Furthermore, they argue that another main element is absorptive capacity, meaning how effectively messages and
 interactions on social media are processed~\cite{Culnan2015}.
-\par
+
 Salzborn \etAl found that people responsible for managing social-media accounts with big influence may be exposed to, and fear,
 drastic mood shifts (also called shitstorms) and that being tasked with managing such an event poses great difficulty~\cite{Salzborn2015}.
 %TODO maybe some more previous work
@@ -179,17 +172,14 @@ drastic mood shifts (also called shitstorms) and that being tasked with managing
 
 % There is reason to believe companies would benefit from being able to analyze what their customers talk about (topics) and how they feel about these topics (sentiment by topic)
 This thesis theorizes that monitoring what users talk about,
-and how they feel about it, will enable stakeholders to get a more quantifiable and structured understanding of their target group.
-\\
+and how they feel about it, will enable stakeholders to get a more quantifiable and structured understanding of their target group.\\
 To achieve high absorptive capacity, this monitoring solution would have to be automated,
 utilizing topic modeling, sentiment analysis and the combination of those as part of the processing.
-These metrics could enable organizations to effectively implement social media~\cite{Culnan2015}.
-\\
+These metrics could enable organizations to effectively implement social media~\cite{Culnan2015}.\\
 % What it could be used for, example use case
 Not only could these real-time analyses be used to reliably monitor consumer sentiment,
 it could also be used to react to changes in sentiment among users fast enough to prevent and counteract
-drastic mood shifts, and prevent further damage.
-\\
+drastic mood shifts, and prevent further damage.\\
 % Using it as a feedback cycle for A/B testing.
 Another benefit of monitoring the sentiment regarding a topic in real-time is that it could be used for product development,
 to compare different iterations of a product.

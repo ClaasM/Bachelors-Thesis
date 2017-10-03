@@ -148,7 +148,7 @@ However, the dictionary created from the Sanders dataset will be used in this th
 The NLTK sentiment analyzer package provides a framework for building classification-pipelines with easily interchangeable components
 (like choosing which methods to use for training, or which feature extractors to use).
 It also builds its own dictionary, which means the dictionary created in~\autoref{sec:preprocessingAndTokenization} doesn't need to be used.
-\par
+\\%Replacement for par
 First, the previous approach was reconstructed in this framework, and successfully validated to give the same accuracy.
 Then, it was expanded by marking all negated words as negated using the \texttt{mark\_negation} utility function of the NLTK.
 They were then added to the dictionary in their negated form.
@@ -174,7 +174,7 @@ VADER (\textbf{V}alence \textbf{A}ware \textbf{D}ictionary for s\textbf{E}ntimen
 is a gold standard of lexical features together with five general rules embodying grammatical and syntactical conventions
 that were devised in a human-centered approach.
 It is specifically designed for microblog-like environments such as Twitter~\cite{Hutto2014}.
-\par
+\\%Replacement for par
 NLTK's implementation of VADER returns scores between 0 and 1 for positivity, negativity and neutrality,
 as well as a compound score between -1 and 1, where the direction represents polarity and the magnitude represents subjectivity.
 A test was conducted involving only the statuses labeled "positive", "negative" or "neutral",
@@ -185,7 +185,7 @@ at an absolute value for the compound score of 0.8, giving an accuracy of 68\%.
 \begin{equation}
     class(x) =
     \begin{cases}
-        neutral & \text{for } |compound\_sentiment(x)| \textless 0.8 \\
+        neutral & \text{for } |compound\_sentiment(x)| < 0.8 \\
         positive & \text{for } compound\_sentiment(x) \geq 0.8 \\
         negative & \text{for } compound\_sentiment(x) \leq -0.8 \\
     \end{cases}
@@ -267,7 +267,7 @@ which is why a quantitative accuracy test was conducted using only tweets labele
     class(x) =
     \begin{cases}
         positive & \text{for } compound\_sentiment(x) \geq 0 \\
-        negative & \text{for } compound\_sentiment(x) \textless 0\\
+        negative & \text{for } compound\_sentiment(x) < 0\\
     \end{cases}
 \end{equation}
 
@@ -283,7 +283,7 @@ For any document, provided in a supported language, the API returns a magnitude 
 (although the highest observed was 4.1) and a score between -1 and 1.
 Magnitude and subjectivity as well as score and polarity are similarly described in the their respective documentations~\cite{gcloudDocs}\cite{textblobDocs},
 which is why they are assumed have the same meaning.
-\par
+
 The API is billed on a per-request basis, so all statuses from the Sanders dataset were classified once and persisted in a CSV-file.
 Again, statuses labeled as irrelevant were filtered out to avoid ambiguity.
 A scatter plot of the score and magnitude on the axes and label represented as the color can be seen in~\autoref{fig:gcloud}.
@@ -304,7 +304,7 @@ which is just marginally better than guessing neutral, with 47\% of statuses bei
 \begin{equation}
     class(x) =
     \begin{cases}
-        neutral & \text{for } |compound\_sentiment(x)| \textless 0.9 \\
+        neutral & \text{for } |compound\_sentiment(x)| < 0.9 \\
         positive & \text{for } compound\_sentiment(x) \geq 0.9 \\
         negative & \text{for } compound\_sentiment(x) \leq -0.9 \\
     \end{cases}
@@ -315,7 +315,7 @@ which is just marginally better than guessing neutral, with 47\% of statuses bei
 
 When comparing the results of the different methods presented, it is surprising to see the simplest,
 a multinomial naive Bayes, turned out to be the most accurate.
-The summarized accuracy results can be seen in~\autoref{tab:sa_results}. \\
+The summarized accuracy results can be seen in~\autoref{tab:sa_results}.
 
 \begin{table}
     \caption{Sentiment classification accuracy comparison, showing naive Bayes' superiority on all sub-datasets tested}
@@ -350,12 +350,12 @@ Additions to existing algorithms, like marking negated words, that showed improv
 showed no improvement to the multinomial naive Bayes classifier when working with Twitter statuses.
 Furthermore, even methods specifically designed for this special challenge, like VADER,
 were outperformed by a multinomial naive Bayes classifier.
-\par
+
 However, the results of these tests need to be handled carefully.
 As explained in~\autoref{sec:theSandersDataset},
 and also indicated by the performance discrepancies between different dictionaries in~\autoref{subsec:naivebayes},
 the dataset used is highly topical.
-\par
+
 The sample stream dataset introduced in~\autoref{sec:streamingSampleDataset} was then classified using the multinomial naive bayes classifier from~\autoref{subsec:naivebayes}.
 When comparing the sentiment distribution of this dataset, seen in~\autoref{fig:sample_sentiment},
 to that of the Sanders dataset, seen in~\autoref{fig:sanders_sentiment},

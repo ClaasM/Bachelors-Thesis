@@ -133,7 +133,7 @@ A screenshot of the settings dialog of the dashboard can be seen in~\autoref{fig
 
 When clicking the update-button, the current settings are sent to the server via a websocket,
 which then closes the existing stream (if any), and opens a stream with the new settings.
-\par
+\\%Replacement for par
 Incoming statuses are relayed into the Kafka messaging system described in~\autoref{subsec:kafka}.
 Kafka then distributes the statuses to the Spark execution nodes as described in~\autoref{subsec:spark}.
 \\
@@ -190,7 +190,7 @@ The resulting function, applied on the incoming statuses on the execution nodes,
 The update containing the results and the tweet itself is then sent to the master node,
 which is also the server, as seen in~\autoref{fig:architecture}.
 The server then sends it to the client via a websocket.
-\par
+\\%Replacement for par
 The client keeps a FIFO-queue of all incoming updates, facilitating a sliding window of the analysed statuses.
 This way, a moving average can be calculated on the values, which represents the overall, \textit{average},
 sentiment and topics on the stream, without too much delay.
@@ -207,7 +207,7 @@ For all of these charts, one vertical section represents one second.
 For testing, the filter stream was used,
 the language was set to english (since our models are trained on english data only),
 and only one keyword was tracked.
-\par
+\\%Replacement for par
 First, the keyword was set to \texttt{iPhone},
 and the stream was left running until the queue was filled and all results calculated from fewer elements
 (which might look noisy) were no longer visible on the timeline.
@@ -215,6 +215,7 @@ Then, to artificially provoke a change in sentiment,
 the streaming settings were updated to only track the keyword \texttt{people} without resetting the charts or the queue (and therefore the moving average).
 This illustrates what a sudden change in sentiment for a stream would look like if it were observed naturally.
 The resulting graph, and the associated values, can be seen in~\autoref{fig:dashboard-sentiment}
+\\%Replacement for par
 
 \begin{figure}
     \centering
@@ -223,12 +224,12 @@ The resulting graph, and the associated values, can be seen in~\autoref{fig:dash
     \includegraphics[width=\textwidth]{../images/dashboard_sentiment.png}
 \end{figure}
 
-\par
 After running the stream with these settings for a while, a natural change in topics was observed, which can be seen in~\autoref{fig:dashboard-topics}.
 Even though the keyword was still \texttt{people}, and the dominating topic was, as expected, topic number 5,
 for which this keyword is one of the most likely ones, the prevalence of this topic decreased in favor of topics 4 and 9,
 indicating a wave of tweets associated with these topics occurring at that moment.
 These events were observed regularly, and might even indicate bot activity~\cite{chu2012detecting}.
+\\%Replacement for par
 
 \begin{figure}
     \centering
@@ -237,15 +238,13 @@ These events were observed regularly, and might even indicate bot activity~\cite
     \includegraphics[width=\textwidth]{../images/dashboard_topics.png}
 \end{figure}
 
-\par
 To calculate the sentiment by topic for the combination-visualization,
 the sliding window was set to 1000, since topics with little prevalence and few opinionated statuses
 (those that are labeled positive or negative) would give very noisy results otherwise.
 That window size was found to give the right balance between reducing noise and not suppressing any signal.
-\par
 Even though the sentiments by topic were mostly free of noise, they did not converge,
 indicating that some topics have an inherently different sentiment.
-\par
+
 As with the visualization of sentiment,
 the settings were changed from tracking \texttt{apple} to tracking \texttt{weekend}, to illustrate a change in sentiment by topic.
 This still gave interesting results, showing that depending on which keywords the stream is tracking,
