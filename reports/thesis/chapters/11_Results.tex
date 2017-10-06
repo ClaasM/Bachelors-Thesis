@@ -8,13 +8,6 @@ While the topic distribution on the training dataset is close to equally distrib
 the same cannot be said for the topic distribution on the same stream on September $27^{th}$ 2017, more than two months later,
 as seen in~\cref{fig:sample_topic_distribtion_new}.
 
-\begin{figure}
-    \centering
-    \caption{Topic distribution of new data, with the LDA model trained on the sample dataset}
-    \label{fig:sample_topic_distribtion_new}
-    \includegraphics[width=\textwidth]{../images/dashboard_topics_sample.png}
-\end{figure}
-
 This time, topics with top terms that indicate some event, like "mtvhottest", are lower in prevalence,
 in favor of topics with more general terms.\\
 This indicates that while the dashboard can reliably show changes in what users are talking about on Twitter,
@@ -28,9 +21,20 @@ to the sentiment distribution observed through the dashboard on the 27$^th$ of S
 
 \begin{figure}
     \centering
-    \caption{Sentiment distribution of new data, with the naive bayes model trained on the Sanders dataset}
-    \label{fig:sample_sentiment_distribtion_new}
-    \includegraphics[width=\textwidth]{../images/dashboard_sentiment_sample.png}
+    \caption{Sample stream comparison to sample dataset}
+    \label{fig:dasboard_sample}
+    \begin{subfigure}[t]{0.485\textwidth}
+        \centering
+        \caption{Similar sentiment}
+        \label{fig:sample_sentiment_distribtion_new}
+        \includegraphics[width=\textwidth]{../images/dashboard_sentiment_sample.png}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.505\textwidth}
+        \centering
+        \caption{Changed topic distribution}
+        \label{fig:sample_topic_distribtion_new}
+        \includegraphics[width=\textwidth]{../images/dashboard_topics_sample.png}
+    \end{subfigure}
 \end{figure}
 
 This comparison shows that the sentiment on the stream remained on a similar level than in the sample dataset,

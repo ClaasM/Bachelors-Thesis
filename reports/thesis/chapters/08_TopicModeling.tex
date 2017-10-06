@@ -145,7 +145,9 @@ For each topic, the 5 terms with the highest probabilities are connected with ed
 of that word being in a document of that topic, as computed by the model.
 It can be seen that some topics share terms - however, these shared terms are not very distinct terms.
 The model even successfully modeled trending topics on the evening when the data was collected as described in~\cref{sec:streamingSampleDataset}.
-The network graph can be seen in~\cref{fig:lda_network_graph}
+The network graph can be seen in~\cref{fig:lda_network_graph}.
+Since LDA is not deterministic, the top terms for each topic and other values might change slightly,
+even if the model is trained with the same parameters on the same data.
 
 \begin{figure}
     \centering
