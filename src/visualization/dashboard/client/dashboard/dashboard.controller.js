@@ -40,7 +40,6 @@ angular.module('Dashboard')
           replies: 'all',
           follow: []
         },
-        /* TODO rename */
         'public': {
           type: 'public',
           'filter_level': 'none',
@@ -62,7 +61,7 @@ angular.module('Dashboard')
           count: 0
         }
       };
-      //TODO remove site, retweet and firehose, and all then unused code parts
+
       // Number of tweets shown in the recent tweets-part and window size for the charts
       $scope.SLIDING_WINDOW = 200;
 
@@ -208,19 +207,4 @@ angular.module('Dashboard')
         //Perform a angular digest so that the changes are represented in the DOM
         $scope.$digest()
       });
-
-      /**
-       * TODO this can be removed if the other thing works
-       * Sets or deletes a key on the streamSettings object.
-       * This is useful since some parameters for the twitter streaming API are supposed to be either a specific string or nonexistent.
-       * @param key the to set
-       * @param value the value to set if it's not set already (in which case it's deleted)
-       */
-      $scope.setOrDelete = function (key, value) {
-        if ($scope.streamSettings[key] == value) {
-          delete $scope.streamSettings[$scope.selectedStream][key]
-        } else {
-          $scope.streamSettings[key] = value
-        }
-      }
     });

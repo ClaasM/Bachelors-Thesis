@@ -18,8 +18,8 @@ def start():
     Serve the App
     """
 
-    # routing for basic pages (pass routing onto the Angular app)
-    # TODO this is stupid.
+    # routing for basic pages
+    # pass routing onto the Angular app, to enable HTML5Mode (frontend routing without hashbang)
     @app.route('/')
     @app.route('/dashboard')
     def basic_pages(*args, **kwargs):

@@ -2,7 +2,7 @@
 
 module.exports = function (grunt) {
 
-  // Load grunt tasks automatically, when needed TODO why
+  // Load grunt tasks automatically, when needed
   require('jit-grunt')(grunt, {
     useminPrepare: 'grunt-usemin',
     ngtemplates: 'grunt-angular-templates',
@@ -107,7 +107,6 @@ module.exports = function (grunt) {
     wiredep: {
       options: {
         exclude: [
-          //TODO why are these excluded?
           /bootstrap.js/,
           '/json3/',
           '/es5-shim/',
@@ -127,7 +126,7 @@ module.exports = function (grunt) {
     filerev: {
       dist: {
         src: [
-          'dist/client/!(bower_components){,*/}*.{js,css,png,jpg,jpeg,gif,webp,svg}' //TODO No idea if this works
+          'dist/client/!(bower_components){,*/}*.{js,css,png,jpg,jpeg,gif,webp,svg}'
         ]
       }
     },
@@ -265,7 +264,6 @@ module.exports = function (grunt) {
         connectCommits: false,
         message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
       },
-      //TODO this should be able to automatically push to aws or something
     },
 
     // Compiles Sass to CSS
@@ -379,7 +377,7 @@ module.exports = function (grunt) {
       'injector',
       'wiredep:client',
       'postcss',
-      //TODO this doesn't work with flask stdout in routes - maybe it does if file=sys.stderr in the print function?
+      //This doesn't work with flask stdout in routes - maybe it does if file=sys.stderr in the print function?
       //'shell:python',
       //'wait',
       //'open',

@@ -1,3 +1,9 @@
+"""
+This file consumes a stream from netcat.
+It was used to debug the spark functions
+"""
+
+
 import os
 
 from pyspark import SparkContext
@@ -22,7 +28,9 @@ class NetcatConsumer(object):
         # ONLY USE GLOBAL FUNCTIONS!
         # Create the stream
         stream = self.ssc.socketTextStream("localhost", 9999)
-        # TODO test functions here
+
+        # Test functions here
+
         stream.pprint()
 
         # Start the streaming

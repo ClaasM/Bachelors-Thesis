@@ -28,7 +28,6 @@ class TwitterKafkaConsumer(object):
     def __init__(self):
         sc = SparkContext.getOrCreate()
         sc.setLogLevel("ERROR")
-        # TODO StreamingContext.getOrCreate()
         self.ssc = StreamingContext(sc, 1)  # 1 second window
         self.ssc.checkpoint("./checkpoints")
 

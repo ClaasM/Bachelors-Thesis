@@ -21,7 +21,6 @@ class MongoKafkaProducer(object):
         except NoBrokersAvailable:
             print("Kafka Server not started!")
             raise
-            # TODO handle appropriately
 
     def update(self):
         cursor = self.db['tweets'].find()

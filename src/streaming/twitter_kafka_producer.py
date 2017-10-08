@@ -5,9 +5,6 @@ import tweepy
 from kafka import KafkaProducer
 from kafka.errors import NoBrokersAvailable
 
-
-# TODO test & figure out tweepy's twitter_stream.sitestream, .userstream, .retweet
-
 class TwitterKafkaProducer(tweepy.StreamListener):
     """
     Listens on the Twitter stream and sends all events to the Kafka queue.
@@ -29,7 +26,6 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         except NoBrokersAvailable:
             print("Kafka Server not started!")
             raise
-            # TODO handle appropriately
         self.twitter_stream = tweepy.Stream(auth=self.api.auth, listener=self)
 
     def update(self, settings):
@@ -40,7 +36,7 @@ class TwitterKafkaProducer(tweepy.StreamListener):
         stream_type = settings['type']
         del settings['type']
         if 'filter_level' in settings:
-            del settings['filter_level']  # TODO find a way to be able to use unicode --> Make a tweepy3 fork maybe?
+            del settings['filter_level']
 
         if stream_type == 'site':
             self.twitter_stream.sitestream(**settings, async=True)
@@ -66,7 +62,7 @@ class TwitterKafkaProducer(tweepy.StreamListener):
     def on_status(self, status):
         """Called when a new status arrives"""
         self.producer.send(str(self.sid), json.dumps(status._json).encode('utf-8'))
-        self.producer.flush()  # TODO probably don't need to always do that
+        self.producer.flush()
         return
 
     def on_error(self, status_code):

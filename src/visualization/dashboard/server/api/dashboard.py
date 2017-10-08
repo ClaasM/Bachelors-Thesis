@@ -48,7 +48,6 @@ def update(settings):
 
 @socketio.on('connect')
 def handle_connect():
-    # TODO remove
     print("Connected!")
 
 

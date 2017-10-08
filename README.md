@@ -1,62 +1,58 @@
-This project is made up of 4 components that each play a part in analysing twitter sentiment,
-and each have to run in a separate process.
+# Combining Sentiment Analysis with Topic Modeling on Streamed Social Network Data
 
-1. Producer - Initializes the Twitter stream and connects it to Kafka
-2. Queue - Using Kafka, right now just as a pub/sub message queue. Even though this is second in the pipeline, this has to be run first, otherwise the producer script will fail with nothing to stream into.
-3. Consumer - Takes the messages out of the queue in batches and performs the algorithms on the data, i.e. LDA topic modeling.
-4. Visualization - a web app that visualizes the outputs from the consumer-algorithm
+This repository contains the project for my thesis as well as the thesis itself.
+Information about this project beyond this README, for example about the project structure,
+can be found in the thesis itself. Technical documentation is done in-code.
 
-For instructions on how to run each component, see the component's README.
+## Setup
 
+The following steps need to be taken to launch the dashboard.
 
+### Dependencies
 
-To create the virtual env:
-TODO
-dhcp-10-176-41-248:VirtualEnvs claasmeiners$ virtualenv botstop
-dhcp-10-176-41-248:VirtualEnvs claasmeiners$ source botstopper/bin/activate
-(botstopper) dhcp-10-176-41-248:VirtualEnvs claasmeiners$ cd ../PycharmProjects/Botstopper/
-(botstopper) dhcp-10-176-41-248:Botstopper claasmeiners$ pip3 install -U .
+The following dependencies need to be installed and (if applicable) added to `PATH` or otherwise set up as per their respective documentations.
 
-To start the thing up:
-TODO start from beginning
+1. Python 3.6
+2. Python dependencies listed in `requirements.txt`
+3. Bower
+4. Bower dependencies listed in `bower.json`
+5. Docker 1.13.1
+7. Apache Spark 2.2.0
+6. Apache Kafka (Go through integration guide [here](https://spark.apache.org/docs/2.2.0/streaming-kafka-integration.html))
 
-from pyspark import SparkContext
-from pyspark.streaming import StreamingContext
-from pyspark.streaming.kafka import KafkaUtils
+It is strongly advised to use a `virtualenv
 
+### Creating a Twitter App
 
-def take_and_print(rdd):
-    for record in rdd.take(10):
-        print(record)
+To enable the dashboard to connect to Twitter, create an App in [Twitter Application Management](https://apps.twitter.com/),
+download the access information, and place it in the root directory with the name `twitter.access.json`.
 
+### Running the Dashboard
 
-sc = SparkContext.getOrCreate()
-ssc = StreamingContext(sc, 1)  # 1 second window
-ssc.checkpoint("./checkpoints")
-kvs = KafkaUtils.createStream(ssc, 'docker:2181', "spark-streaming-consumer", {'iphone': 1})
+1. Start Kafka by running `docker-compose up`. Make sure Docker is running
+2. Set the environment variables:
+    - SPARK_HOME="/path/to/spark/"
+    - PYSPARK_PYTHON=python3
+    - PYSPARK_SUBMIT_ARGS=--packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.0.2 pyspark-shell
+3. Run `python3 run.py` from `src/visualization/dashboard`
 
-result = kvs.map(lambda x: x[1]) \
-    .flatMap(lambda line: line.split(" ")) \
-    .map(lambda word: (word, 1)) \
-    .reduceByKey(lambda x, y: x + y) \
-    .transform(lambda rdd: rdd.sortBy(lambda a: a[1])) \
-    .foreachRDD(take_and_print)
+### Troubleshooting
 
-ssc.start()
-ssc.awaitTermination()
+`NoBrokersAvailable`: Pyspark cannot reach the Kafka message broker. Make sure docker-compose ran without errors.
+
+## Miscellaneous
 
 
-To start the Notebook Server:
+### Starting a pySpark Notebook Server:
+Set `PYSPARK_DRIVER_PYTHON=jupyter` and  `PYSPARK_DRIVER_PYTHON_OPTS="notebook"` to run `pyspark` in Notebook-mode.
+Spark can now be used in Jupyter notebooks.
 
-Start pyspark in Notebook mode
-export SPARK_HOME="/Users/claasmeiners/Library/spark/"
-export PYSPARK_DRIVER_PYTHON=jupyter
-export PYSPARK_DRIVER_PYTHON_OPTS="notebook"
+### Streaming from MongoDB
+Add `'--packages org.mongodb.spark:mongo-spark-connector_2.10:1.1.0'` to `PYSPARK_SUBMIT_ARGS` to be able to
+use Spark with MongoDB instead of a Kafka message queue. This is useful for development/debugging, since it doesn't require connecting to the actual Twitter stream.
 
-ggf.
-export PYSPARK_SUBMIT_ARGS='--packages org.mongodb.spark:mongo-spark-connector_2.10:1.1.0'
 
-## To change the LDA model
-1. Run `tweets_mongo_to_gensim.py` with your filter settings
-2. Run `gensim/lda_train.py`to build the new model
-3. Restart the server
+### Changing Models
+All models are trained in Notebooks under `/notebooks`.
+
+
