@@ -5,18 +5,19 @@
 \section{Introduction to Twitter}
 \label{sec:twitter}
 
-Twitter is a form of so-called microblogging, which is defined as a form of blogging with small-sized pieces of content,
-usually text up to a character-count of 200, which, in the case of Twitter, are called Tweets or statuses
-(where this thesis will stick to the latter since it is the predominant terminology used in the official documentation~\cite{twitterDocs}).
-This enables light-weight, mobile and easy sharing of opinions, status and activities~\cite{Finin2007},
-which proved popular among users and lead to rapid adoption and growth~\cite{mcgiboney2009twitter}.
+Twitter is a form of so-called microblogs, which is defined as a form of blogging with small-sized pieces of content,
+usually text, up to a character-count of 200.
+In the case of Twitter, these are called Tweets or statuses
+(this thesis will stick to the term "status" since it is the predominant terminology used in the official documentation~\cite{twitterDocs}).
+These statuses enable light-weight, mobile and easy sharing of opinions, activities and more~\cite{Finin2007},
+which proved to be popular among users and lead to rapid adoption and growth~\cite{mcgiboney2009twitter}.
 
 As shown in~\cref{tab:comparison}, the relationships of following users and being followed by users on Twitter is unreciprocated,
 which means it requires no active accepting of followers.\\
 This leads to only 22.1\% of users who are being followed by someone, also being followed back by that someone~\cite{Kwak2010}.
-Although Twitter offers the option to protect ones account, which means followers need to be accepted,
-and users can be blocked, thereby denying them seeing ones content, these options are only used in rare cases,
-making the form of relationships they represent the exception~\cite{Kwak2010}.\\
+Twitter does offers the option to protect ones account, which means followers need to be accepted,
+and users can be blocked, thereby denying them seeing ones content.
+However, these options are only used in rare cases, making the form of relationships they represent the exception~\cite{Kwak2010}.\\
 The relationship between different kinds of entities present on Twitter can be seen in~\cref{fig:twitter}
 
 % include diagram
@@ -28,7 +29,7 @@ The relationship between different kinds of entities present on Twitter can be s
 \end{figure}
 
 This thesis will focus on analyzing statuses in real time.
-Statuses on Twitter can not only contain text, but also rich media like images, gifs, or videos, as well as surveys.
+Statuses on Twitter can not only contain text, but also rich media like images, gifs, or videos, as well as polls.
 The text itself can also contain links, mention other users by containing \texttt{@<user\_name>},
 and contain any number of the infamous hashtag (\texttt{\#hashtag}), used to label a status, all while being limited to 140 characters.
 A status can also be a so-called retweet of another status, adding to its content and exposing the other status to the retweeting users' followers.
@@ -273,7 +274,7 @@ To give a feeling for the rate at which statuses will need to be analyzed,
 the number of statuses per second for two different streams were recorded over a 10 second period.
 The first stream was the sample stream, with the language set to english.
 The second stream was the filter stream, tracking only the keyword \texttt{iPhone}, and the language also set to english.
-The data was recorded on the 30$^th$ of September 2017.
+The data was recorded on the 30$^{th}$ of September 2017.
 The results can be seen in~\cref{fig:stream_frequency}.
 
 % include diagram
@@ -300,7 +301,7 @@ a set of statuses labeled with sentiment was needed.
 Evaluation using the comparison in~\cite{Saif2013} showed the Sanders-dataset~\cite{sanders} to be most-suited to train Twitter sentiment analysis models.
 At 4347 available statuses, it is large enough to train an accurate model and is hand-labeled instead of relying on, for example, emoticons for labeling, which might be flawed.
 Also, Twitter's terms of service forbid the distribution of statuses outside of their API, which ruled out all datasets that did.
-Even though the NLTK~\cref{subsec:nltk} contains a Twitter sentiment sample dataset,
+Even though the NLTK~(\cref{subsec:nltk}) contains a Twitter sentiment sample dataset,
 there is no information available on how it was collected and labeled, which is why it wasn't considered.
 The Sanders-dataset only contains the statuses unique identifier (id), along with the sentiment label ("positive", "negative", "neutral" or "irrelevant").
 The existing scripts to hydrate the dataset (meaning to replace the id with the actual status by requesting them from the API) were either slow or deprecated and dysfunctional,

@@ -4,7 +4,7 @@
 
 Semantic orientation describes the strength and polarity of words and phrases used in text.
 Extraction of subjectivity and polarity of the text from the semantic orientation of its words and phrases is called sentiment analysis.
-The huge volume of text-based interactions on social media make it difficult
+The huge volume of text-based interactions on social media makes it difficult
 to read and organize them, and manually analyze their sentiment.
 Focusing on single instances of interaction also makes it difficult to extract the overall sentiment,
 necessitating a solution that performs and summarizes the analysis automatically, fast, and gives human-comprehensible results~\cite{Sarlan2014}.
@@ -58,30 +58,27 @@ The Python-code achieving this encoding can be seen in~\cref{code:extract_featur
 \end{figure}
 
 NLTK's implementation of this algorithm is used~\cite{nltkDocs}.
-This implementation assumes the distribution of each feature $P(feature i|label)$ to be multinomial,
+This implementation assumes the distribution of each feature $P(feature_i|label)$ to be multinomial,
 making it a multinomial naive Bayes, which has shown the best performance in previous work~\cite{Go2009}.
-The data from the hydrated Sanders dataset created in~\cref{sec:theSandersDataset} was shuffled and split into 10\% test data and 90\% training data,
+The data from the Sanders dataset created in~\cref{sec:theSandersDataset} was shuffled and split into 10\% test data and 90\% training data,
 which still gives accurate test results without removing too much from the little available training data.
 This classifier achieved an accuracy of 75\%.
-In addition to accuracy, the performance measures precision, recall and F-measure,
-the definition of which can be seen in~\cref{math:precision_recall_fmeasure}, were computed for this classifier.
+In addition to accuracy, the performance measures precision, recall and F-measure, were computed for this classifier.
+Let $p_t$ be the number of statuses from a class that were actually labeled as being in that class,
+and $p_f$ be the number of statuses from other classes that were falsely labeled as being in that class.
+Similarly, let $n_t$ be the number of statuses that were correctly labeled as $not$ being in that class,
+and $n_f$ be the number of statuses were labeled as not being in that class although they are.
+The definitions for precision, recall and F-measure are then defined as follows:
 
-\begin{figure}
-    \caption{Definition of precision, recall and F-measure~\cite{Hong2010}}
-    \label{math:precision_recall_fmeasure}
-    \begin{math}
-        \\
-        p_t = \textrm{number of true positives}\\
-        p_f = \textrm{number of false positives}\\
-        n_t = \textrm{number of true negatives}\\
-        n_f = \textrm{number of false negatives}\\
-        \\
-        Precision = \frac{p_t}{p_t + p_f}\\
-        Recall = \frac{p_t}{p_t + n_f}\\
-        \\
-        F-Measure = \frac{2 \* Precision \* Recall}{Precision + Recall}\\
-    \end{math}
-\end{figure}
+\begin{equation}
+    Precision = \frac{p_t}{p_t + p_f}
+\end{equation}
+\begin{equation}
+    Recall = \frac{p_t}{p_t + n_f}
+\end{equation}
+\begin{equation}
+    F-Measure = \frac{2 \times Precision \times Recall}{Precision + Recall}
+\end{equation}
 
 Intuitively, precision and recall can be understood as the percentage of positives that are real positives,
 and the percentage of real positives that were labeled as positives, respectively.
@@ -91,13 +88,13 @@ Class distribution and absolute counts for each class can be seen in~\cref{tab:n
 
 \begin{table}
     \centering
+    \fontsize{8.5}{9}\selectfont
     \caption{Sentiment classification results using multinomial naive Bayes}
     \label{fig:sentiment_results}
     \begin{subtable}{.48\textwidth}
         \caption{Absolute counts and percentages}
         \label{tab:naive_bayes_results}
         \centering
-        \resizebox{\textwidth}{!}{%
         \begin{tabular}{lllll} %
             \toprule
             & \multicolumn{2}{c}{Test Data} & \multicolumn{2}{c}{Classification Result}\\
@@ -117,17 +114,17 @@ Class distribution and absolute counts for each class can be seen in~\cref{tab:n
             \\\midrule
             positive & 41 & 9\%   & 15 & 3\%
             \\\bottomrule
-        \end{tabular}}
+        \end{tabular}
     \end{subtable}%
     \hfill
     \begin{subtable}{.48\textwidth}
-        \vspace{1.2mm} % Lining up the tables to make it bit prettier
         \caption{F-measure, precision and recall}
         \label{tab:mnb_results}
         \centering
-        \resizebox{\textwidth}{!}{%
         \begin{tabular}{llll} %
             \toprule
+            & \multicolumn{3}{c}{Measure}\\
+            \cmidrule{2-4}
             Sentiment
             & F-measure
             & Precision
@@ -141,7 +138,7 @@ Class distribution and absolute counts for each class can be seen in~\cref{tab:n
             \\\midrule
             positive & 0.318 & 0.440 & 0.250
             \\\bottomrule
-        \end{tabular}}
+        \end{tabular}
     \end{subtable}
 \end{table}
 
@@ -247,8 +244,8 @@ Detailed results can be seem in~\cref{tab:vader_results}.
     \end{minipage}
 \end{table}
 
-Interestingly, VADER performs better on the dataset provided by the NLTK than the Sanders-dataset.
-The demonstration of this can be seen in~\cref{code:vader_demo}.
+The NLTK also provides a function that demonstrates the use of VADER on the dataset provided by the NLTK.
+Interestingly, as seen in~\cref{code:vader_demo}, the performance on that dataset is better than on the Sanders-dataset.
 However, as described in~\cref{sec:theSandersDataset}, it is not known how the sample dataset in the NLTK was collected and labeled,
 which is why these results are disregarded.
 

@@ -148,7 +148,7 @@ and the computational power required per status is still small enough for Kafka 
 Furthermore, this makes it easier to combine the results of sentiment analysis and topic modeling later on.
 However, as explained in~\cref{subsec:nltk}, the NLTK is meant for teaching and research,
 and the naive bayes classifier built with it did not meet the performance demands in a streaming scenario,
-so an exact replica of the classifier was built using scikit~\cite{scikitDocs}, and was used instead.
+so an exact replica of the classifier was built using scikit-learn~\cite{scikitDocs}, and was used instead.
 The resulting function, applied on the incoming statuses on the execution nodes, can be seen in~\cref{fig:spark_job}
 
 \begin{figure}

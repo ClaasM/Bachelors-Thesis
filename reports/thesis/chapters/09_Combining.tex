@@ -9,7 +9,7 @@ is combined with the LDA topic model built in~\cref{ch:topicModeling},
 to perform the sentiment analysis by topic referred to in~\cref{sec:backgroundTheory}.
 \\
 This is achieved by simply performing the sentiment analysis on a Twitter status and attributing the result to each topic,
-weighed by the percentage the status belongs to that topic given by the topic model.
+weighted by the percentage the status belongs to that topic given by the topic model.
 A pseudo-code implementation of that can be seen in~\cref{pseudo_code:sentiment_topic_summing}.
 
 \begin{figure}
@@ -104,6 +104,13 @@ The exact formulae can be seen in~\cref{math:visualization}.
     \end{math}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \caption{Network graph of the LDA topic model created from the stream sample dataset}
+    \label{fig:combined_network_graph}
+    \includegraphics[width=\textwidth]{../figures/combined_network_graph.pdf}
+\end{figure}
+
 To make these values visually more differentiable, they were then scaled.
 Hue was linearly scaled such that the smallest value was 0\degree (red) and the biggest value was 120\degree (green).
 The saturation was linearly scaled such that the smallest opacity was 0\%,
@@ -112,9 +119,3 @@ and the biggest opacity was 80\%.
 The size was linearly scaled to be between 0 and 2000.
 The resulting network graph can be seen in~\cref{fig:combined_network_graph}.
 
-\begin{figure}
-    \centering
-    \caption{Network graph of the LDA topic model created from the stream sample dataset}
-    \label{fig:combined_network_graph}
-    \includegraphics[width=\textwidth]{../figures/combined_network_graph.pdf}
-\end{figure}

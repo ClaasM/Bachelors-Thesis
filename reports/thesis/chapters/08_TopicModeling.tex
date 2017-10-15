@@ -4,7 +4,7 @@
 
 Topic models are probabilistic models which are used to extract an underlying semantic structure from text artifacts, or documents.
 They are based on a hierarchical bayesian analysis on the terms in a document,
-on which a similarity measure for the its content can be defined and used to "connect" and cluster documents.
+on which a similarity measure for its content can be defined and used to "connect" and cluster documents.
 
 Topic models are useful when dealing with large quantities of unstructured documents,
 that need to be automatically structured, grouped or filtered for knowledge extraction,
@@ -53,7 +53,7 @@ The implementation of the dictionary creation process can be seen in~\cref{code:
     % @formatter:off
     \begin{minted}{python}
         # The usual preprocessing and tokenization
-        tweets = [tokenize(preprocess(tweet) for tweet in tweets]
+        tweets = [tokenize(preprocess(tweet)) for tweet in tweets]
 
         # Count term occurences
         term_count_dictionary = defaultdict(int)
@@ -194,6 +194,7 @@ The resulting network graph can be seen in~\cref{fig:nmf_network_graph}.
 
 Overall, the results that could be achieved with both methods were similar in terms of subjective descriptiveness of the top terms and amount of overlap.
 There were even some equal topics, like topic number 6 in the LDA model and topic number 1 in the NMF model.
-The advantages of NMF also do not apply to this usecase, therefore a decision was made in favor or LDA,
-since it is the more mature method with more available research, implementations and tools like LDAvis, which can be used to comfortably
-tune and explore models.
+The advantages of NMF also do not apply to this use case, therefore a decision was made in favor or LDA,
+since it is the more mature method with more available research.
+Furthermore, there are a variety of libraries and tools available for LDA that can be used to implement and tune models,
+like gensim and LDAvis.
