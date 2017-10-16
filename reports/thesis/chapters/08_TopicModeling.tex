@@ -55,7 +55,7 @@ The implementation of the dictionary creation process can be seen in~\cref{code:
         # The usual preprocessing and tokenization
         tweets = [tokenize(preprocess(tweet)) for tweet in tweets]
 
-        # Count term occurences
+        # Count term occurrences
         term_count_dictionary = defaultdict(int)
         for tweet in tweets:
             for term in tweet:
@@ -79,7 +79,7 @@ giving $term frequency / document frequency$, or $term frequency \* inverse docu
 
 The gensim library was used to create and save the TF-IDF model,
 which contains rows with two term identifiers (the terms themselves are saved in the dictionary) and a count of how often
-they cooccurr in any of the training documents, while omitting term-combinations that never coocurr, to reduce size~\cite{gensimDocs}.
+they co-occur in any of the training documents, while omitting term-combinations that never co-occur, to reduce size~\cite{gensimDocs}.
 
 \subsection{LDA}
 \label{subsec:lda}

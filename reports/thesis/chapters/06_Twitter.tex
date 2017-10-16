@@ -5,7 +5,7 @@
 \section{Introduction to Twitter}
 \label{sec:twitter}
 
-Twitter is a form of so-called microblogs, which is defined as a form of blogging with small-sized pieces of content,
+Twitter is a form of so-called micro-blogs, which is defined as a form of blogging with small-sized pieces of content,
 usually text, up to a character-count of 200.
 In the case of Twitter, these are called Tweets or statuses
 (this thesis will stick to the term "status" since it is the predominant terminology used in the official documentation~\cite{twitterDocs}).
@@ -29,7 +29,7 @@ The relationship between different kinds of entities present on Twitter can be s
 \end{figure}
 
 This thesis will focus on analyzing statuses in real time.
-Statuses on Twitter can not only contain text, but also rich media like images, gifs, or videos, as well as polls.
+Statuses on Twitter can not only contain text, but also rich media like images, GIFs, or videos, as well as polls.
 The text itself can also contain links, mention other users by containing \texttt{@<user\_name>},
 and contain any number of the infamous hashtag (\texttt{\#hashtag}), used to label a status, all while being limited to 140 characters.
 A status can also be a so-called retweet of another status, adding to its content and exposing the other status to the retweeting users' followers.
@@ -289,7 +289,7 @@ It has to be noted that the results are not representative of the share of statu
 since the Twitter streaming API only sends an indeterminate, small part of all statuses posted~\cite{twitterDocs}.
 
 Compared to the general use-case for Kafka shown in~\cref{fig:kafka}, in this thesis,
-every producer will produce events for exactly one topic, with the producer being a specific Twitter stream and the topic beint a unique identifier for it.
+every producer will produce events for exactly one topic, with the producer being a specific Twitter stream and the topic being a unique identifier for it.
 The advantage of using the Twitter streaming-API compared to repeatedly polling the REST-API for the use-case of this thesis
 is that it is more efficient and has less latency.
 
@@ -361,9 +361,9 @@ again only keeping english tweets.
 The statuses were collected on the 18$^{th}$ of august 2017.
 The statuses received via the stream were written to a database until 7000 statuses were collected.
 This dataset will be used for (unsupervised) topic modeling, since it is representative of all activity on Twitter.
-A wordcloud of the statuses collected from the sample stream can be seen in~\cref{fig:wordloud_pre}.
+A word cloud of the statuses collected from the sample stream can be seen in~\cref{fig:wordcloud_pre}.
 
-Some of the biggest "words" in the wordcloud are "RT", "it" and "be",
+Some of the biggest "words" in the word cloud are "RT", "it" and "be",
 or even some digits, which have no informativeness with regards to sentiment or topic,
 demonstrating the necessity of preprocessing, shown in the next chapter.
 
@@ -407,22 +407,22 @@ The Python implementation of these functions can be found in the Appendix in~\cr
 While some approaches to removing terms with low informativeness rely on removing terms that occur in too many or too few documents,
 in this thesis, a stopword list is used,
 since only english statuses will be considered, and extensive stopword lists exit for the english language~\cite{Porter2001}.
-The change to the wordcloud of the statuses collected from the sample stream after preprocessing and tokenization (including stopword removal) can be seen in~\cref{fig:wordloud_post}.
+The change to the word cloud of the statuses collected from the sample stream after preprocessing and tokenization (including stopword removal) can be seen in~\cref{fig:wordcloud_post}.
 
 \begin{figure}
     \centering
-    \caption{Wordcloud of the statuses collected from the sample stream}
+    \caption{Word cloud of the statuses collected from the sample stream}
     \label{fig:test}
     \begin{subfigure}{.5\textwidth}
         \centering
         \caption{Before preprocessing and tokenization}
-        \label{fig:wordloud_pre}
+        \label{fig:wordcloud_pre}
         \includegraphics[width=\textwidth]{../images/wordcloud_pre.png}
     \end{subfigure}%
     \begin{subfigure}{.5\textwidth}
         \centering
         \caption{After preprocessing and tokenization}
-        \label{fig:wordloud_post}
+        \label{fig:wordcloud_post}
         \includegraphics[width=\textwidth]{../images/wordcloud_post.png}
     \end{subfigure}
 \end{figure}

@@ -48,7 +48,7 @@ A simplified diagram of the architecture can be seen in~\cref{fig:architecture}.
 
 For the server, Flask~\cite{flaskDocs} was used, because it is written in Python and therefore works seamlessly with the rest of the code.
 In the frontend, common web technologies such as HTML, CSS and JS were used, with Angular JS providing the framework~\cite{angularDocs}.
-Furthermore, some miscellaneous technologies such as SCSS\cite{scssDocs} for more efficient styling and the taskrunner GruntJS~\cite{gruntDocs} for
+Furthermore, some miscellaneous technologies such as SCSS\cite{scssDocs} for more efficient styling and the task runner GruntJS~\cite{gruntDocs} for
 minification, transpilation etc. were used.
 
 \section{Dashboard Code Structure}
@@ -157,7 +157,7 @@ The resulting function, applied on the incoming statuses on the execution nodes,
     % @formatter:off
     \begin{minted}{python}
     def analyze(element):
-        # The actual tweet is the second element in a tupel
+        # The actual tweet is the second element in a tuple
         tweet_str = element[1]
         # It's still a string, so parse it
         tweet = json.loads(tweet_str)
