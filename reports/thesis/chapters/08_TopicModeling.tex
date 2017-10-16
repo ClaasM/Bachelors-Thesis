@@ -75,7 +75,7 @@ This is usually sparsely implemented, since especially with short Twitter status
 most words in the corpus do not occur in the document.
 Also, since some words might generally occur more often, thereby being less informative of the topic,
 the frequency for each term in the document is then divided by the frequency of that term in the dictionary,
-giving $term frequency / document frequency$, or $term frequency \* inverse document frequency$ (TF-IDF)~\cite{Blei2003}.
+giving $term\_frequency / document\_frequency$, or $term\_frequency \times inverse\_document\_frequency$ (TF-IDF)~\cite{Blei2003}.
 
 The gensim library was used to create and save the TF-IDF model,
 which contains rows with two term identifiers (the terms themselves are saved in the dictionary) and a count of how often
@@ -119,7 +119,7 @@ which can be seen in~\cref{math:relevance}.
     \caption{Relevancy measure used in LDAvis, developed by Sievert \etAl~\cite{sievert2014ldavis}}
     \label{math:relevance}
     \begin{align*}
-        relevance(term w | topic t) = \lambda \* p(w | t) + (1 - \lambda) \* \frac{p(w | t)}{p(w)}
+        relevance(term | topic) = \lambda \* p(term | topic) + (1 - \lambda) \* \frac{p(term | topic)}{p(term)}
     \end{align*}
 \end{figure}
 

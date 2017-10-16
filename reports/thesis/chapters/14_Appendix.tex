@@ -14,7 +14,8 @@ in the factory pattern, can be seen in~\cref{code:preprocessing_tokenization}.
     \begin{minted}{python}
 def preprocessor():
     """
-    Removes all #hashtags, @mentions and other commonly used special characters used directly in front of
+    Removes all #hashtags, @mentions and other commonly used special characters
+    used directly in front of
     or behind valid words as well as URL's and then only keeps valid words.
     :param text: the text to be preprocessed
     :return: the preprocessed text
@@ -24,7 +25,8 @@ def preprocessor():
         # Remove url's
         text = re.sub(r"http\S+", "", text)
         # Remove all the other stuff
-        return " ".join([word for word in re.split("[\s;,.#:-@!?'\"]", text) if word.isalpha()])
+        return " ".join([word for word in re.split("[\s;,.#:-@!?'\"]", text)
+                        if word.isalpha()])
 
     return _preprocess
 
@@ -36,12 +38,15 @@ def tokenizer(remove_stopwords=True):
     """
     regex_tokenizer = RegexpTokenizer(r'\w+')
     # nltk stopword list plus some miscellaneous terms with low informativeness
-    stoplist = set(['amp', 'get', 'got', 'hey', 'hmm', 'hoo', 'hop', 'iep', 'let', 'ooo', 'par',
-                    'pdt', 'pln', 'pst', 'wha', 'yep', 'yer', 'aest', 'didn', 'nzdt', 'via',
-                    'one', 'com', 'new', 'like', 'great', 'make', 'top', 'awesome', 'best',
-                    'good', 'wow', 'yes', 'say', 'yay', 'would', 'thanks', 'thank', 'going',
-                    'new', 'use', 'should', 'could', 'best', 'really', 'see', 'want', 'nice',
-                    'while', 'know', 'que', 'sur', 'con'] + nltk.corpus.stopwords.words("english"))
+    stoplist = set(['amp', 'get', 'got', 'hey', 'hmm', 'hoo', 'hop', 'iep',
+                    'let', 'ooo', 'par', 'pdt', 'pln', 'pst', 'wha', 'yep',
+                    'yer', 'aest', 'didn', 'nzdt', 'via', 'one', 'com',
+                    'new', 'like', 'great', 'make', 'top', 'awesome', 'best',
+                    'good', 'wow', 'yes', 'say', 'yay', 'would',
+                    'thanks', 'thank', 'going', 'new', 'use', 'should',
+                    'could', 'best', 'really', 'see', 'want', 'nice',
+                    'while', 'know', 'que', 'sur', 'con']
+                    + nltk.corpus.stopwords.words("english"))
 
     def _tokenize(text):
         # Tokenize
