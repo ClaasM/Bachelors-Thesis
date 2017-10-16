@@ -12,6 +12,31 @@ This is achieved by simply performing the sentiment analysis on a Twitter status
 weighted by the percentage the status belongs to that topic given by the topic model.
 A pseudo-code implementation of that can be seen in~\cref{pseudo_code:sentiment_topic_summing}.
 
+This results in a 2-dimensional array where all values sum up to the number of statuses,
+since for each status the topic-probabilities sum up to 1.
+This was then performed on the sample stream dataset collected in~\cref{sec:streamingSampleDataset}.
+A table showing the results for each topic with relative as well as absolute values for the sentiment classes can be seen in~\cref{tab:combination}.
+The table also shows the sum of all probabilities, and the percentage of statuses in that topic.
+
+To visualize the sentiment by topic,
+the network graph used in~\cref{ch:topicModeling} was extended.
+The size of a node representing a topic indicates the topics' prevalence in the dataset.
+The color, on a hue-spectrum from red to green represents the polarity.
+On a 360\degree hue-spectrum in the HSV-color-space, as seen in~\cref{fig:hue_spectrum}, 0\degree is red, and 120\degree is green.
+
+The opacity is determined by the subjectivity.
+The exact formulae can be seen in~\cref{math:visualization}.
+
+\begin{absolutelynopagebreak}
+    To make these values visually more differentiable, they were then scaled.
+    Hue was linearly scaled such that the smallest value was 0\degree (red) and the biggest value was 120\degree (green).
+    The saturation was linearly scaled such that the smallest opacity was 0\%,
+    and the biggest opacity was 80\%.
+    20\% were then added to each node, making sure each node is visible.
+    The size was linearly scaled to be between 0 and 2000.
+    The resulting network graph can be seen in~\cref{fig:combined_network_graph}.
+\end{absolutelynopagebreak}
+
 \begin{figure}
     \caption{Summing up sentiments by topic for each status}
     \label{pseudo_code:sentiment_topic_summing}
@@ -29,12 +54,6 @@ A pseudo-code implementation of that can be seen in~\cref{pseudo_code:sentiment_
     \end{algorithmic}
     % @formatter:on
 \end{figure}
-
-This results in a 2-dimensional array where all values sum up to the number of statuses,
-since for each status the topic-probabilities sum up to 1.
-This was then performed on the sample stream dataset collected in~\cref{sec:streamingSampleDataset}.
-A table showing the results for each topic with relative as well as absolute values for the sentiment classes can be seen in~\cref{tab:combination}.
-The table also shows the sum of all probabilities, and the percentage of statuses in that topic.
 
 \begin{table}
     \caption{Absolute and relative results of the sentiment-by-topic analysis on the sample stream dataset}
@@ -75,21 +94,12 @@ The table also shows the sum of all probabilities, and the percentage of statuse
     \end{tabular}}
 \end{table}
 
-To visualize the sentiment by topic,
-the network graph used in~\cref{ch:topicModeling} was extended.
-The size of a node representing a topic indicates the topics' prevalence in the dataset.
-The color, on a hue-spectrum from red to green represents the polarity.
-On a 360\degree hue-spectrum in the HSV-color-space, as seen in~\cref{fig:hue_spectrum}, 0\degree is red, and 120\degree is green.
-
 \begin{figure}
     \centering
     \caption{Hue-spectrum~\cite{hueSpectrum}}
     \label{fig:hue_spectrum}
     \includegraphics[width=10cm]{../images/hue_spectrum.png}
 \end{figure}
-
-The opacity is determined by the subjectivity.
-The exact formulae can be seen in~\cref{math:visualization}.
 
 \begin{figure}
     \caption{The formulae used to extend the network graph}
@@ -110,12 +120,4 @@ The exact formulae can be seen in~\cref{math:visualization}.
     \label{fig:combined_network_graph}
     \includegraphics[width=\textwidth]{../figures/combined_network_graph.pdf}
 \end{figure}
-
-To make these values visually more differentiable, they were then scaled.
-Hue was linearly scaled such that the smallest value was 0\degree (red) and the biggest value was 120\degree (green).
-The saturation was linearly scaled such that the smallest opacity was 0\%,
-and the biggest opacity was 80\%.
-20\% were then added to each node, making sure each node is visible.
-The size was linearly scaled to be between 0 and 2000.
-The resulting network graph can be seen in~\cref{fig:combined_network_graph}.
 

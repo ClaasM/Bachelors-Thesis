@@ -231,3 +231,11 @@ folder/.pic={
 \usepackage{capt-of}
 
 \usepackage[nameinlink]{cleveref}      % 'nameinlink' option emulates look of \autoref
+
+\newenvironment{absolutelynofuckingpagebreakyoubitch}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
+
+\usepackage{xspace}
