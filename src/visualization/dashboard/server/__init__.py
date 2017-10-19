@@ -11,6 +11,7 @@ socketio = SocketIO(app)
 
 
 def start():
+    app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
     app.config.from_object('server.settings')
     app.url_map.strict_slashes = False
 
