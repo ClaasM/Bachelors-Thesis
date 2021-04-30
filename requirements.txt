@@ -128,7 +128,7 @@ regex==2017.7.28
 requests==2.18.2
 requests-oauthlib==0.8.0
 restless==2.1.1
-rsa==3.4.2
+rsa==4.7
 scipy==0.19.1
 simplegeneric==0.8.1
 six==1.10.0
